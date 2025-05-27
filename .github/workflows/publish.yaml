@@ -93,6 +93,7 @@ jobs:
           sed -i 's/"packageVersion": "[0-9]*\.[0-9]*\.[0-9]*"/"packageVersion": "${{ env.next_version }}"/' openapitools.json
 
       - name: Generate API docs
+        if: inputs.version == ''
         run: |
           find $(cat PACKAGE) -mindepth 1 ! -name 'py.typed' -delete
           java -jar openapi-generator-cli.jar generate -c openapitools.json
