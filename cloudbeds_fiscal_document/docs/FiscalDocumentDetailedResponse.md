@@ -18,13 +18,14 @@ Name | Type | Description | Notes
 **amount** | **float** |  | [optional] 
 **balance** | **float** |  | [optional] 
 **due_date** | **date** |  | [optional] 
-**guest_name** | **str** |  | [optional] 
-**status** | **str** |  | [optional] 
+**guests** | [**List[GuestDetails]**](GuestDetails.md) |  | [optional] 
+**status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
 **external_source** | **str** |  | [optional] 
 **external_id** | **str** |  | [optional] 
 **created_at** | **datetime** |  | [optional] 
 **updated_at** | **datetime** |  | [optional] 
 **government_integration** | [**GovernmentIntegration**](GovernmentIntegration.md) |  | [optional] 
+**actions** | [**List[Action]**](Action.md) | Returns the list of actions available for the transaction | [optional] 
 
 ## Example
 

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **number** | **str** |  | [optional] 
 **series** | **str** |  | [optional] 
+**status** | **str** |  | [optional] 
 **qr** | [**GovernmentIntegrationQr**](GovernmentIntegrationQr.md) |  | [optional] 
 **url** | **str** |  | [optional] 
 **official_id** | **str** |  | [optional] 

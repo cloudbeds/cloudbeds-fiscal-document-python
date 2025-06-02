@@ -37,7 +37,7 @@ class ConfigsResponse(BaseModel):
     prefix: Optional[StrictStr] = None
     suffix: Optional[StrictStr] = None
     legal_company_name: Optional[StrictStr] = Field(default=None, alias="legalCompanyName")
-    title: Optional[StrictStr] = None
+    title: Optional[Dict[str, StrictStr]] = None
     show_legal_company_name: Optional[StrictBool] = Field(default=None, alias="showLegalCompanyName")
     include_room_number: Optional[StrictBool] = Field(default=None, alias="includeRoomNumber")
     use_document_number: Optional[StrictBool] = Field(default=None, alias="useDocumentNumber")
@@ -45,7 +45,7 @@ class ConfigsResponse(BaseModel):
     tax_id1: Optional[StrictStr] = Field(default=None, alias="taxId1")
     tax_id2: Optional[StrictStr] = Field(default=None, alias="taxId2")
     cpf: Optional[StrictStr] = None
-    custom_text: Optional[StrictStr] = Field(default=None, alias="customText")
+    custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
     __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "chargeBreakdown", "useGuestLang", "dueDays", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText"]
 
     model_config = ConfigDict(

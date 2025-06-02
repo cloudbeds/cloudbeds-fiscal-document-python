@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **prefix** | **str** |  | [optional] 
 **suffix** | **str** |  | [optional] 
 **legal_company_name** | **str** |  | [optional] 
-**title** | **str** |  | [optional] 
+**title** | **Dict[str, str]** |  | [optional] 
 **show_legal_company_name** | **bool** |  | [optional] 
 **include_room_number** | **bool** |  | [optional] 
 **use_document_number** | **bool** |  | [optional] 
@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 **tax_id1** | **str** |  | [optional] 
 **tax_id2** | **str** |  | [optional] 
 **cpf** | **str** |  | [optional] 
-**custom_text** | **str** |  | [optional] 
+**custom_text** | **Dict[str, str]** |  | [optional] 
 
 ## Example
 

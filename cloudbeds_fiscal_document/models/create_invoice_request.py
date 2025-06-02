@@ -31,9 +31,9 @@ class CreateInvoiceRequest(BaseModel):
     source_id: Optional[StrictInt] = Field(default=None, alias="sourceId")
     sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
     source_kind: Optional[SourceKind] = Field(default=None, alias="sourceKind")
-    property_id: Optional[StrictInt] = Field(default=None, alias="propertyId")
     user_id: Optional[StrictInt] = Field(default=None, alias="userId")
-    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "propertyId", "userId"]
+    guest_id: Optional[StrictInt] = Field(default=None, alias="guestId")
+    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "guestId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -90,8 +90,8 @@ class CreateInvoiceRequest(BaseModel):
             "sourceId": obj.get("sourceId"),
             "sequenceId": obj.get("sequenceId"),
             "sourceKind": obj.get("sourceKind"),
-            "propertyId": obj.get("propertyId"),
-            "userId": obj.get("userId")
+            "userId": obj.get("userId"),
+            "guestId": obj.get("guestId")
         })
         return _obj
 
