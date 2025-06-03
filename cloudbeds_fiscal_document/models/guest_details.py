@@ -17,21 +17,19 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class CreateCreditNoteRequest(BaseModel):
+class GuestDetails(BaseModel):
     """
-    CreateCreditNoteRequest
+    GuestDetails
     """ # noqa: E501
-    sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
-    invoice_id: Optional[StrictInt] = Field(default=None, alias="invoiceId")
-    reason: Optional[StrictStr] = None
-    user_id: Optional[StrictInt] = Field(default=None, alias="userId")
-    guest_id: Optional[StrictInt] = Field(default=None, alias="guestId")
-    __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "guestId"]
+    id: Optional[StrictStr] = None
+    first_name: Optional[StrictStr] = Field(default=None, alias="firstName")
+    last_name: Optional[StrictStr] = Field(default=None, alias="lastName")
+    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +49,7 @@ class CreateCreditNoteRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CreateCreditNoteRequest from a JSON string"""
+        """Create an instance of GuestDetails from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,7 +74,7 @@ class CreateCreditNoteRequest(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CreateCreditNoteRequest from a dict"""
+        """Create an instance of GuestDetails from a dict"""
         if obj is None:
             return None
 
@@ -84,11 +82,9 @@ class CreateCreditNoteRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "sequenceId": obj.get("sequenceId"),
-            "invoiceId": obj.get("invoiceId"),
-            "reason": obj.get("reason"),
-            "userId": obj.get("userId"),
-            "guestId": obj.get("guestId")
+            "id": obj.get("id"),
+            "firstName": obj.get("firstName"),
+            "lastName": obj.get("lastName")
         })
         return _obj
 

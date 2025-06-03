@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi
@@ -32,11 +32,13 @@ from cloudbeds_fiscal_document.exceptions import ApiAttributeError
 from cloudbeds_fiscal_document.exceptions import ApiException
 
 # import models into sdk package
+from cloudbeds_fiscal_document.models.action import Action
 from cloudbeds_fiscal_document.models.api_error import ApiError
 from cloudbeds_fiscal_document.models.configs_response import ConfigsResponse
 from cloudbeds_fiscal_document.models.configs_update_request import ConfigsUpdateRequest
 from cloudbeds_fiscal_document.models.create_credit_note_request import CreateCreditNoteRequest
 from cloudbeds_fiscal_document.models.create_invoice_request import CreateInvoiceRequest
+from cloudbeds_fiscal_document.models.document_action import DocumentAction
 from cloudbeds_fiscal_document.models.fiscal_document_detailed_response import FiscalDocumentDetailedResponse
 from cloudbeds_fiscal_document.models.fiscal_document_email_request import FiscalDocumentEmailRequest
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
@@ -48,4 +50,5 @@ from cloudbeds_fiscal_document.models.fiscal_document_transaction_response impor
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_paginated import FiscalDocumentTransactionsPaginated
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr
+from cloudbeds_fiscal_document.models.guest_details import GuestDetails
 from cloudbeds_fiscal_document.models.source_kind import SourceKind

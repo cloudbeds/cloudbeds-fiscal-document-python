@@ -9,8 +9,8 @@ Name | Type | Description | Notes
 **source_id** | **int** |  | [optional] 
 **sequence_id** | **int** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | [optional] 
-**property_id** | **int** |  | [optional] 
 **user_id** | **int** |  | [optional] 
+**guest_id** | **int** |  | [optional] 
 
 ## Example
 

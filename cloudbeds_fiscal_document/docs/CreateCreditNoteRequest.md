@@ -7,10 +7,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **sequence_id** | **int** |  | [optional] 
 **invoice_id** | **int** |  | [optional] 
-**source_identifier** | **str** |  | [optional] 
 **reason** | **str** |  | [optional] 
-**property_id** | **int** |  | [optional] 
 **user_id** | **int** |  | [optional] 
+**guest_id** | **int** |  | [optional] 
 
 ## Example
 

@@ -29,12 +29,13 @@ class GovernmentIntegration(BaseModel):
     """ # noqa: E501
     number: Optional[StrictStr] = None
     series: Optional[StrictStr] = None
+    status: Optional[StrictStr] = None
     qr: Optional[GovernmentIntegrationQr] = None
     url: Optional[StrictStr] = None
     official_id: Optional[StrictStr] = Field(default=None, alias="officialId")
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
     rectifying_invoice_type: Optional[StrictStr] = Field(default=None, alias="rectifyingInvoiceType")
-    __properties: ClassVar[List[str]] = ["number", "series", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType"]
+    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -92,6 +93,7 @@ class GovernmentIntegration(BaseModel):
         _obj = cls.model_validate({
             "number": obj.get("number"),
             "series": obj.get("series"),
+            "status": obj.get("status"),
             "qr": GovernmentIntegrationQr.from_dict(obj["qr"]) if obj.get("qr") is not None else None,
             "url": obj.get("url"),
             "officialId": obj.get("officialId"),

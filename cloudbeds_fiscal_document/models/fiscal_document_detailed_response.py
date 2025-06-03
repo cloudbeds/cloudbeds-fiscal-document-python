@@ -20,7 +20,10 @@ import json
 from datetime import date, datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from cloudbeds_fiscal_document.models.action import Action
+from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration
+from cloudbeds_fiscal_document.models.guest_details import GuestDetails
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -41,14 +44,15 @@ class FiscalDocumentDetailedResponse(BaseModel):
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     balance: Optional[Union[StrictFloat, StrictInt]] = None
     due_date: Optional[date] = Field(default=None, alias="dueDate")
-    guest_name: Optional[StrictStr] = Field(default=None, alias="guestName")
-    status: Optional[StrictStr] = None
+    guests: Optional[List[GuestDetails]] = None
+    status: Optional[FiscalDocumentStatus] = None
     external_source: Optional[StrictStr] = Field(default=None, alias="externalSource")
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
     created_at: Optional[datetime] = Field(default=None, alias="createdAt")
     updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
     government_integration: Optional[GovernmentIntegration] = Field(default=None, alias="governmentIntegration")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "guestName", "status", "externalSource", "externalId", "createdAt", "updatedAt", "governmentIntegration"]
+    actions: Optional[List[Action]] = Field(default=None, description="Returns the list of actions available for the transaction")
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "guests", "status", "externalSource", "externalId", "createdAt", "updatedAt", "governmentIntegration", "actions"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -89,9 +93,23 @@ class FiscalDocumentDetailedResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in guests (list)
+        _items = []
+        if self.guests:
+            for _item_guests in self.guests:
+                if _item_guests:
+                    _items.append(_item_guests.to_dict())
+            _dict['guests'] = _items
         # override the default output from pydantic by calling `to_dict()` of government_integration
         if self.government_integration:
             _dict['governmentIntegration'] = self.government_integration.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in actions (list)
+        _items = []
+        if self.actions:
+            for _item_actions in self.actions:
+                if _item_actions:
+                    _items.append(_item_actions.to_dict())
+            _dict['actions'] = _items
         return _dict
 
     @classmethod
@@ -117,13 +135,14 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "amount": obj.get("amount"),
             "balance": obj.get("balance"),
             "dueDate": obj.get("dueDate"),
-            "guestName": obj.get("guestName"),
+            "guests": [GuestDetails.from_dict(_item) for _item in obj["guests"]] if obj.get("guests") is not None else None,
             "status": obj.get("status"),
             "externalSource": obj.get("externalSource"),
             "externalId": obj.get("externalId"),
             "createdAt": obj.get("createdAt"),
             "updatedAt": obj.get("updatedAt"),
-            "governmentIntegration": GovernmentIntegration.from_dict(obj["governmentIntegration"]) if obj.get("governmentIntegration") is not None else None
+            "governmentIntegration": GovernmentIntegration.from_dict(obj["governmentIntegration"]) if obj.get("governmentIntegration") is not None else None,
+            "actions": [Action.from_dict(_item) for _item in obj["actions"]] if obj.get("actions") is not None else None
         })
         return _obj
 
