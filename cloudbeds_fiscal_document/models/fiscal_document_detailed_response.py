@@ -21,9 +21,11 @@ from datetime import date, datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.action import Action
+from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration
-from cloudbeds_fiscal_document.models.guest_details import GuestDetails
+from cloudbeds_fiscal_document.models.recipient_details import RecipientDetails
+from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -37,14 +39,14 @@ class FiscalDocumentDetailedResponse(BaseModel):
     user_id: Optional[StrictStr] = Field(default=None, alias="userId")
     user_full_name: Optional[StrictStr] = Field(default=None, alias="userFullName")
     source_id: Optional[StrictStr] = Field(default=None, alias="sourceId")
-    source_kind: Optional[StrictStr] = Field(default=None, alias="sourceKind")
-    kind: Optional[StrictStr] = None
+    source_kind: Optional[SourceKind] = Field(default=None, alias="sourceKind")
+    kind: Optional[FiscalDocumentKind] = None
     invoice_date: Optional[date] = Field(default=None, alias="invoiceDate")
     file_name: Optional[StrictStr] = Field(default=None, alias="fileName")
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     balance: Optional[Union[StrictFloat, StrictInt]] = None
     due_date: Optional[date] = Field(default=None, alias="dueDate")
-    guests: Optional[List[GuestDetails]] = None
+    recipients: Optional[List[RecipientDetails]] = None
     status: Optional[FiscalDocumentStatus] = None
     external_source: Optional[StrictStr] = Field(default=None, alias="externalSource")
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
@@ -52,7 +54,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
     updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
     government_integration: Optional[GovernmentIntegration] = Field(default=None, alias="governmentIntegration")
     actions: Optional[List[Action]] = Field(default=None, description="Returns the list of actions available for the transaction")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "guests", "status", "externalSource", "externalId", "createdAt", "updatedAt", "governmentIntegration", "actions"]
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "recipients", "status", "externalSource", "externalId", "createdAt", "updatedAt", "governmentIntegration", "actions"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -93,13 +95,13 @@ class FiscalDocumentDetailedResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in guests (list)
+        # override the default output from pydantic by calling `to_dict()` of each item in recipients (list)
         _items = []
-        if self.guests:
-            for _item_guests in self.guests:
-                if _item_guests:
-                    _items.append(_item_guests.to_dict())
-            _dict['guests'] = _items
+        if self.recipients:
+            for _item_recipients in self.recipients:
+                if _item_recipients:
+                    _items.append(_item_recipients.to_dict())
+            _dict['recipients'] = _items
         # override the default output from pydantic by calling `to_dict()` of government_integration
         if self.government_integration:
             _dict['governmentIntegration'] = self.government_integration.to_dict()
@@ -135,7 +137,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "amount": obj.get("amount"),
             "balance": obj.get("balance"),
             "dueDate": obj.get("dueDate"),
-            "guests": [GuestDetails.from_dict(_item) for _item in obj["guests"]] if obj.get("guests") is not None else None,
+            "recipients": [RecipientDetails.from_dict(_item) for _item in obj["recipients"]] if obj.get("recipients") is not None else None,
             "status": obj.get("status"),
             "externalSource": obj.get("externalSource"),
             "externalId": obj.get("externalId"),

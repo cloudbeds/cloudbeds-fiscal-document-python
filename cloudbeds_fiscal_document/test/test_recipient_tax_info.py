@@ -14,10 +14,10 @@
 
 import unittest
 
-from cloudbeds_fiscal_document.models.guest_details import GuestDetails
+from cloudbeds_fiscal_document.models.recipient_tax_info import RecipientTaxInfo
 
-class TestGuestDetails(unittest.TestCase):
-    """GuestDetails unit test stubs"""
+class TestRecipientTaxInfo(unittest.TestCase):
+    """RecipientTaxInfo unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,27 +25,25 @@ class TestGuestDetails(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> GuestDetails:
-        """Test GuestDetails
+    def make_instance(self, include_optional) -> RecipientTaxInfo:
+        """Test RecipientTaxInfo
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `GuestDetails`
+        # uncomment below to create an instance of `RecipientTaxInfo`
         """
-        model = GuestDetails()
+        model = RecipientTaxInfo()
         if include_optional:
-            return GuestDetails(
-                id = '',
-                first_name = '',
-                last_name = ''
+            return RecipientTaxInfo(
+                id = ''
             )
         else:
-            return GuestDetails(
+            return RecipientTaxInfo(
         )
         """
 
-    def testGuestDetails(self):
-        """Test GuestDetails"""
+    def testRecipientTaxInfo(self):
+        """Test RecipientTaxInfo"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

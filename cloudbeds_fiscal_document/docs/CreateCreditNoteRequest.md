@@ -6,10 +6,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **sequence_id** | **int** |  | [optional] 
-**invoice_id** | **int** |  | [optional] 
+**invoice_id** | **int** |  | 
 **reason** | **str** |  | [optional] 
 **user_id** | **int** |  | [optional] 
-**guest_id** | **int** |  | [optional] 
+**method** | **str** |  | 
+**transaction_ids** | **List[int]** |  | [optional] 
+**guest_id** | **int** |  | 
 
 ## Example
 

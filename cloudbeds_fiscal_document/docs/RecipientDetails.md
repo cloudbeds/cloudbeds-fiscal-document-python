@@ -1,4 +1,4 @@
-# GuestDetails
+# RecipientDetails
 
 
 ## Properties
@@ -8,23 +8,24 @@ Name | Type | Description | Notes
 **id** | **str** |  | [optional] 
 **first_name** | **str** |  | [optional] 
 **last_name** | **str** |  | [optional] 
+**email** | **str** |  | [optional] 
 
 ## Example
 
 ```python
-from cloudbeds_fiscal_document.models.guest_details import GuestDetails
+from cloudbeds_fiscal_document.models.recipient_details import RecipientDetails
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of GuestDetails from a JSON string
-guest_details_instance = GuestDetails.from_json(json)
+# create an instance of RecipientDetails from a JSON string
+recipient_details_instance = RecipientDetails.from_json(json)
 # print the JSON string representation of the object
-print(GuestDetails.to_json())
+print(RecipientDetails.to_json())
 
 # convert the object into a dict
-guest_details_dict = guest_details_instance.to_dict()
-# create an instance of GuestDetails from a dict
-guest_details_from_dict = GuestDetails.from_dict(guest_details_dict)
+recipient_details_dict = recipient_details_instance.to_dict()
+# create an instance of RecipientDetails from a dict
+recipient_details_from_dict = RecipientDetails.from_dict(recipient_details_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

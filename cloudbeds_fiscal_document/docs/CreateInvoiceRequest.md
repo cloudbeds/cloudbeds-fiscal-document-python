@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**transaction_ids** | **List[int]** |  | [optional] 
-**source_id** | **int** |  | [optional] 
+**transaction_ids** | **List[int]** |  | 
+**source_id** | **int** |  | 
 **sequence_id** | **int** |  | [optional] 
-**source_kind** | [**SourceKind**](SourceKind.md) |  | [optional] 
+**source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **user_id** | **int** |  | [optional] 
-**guest_id** | **int** |  | [optional] 
+**guest_id** | **int** |  | 
 
 ## Example
 

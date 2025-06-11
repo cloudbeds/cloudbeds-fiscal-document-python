@@ -43,7 +43,9 @@ class TestConfigsUpdateRequest(unittest.TestCase):
                 prefix = '',
                 suffix = '',
                 legal_company_name = '',
-                title = '',
+                title = {
+                    'key' : ''
+                    },
                 show_legal_company_name = True,
                 include_room_number = True,
                 use_document_number = True,
@@ -51,10 +53,19 @@ class TestConfigsUpdateRequest(unittest.TestCase):
                 tax_id1 = '',
                 tax_id2 = '',
                 cpf = '',
-                custom_text = ''
+                custom_text = {
+                    'key' : ''
+                    }
             )
         else:
             return ConfigsUpdateRequest(
+                show_detailed_tax_fee = True,
+                charge_breakdown = True,
+                use_guest_lang = True,
+                show_legal_company_name = True,
+                include_room_number = True,
+                use_document_number = True,
+                is_compact = True,
         )
         """
 

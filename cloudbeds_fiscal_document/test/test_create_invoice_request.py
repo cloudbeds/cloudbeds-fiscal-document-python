@@ -41,11 +41,17 @@ class TestCreateInvoiceRequest(unittest.TestCase):
                 source_id = 56,
                 sequence_id = 56,
                 source_kind = 'GROUP_PROFILE',
-                property_id = 56,
-                user_id = 56
+                user_id = 56,
+                guest_id = 56
             )
         else:
             return CreateInvoiceRequest(
+                transaction_ids = [
+                    56
+                    ],
+                source_id = 56,
+                source_kind = 'GROUP_PROFILE',
+                guest_id = 56,
         )
         """
 

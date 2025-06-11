@@ -36,6 +36,7 @@ class TestConfigsApi(unittest.TestCase):
     def test_update_configs(self) -> None:
         """Test case for update_configs
 
+        Updates a config of a specific kind
         """
         pass
 

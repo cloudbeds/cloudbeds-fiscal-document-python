@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost:8700*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_configs**](ConfigsApi.md#get_configs) | **GET** /fiscal-document/v1/configs | Get list of fiscal documents configs
-[**update_configs**](ConfigsApi.md#update_configs) | **PUT** /fiscal-document/v1/configs/{documentKind} | 
+[**update_configs**](ConfigsApi.md#update_configs) | **PUT** /fiscal-document/v1/configs/{documentKind} | Updates a config of a specific kind
 
 
 # **get_configs**
@@ -89,7 +89,7 @@ Name | Type | Description  | Notes
 # **update_configs**
 > ConfigsResponse update_configs(x_property_id, document_kind, configs_update_request)
 
-
+Updates a config of a specific kind
 
 Update document config.
 
@@ -130,6 +130,7 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     configs_update_request = cloudbeds_fiscal_document.ConfigsUpdateRequest() # ConfigsUpdateRequest | 
 
     try:
+        # Updates a config of a specific kind
         api_response = api_instance.update_configs(x_property_id, document_kind, configs_update_request)
         print("The response of ConfigsApi->update_configs:\n")
         pprint(api_response)

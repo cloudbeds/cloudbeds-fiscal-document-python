@@ -17,29 +17,35 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress
+from cloudbeds_fiscal_document.models.recipient_tax_info import RecipientTaxInfo
 from typing import Optional, Set
 from typing_extensions import Self
 
-class CreateCreditNoteRequest(BaseModel):
+class FiscalDocumentRecipient(BaseModel):
     """
-    CreateCreditNoteRequest
+    FiscalDocumentRecipient
     """ # noqa: E501
-    sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
-    invoice_id: StrictInt = Field(alias="invoiceId")
-    reason: Optional[StrictStr] = None
-    user_id: Optional[StrictInt] = Field(default=None, alias="userId")
-    method: StrictStr
-    transaction_ids: Optional[List[StrictInt]] = Field(default=None, alias="transactionIds")
-    guest_id: StrictInt = Field(alias="guestId")
-    __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "method", "transactionIds", "guestId"]
+    id: Optional[StrictStr] = None
+    first_name: Optional[StrictStr] = Field(default=None, alias="firstName")
+    last_name: Optional[StrictStr] = Field(default=None, alias="lastName")
+    email: Optional[StrictStr] = None
+    type: Optional[StrictStr] = None
+    address: Optional[RecipientAddress] = None
+    tax: Optional[RecipientTaxInfo] = None
+    country_data: Optional[Dict[str, Dict[str, Any]]] = Field(default=None, description="Arbitrary country-specific fields.  Keys are ISO country codes like \"ES\", \"AR\", \"US\", and each value is a free-form object. ", alias="countryData")
+    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email", "type", "address", "tax", "countryData"]
 
-    @field_validator('method')
-    def method_validate_enum(cls, value):
+    @field_validator('type')
+    def type_validate_enum(cls, value):
         """Validates the enum"""
-        if value not in set(['VOID', 'ADJUSTMENT']):
-            raise ValueError("must be one of enum values ('VOID', 'ADJUSTMENT')")
+        if value is None:
+            return value
+
+        if value not in set(['COMPANY', 'PERSON']):
+            raise ValueError("must be one of enum values ('COMPANY', 'PERSON')")
         return value
 
     model_config = ConfigDict(
@@ -60,7 +66,7 @@ class CreateCreditNoteRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CreateCreditNoteRequest from a JSON string"""
+        """Create an instance of FiscalDocumentRecipient from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -81,11 +87,17 @@ class CreateCreditNoteRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of address
+        if self.address:
+            _dict['address'] = self.address.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of tax
+        if self.tax:
+            _dict['tax'] = self.tax.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CreateCreditNoteRequest from a dict"""
+        """Create an instance of FiscalDocumentRecipient from a dict"""
         if obj is None:
             return None
 
@@ -93,13 +105,14 @@ class CreateCreditNoteRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "sequenceId": obj.get("sequenceId"),
-            "invoiceId": obj.get("invoiceId"),
-            "reason": obj.get("reason"),
-            "userId": obj.get("userId"),
-            "method": obj.get("method"),
-            "transactionIds": obj.get("transactionIds"),
-            "guestId": obj.get("guestId")
+            "id": obj.get("id"),
+            "firstName": obj.get("firstName"),
+            "lastName": obj.get("lastName"),
+            "email": obj.get("email"),
+            "type": obj.get("type"),
+            "address": RecipientAddress.from_dict(obj["address"]) if obj.get("address") is not None else None,
+            "tax": RecipientTaxInfo.from_dict(obj["tax"]) if obj.get("tax") is not None else None,
+            "countryData": obj.get("countryData")
         })
         return _obj
 

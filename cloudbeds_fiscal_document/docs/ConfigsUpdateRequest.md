@@ -5,19 +5,19 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**show_detailed_tax_fee** | **bool** |  | [optional] 
-**charge_breakdown** | **bool** |  | [optional] 
-**use_guest_lang** | **bool** |  | [optional] 
+**show_detailed_tax_fee** | **bool** |  | 
+**charge_breakdown** | **bool** |  | 
+**use_guest_lang** | **bool** |  | 
 **due_days** | **int** |  | [optional] 
 **lang** | **str** |  | [optional] 
 **prefix** | **str** |  | [optional] 
 **suffix** | **str** |  | [optional] 
 **legal_company_name** | **str** |  | [optional] 
 **title** | **Dict[str, str]** |  | [optional] 
-**show_legal_company_name** | **bool** |  | [optional] 
-**include_room_number** | **bool** |  | [optional] 
-**use_document_number** | **bool** |  | [optional] 
-**is_compact** | **bool** |  | [optional] 
+**show_legal_company_name** | **bool** |  | 
+**include_room_number** | **bool** |  | 
+**use_document_number** | **bool** |  | 
+**is_compact** | **bool** |  | 
 **tax_id1** | **str** |  | [optional] 
 **tax_id2** | **str** |  | [optional] 
 **cpf** | **str** |  | [optional] 
