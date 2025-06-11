@@ -321,7 +321,7 @@ class ConfigsApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ConfigsResponse:
-        """update_configs
+        """Updates a config of a specific kind
 
         Update document config.
 
@@ -396,7 +396,7 @@ class ConfigsApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[ConfigsResponse]:
-        """update_configs
+        """Updates a config of a specific kind
 
         Update document config.
 
@@ -471,7 +471,7 @@ class ConfigsApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """update_configs
+        """Updates a config of a specific kind
 
         Update document config.
 

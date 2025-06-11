@@ -17,24 +17,17 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
-from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
 from typing_extensions import Self
 
-class CreateInvoiceRequest(BaseModel):
+class RecipientTaxInfo(BaseModel):
     """
-    CreateInvoiceRequest
+    RecipientTaxInfo
     """ # noqa: E501
-    transaction_ids: Annotated[List[StrictInt], Field(min_length=1)] = Field(alias="transactionIds")
-    source_id: StrictInt = Field(alias="sourceId")
-    sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
-    source_kind: SourceKind = Field(alias="sourceKind")
-    user_id: Optional[StrictInt] = Field(default=None, alias="userId")
-    guest_id: StrictInt = Field(alias="guestId")
-    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "guestId"]
+    id: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["id"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -54,7 +47,7 @@ class CreateInvoiceRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CreateInvoiceRequest from a JSON string"""
+        """Create an instance of RecipientTaxInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,7 +72,7 @@ class CreateInvoiceRequest(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CreateInvoiceRequest from a dict"""
+        """Create an instance of RecipientTaxInfo from a dict"""
         if obj is None:
             return None
 
@@ -87,12 +80,7 @@ class CreateInvoiceRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "transactionIds": obj.get("transactionIds"),
-            "sourceId": obj.get("sourceId"),
-            "sequenceId": obj.get("sequenceId"),
-            "sourceKind": obj.get("sourceKind"),
-            "userId": obj.get("userId"),
-            "guestId": obj.get("guestId")
+            "id": obj.get("id")
         })
         return _obj
 

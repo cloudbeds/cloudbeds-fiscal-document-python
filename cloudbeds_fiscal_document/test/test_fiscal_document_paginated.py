@@ -43,15 +43,21 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                         user_id = '', 
                         user_full_name = '', 
                         source_id = '', 
-                        source_kind = '', 
-                        kind = '', 
+                        source_kind = 'GROUP_PROFILE', 
+                        kind = 'INVOICE', 
                         invoice_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
                         file_name = '', 
                         amount = 1.337, 
                         balance = 1.337, 
                         due_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
-                        guest_name = '', 
-                        status = '', 
+                        recipients = [
+                            cloudbeds_fiscal_document.models.recipient_details.RecipientDetails(
+                                id = '', 
+                                first_name = '', 
+                                last_name = '', 
+                                email = '', )
+                            ], 
+                        status = 'COMPLETED', 
                         external_source = '', 
                         external_id = '', 
                         created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
@@ -65,7 +71,11 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                             url = '', 
                             official_id = '', 
                             external_id = '', 
-                            rectifying_invoice_type = '', ), )
+                            rectifying_invoice_type = '', ), 
+                        actions = [
+                            cloudbeds_fiscal_document.models.action.Action(
+                                type = 'CANCEL', )
+                            ], )
                     ],
                 next_page_token = ''
             )

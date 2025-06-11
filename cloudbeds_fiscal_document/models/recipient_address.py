@@ -22,14 +22,17 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class GuestDetails(BaseModel):
+class RecipientAddress(BaseModel):
     """
-    GuestDetails
+    RecipientAddress
     """ # noqa: E501
-    id: Optional[StrictStr] = None
-    first_name: Optional[StrictStr] = Field(default=None, alias="firstName")
-    last_name: Optional[StrictStr] = Field(default=None, alias="lastName")
-    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName"]
+    address1: Optional[StrictStr] = None
+    address2: Optional[StrictStr] = None
+    city: Optional[StrictStr] = None
+    state: Optional[StrictStr] = None
+    zip_code: Optional[StrictStr] = Field(default=None, alias="zipCode")
+    country: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["address1", "address2", "city", "state", "zipCode", "country"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -49,7 +52,7 @@ class GuestDetails(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of GuestDetails from a JSON string"""
+        """Create an instance of RecipientAddress from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,7 +77,7 @@ class GuestDetails(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of GuestDetails from a dict"""
+        """Create an instance of RecipientAddress from a dict"""
         if obj is None:
             return None
 
@@ -82,9 +85,12 @@ class GuestDetails(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "firstName": obj.get("firstName"),
-            "lastName": obj.get("lastName")
+            "address1": obj.get("address1"),
+            "address2": obj.get("address2"),
+            "city": obj.get("city"),
+            "state": obj.get("state"),
+            "zipCode": obj.get("zipCode"),
+            "country": obj.get("country")
         })
         return _obj
 

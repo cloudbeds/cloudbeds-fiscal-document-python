@@ -29,12 +29,14 @@ class TestFiscalDocumentsApi(unittest.TestCase):
     def test_create_credit_note(self) -> None:
         """Test case for create_credit_note
 
+        Create a fiscal document of the type credit note
         """
         pass
 
     def test_create_invoice(self) -> None:
         """Test case for create_invoice
 
+        Create a fiscal document of the type invoice
         """
         pass
 
@@ -52,10 +54,24 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """
         pass
 
+    def test_get_fiscal_document_recipients_by_id(self) -> None:
+        """Test case for get_fiscal_document_recipients_by_id
+
+        Get list of recipients associated to the fiscal document
+        """
+        pass
+
     def test_get_fiscal_document_transactions(self) -> None:
         """Test case for get_fiscal_document_transactions
 
         Get list of fiscal documents
+        """
+        pass
+
+    def test_get_fiscal_document_transactions_by_id(self) -> None:
+        """Test case for get_fiscal_document_transactions_by_id
+
+        Get list of transactions for a given fiscal document id
         """
         pass
 
@@ -69,6 +85,7 @@ class TestFiscalDocumentsApi(unittest.TestCase):
     def test_put_fiscal_document(self) -> None:
         """Test case for put_fiscal_document
 
+        Update a fiscal document by id
         """
         pass
 

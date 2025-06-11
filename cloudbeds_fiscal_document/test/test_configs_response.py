@@ -45,7 +45,9 @@ class TestConfigsResponse(unittest.TestCase):
                 prefix = '',
                 suffix = '',
                 legal_company_name = '',
-                title = '',
+                title = {
+                    'key' : ''
+                    },
                 show_legal_company_name = True,
                 include_room_number = True,
                 use_document_number = True,
@@ -53,7 +55,9 @@ class TestConfigsResponse(unittest.TestCase):
                 tax_id1 = '',
                 tax_id2 = '',
                 cpf = '',
-                custom_text = ''
+                custom_text = {
+                    'key' : ''
+                    }
             )
         else:
             return ConfigsResponse(

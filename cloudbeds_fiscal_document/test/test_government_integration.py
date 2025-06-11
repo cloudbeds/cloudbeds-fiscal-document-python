@@ -37,6 +37,7 @@ class TestGovernmentIntegration(unittest.TestCase):
             return GovernmentIntegration(
                 number = '',
                 series = '',
+                status = '',
                 qr = cloudbeds_fiscal_document.models.government_integration_qr.GovernmentIntegration_qr(
                     url = '', 
                     string = '', ),

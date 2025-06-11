@@ -37,13 +37,19 @@ class TestCreateCreditNoteRequest(unittest.TestCase):
             return CreateCreditNoteRequest(
                 sequence_id = 56,
                 invoice_id = 56,
-                source_identifier = '',
                 reason = '',
-                property_id = 56,
-                user_id = 56
+                user_id = 56,
+                method = 'VOID',
+                transaction_ids = [
+                    56
+                    ],
+                guest_id = 56
             )
         else:
             return CreateCreditNoteRequest(
+                invoice_id = 56,
+                method = 'VOID',
+                guest_id = 56,
         )
         """
 

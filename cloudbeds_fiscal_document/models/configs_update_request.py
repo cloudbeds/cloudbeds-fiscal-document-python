@@ -26,19 +26,19 @@ class ConfigsUpdateRequest(BaseModel):
     """
     ConfigsUpdateRequest
     """ # noqa: E501
-    show_detailed_tax_fee: Optional[StrictBool] = Field(default=None, alias="showDetailedTaxFee")
-    charge_breakdown: Optional[StrictBool] = Field(default=None, alias="chargeBreakdown")
-    use_guest_lang: Optional[StrictBool] = Field(default=None, alias="useGuestLang")
+    show_detailed_tax_fee: StrictBool = Field(alias="showDetailedTaxFee")
+    charge_breakdown: StrictBool = Field(alias="chargeBreakdown")
+    use_guest_lang: StrictBool = Field(alias="useGuestLang")
     due_days: Optional[StrictInt] = Field(default=None, alias="dueDays")
     lang: Optional[StrictStr] = None
     prefix: Optional[StrictStr] = None
     suffix: Optional[StrictStr] = None
     legal_company_name: Optional[StrictStr] = Field(default=None, alias="legalCompanyName")
     title: Optional[Dict[str, StrictStr]] = None
-    show_legal_company_name: Optional[StrictBool] = Field(default=None, alias="showLegalCompanyName")
-    include_room_number: Optional[StrictBool] = Field(default=None, alias="includeRoomNumber")
-    use_document_number: Optional[StrictBool] = Field(default=None, alias="useDocumentNumber")
-    is_compact: Optional[StrictBool] = Field(default=None, alias="isCompact")
+    show_legal_company_name: StrictBool = Field(alias="showLegalCompanyName")
+    include_room_number: StrictBool = Field(alias="includeRoomNumber")
+    use_document_number: StrictBool = Field(alias="useDocumentNumber")
+    is_compact: StrictBool = Field(alias="isCompact")
     tax_id1: Optional[StrictStr] = Field(default=None, alias="taxId1")
     tax_id2: Optional[StrictStr] = Field(default=None, alias="taxId2")
     cpf: Optional[StrictStr] = None
