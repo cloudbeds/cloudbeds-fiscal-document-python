@@ -17,18 +17,21 @@ import pprint
 import re  # noqa: F401
 import json
 
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-class RecipientTaxInfo(BaseModel):
+class RecipientContactDetails(BaseModel):
     """
-    RecipientTaxInfo
+    RecipientContactDetails
     """ # noqa: E501
-    id: Optional[StrictStr] = None
-    company_name: Optional[StrictStr] = Field(default=None, alias="companyName")
-    __properties: ClassVar[List[str]] = ["id", "companyName"]
+    phone: Optional[StrictStr] = None
+    gender: Optional[StrictStr] = None
+    cell_phone: Optional[StrictStr] = Field(default=None, alias="cellPhone")
+    birthday: Optional[datetime] = None
+    __properties: ClassVar[List[str]] = ["phone", "gender", "cellPhone", "birthday"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -48,7 +51,7 @@ class RecipientTaxInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of RecipientTaxInfo from a JSON string"""
+        """Create an instance of RecipientContactDetails from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,7 +76,7 @@ class RecipientTaxInfo(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of RecipientTaxInfo from a dict"""
+        """Create an instance of RecipientContactDetails from a dict"""
         if obj is None:
             return None
 
@@ -81,8 +84,10 @@ class RecipientTaxInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "companyName": obj.get("companyName")
+            "phone": obj.get("phone"),
+            "gender": obj.get("gender"),
+            "cellPhone": obj.get("cellPhone"),
+            "birthday": obj.get("birthday")
         })
         return _obj
 

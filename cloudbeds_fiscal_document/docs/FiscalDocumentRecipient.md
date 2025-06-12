@@ -12,7 +12,9 @@ Name | Type | Description | Notes
 **type** | **str** |  | [optional] 
 **address** | [**RecipientAddress**](RecipientAddress.md) |  | [optional] 
 **tax** | [**RecipientTaxInfo**](RecipientTaxInfo.md) |  | [optional] 
-**country_data** | **Dict[str, object]** | Arbitrary country-specific fields.  Keys are ISO country codes like \&quot;ES\&quot;, \&quot;AR\&quot;, \&quot;US\&quot;, and each value is a free-form object.  | [optional] 
+**contact_details** | [**RecipientContactDetails**](RecipientContactDetails.md) |  | [optional] 
+**document** | [**RecipientDocument**](RecipientDocument.md) |  | [optional] 
+**country_data** | **Dict[str, object]** | Arbitrary country-specific fields. Keys are ISO country codes like \&quot;ES\&quot;, \&quot;AR\&quot;, \&quot;US\&quot;, and each value is a free-form object.  | [optional] 
 
 ## Example
 

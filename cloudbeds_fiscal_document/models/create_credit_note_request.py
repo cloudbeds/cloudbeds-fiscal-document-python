@@ -32,8 +32,7 @@ class CreateCreditNoteRequest(BaseModel):
     user_id: Optional[StrictInt] = Field(default=None, alias="userId")
     method: StrictStr
     transaction_ids: Optional[List[StrictInt]] = Field(default=None, alias="transactionIds")
-    guest_id: StrictInt = Field(alias="guestId")
-    __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "method", "transactionIds", "guestId"]
+    __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "method", "transactionIds"]
 
     @field_validator('method')
     def method_validate_enum(cls, value):
@@ -98,8 +97,7 @@ class CreateCreditNoteRequest(BaseModel):
             "reason": obj.get("reason"),
             "userId": obj.get("userId"),
             "method": obj.get("method"),
-            "transactionIds": obj.get("transactionIds"),
-            "guestId": obj.get("guestId")
+            "transactionIds": obj.get("transactionIds")
         })
         return _obj
 

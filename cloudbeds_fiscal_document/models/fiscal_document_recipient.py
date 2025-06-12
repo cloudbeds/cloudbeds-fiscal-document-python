@@ -20,6 +20,8 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress
+from cloudbeds_fiscal_document.models.recipient_contact_details import RecipientContactDetails
+from cloudbeds_fiscal_document.models.recipient_document import RecipientDocument
 from cloudbeds_fiscal_document.models.recipient_tax_info import RecipientTaxInfo
 from typing import Optional, Set
 from typing_extensions import Self
@@ -35,8 +37,10 @@ class FiscalDocumentRecipient(BaseModel):
     type: Optional[StrictStr] = None
     address: Optional[RecipientAddress] = None
     tax: Optional[RecipientTaxInfo] = None
-    country_data: Optional[Dict[str, Dict[str, Any]]] = Field(default=None, description="Arbitrary country-specific fields.  Keys are ISO country codes like \"ES\", \"AR\", \"US\", and each value is a free-form object. ", alias="countryData")
-    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email", "type", "address", "tax", "countryData"]
+    contact_details: Optional[RecipientContactDetails] = Field(default=None, alias="contactDetails")
+    document: Optional[RecipientDocument] = None
+    country_data: Optional[Dict[str, Dict[str, Any]]] = Field(default=None, description="Arbitrary country-specific fields. Keys are ISO country codes like \"ES\", \"AR\", \"US\", and each value is a free-form object. ", alias="countryData")
+    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email", "type", "address", "tax", "contactDetails", "document", "countryData"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -93,6 +97,12 @@ class FiscalDocumentRecipient(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of tax
         if self.tax:
             _dict['tax'] = self.tax.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of contact_details
+        if self.contact_details:
+            _dict['contactDetails'] = self.contact_details.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of document
+        if self.document:
+            _dict['document'] = self.document.to_dict()
         return _dict
 
     @classmethod
@@ -112,6 +122,8 @@ class FiscalDocumentRecipient(BaseModel):
             "type": obj.get("type"),
             "address": RecipientAddress.from_dict(obj["address"]) if obj.get("address") is not None else None,
             "tax": RecipientTaxInfo.from_dict(obj["tax"]) if obj.get("tax") is not None else None,
+            "contactDetails": RecipientContactDetails.from_dict(obj["contactDetails"]) if obj.get("contactDetails") is not None else None,
+            "document": RecipientDocument.from_dict(obj["document"]) if obj.get("document") is not None else None,
             "countryData": obj.get("countryData")
         })
         return _obj
