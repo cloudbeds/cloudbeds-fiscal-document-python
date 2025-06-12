@@ -48,13 +48,14 @@ class FiscalDocumentDetailedResponse(BaseModel):
     due_date: Optional[date] = Field(default=None, alias="dueDate")
     recipients: Optional[List[RecipientDetails]] = None
     status: Optional[FiscalDocumentStatus] = None
-    external_source: Optional[StrictStr] = Field(default=None, alias="externalSource")
+    origin: Optional[StrictStr] = None
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
     created_at: Optional[datetime] = Field(default=None, alias="createdAt")
+    parent_id: Optional[StrictStr] = Field(default=None, alias="parentId")
     updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
     government_integration: Optional[GovernmentIntegration] = Field(default=None, alias="governmentIntegration")
     actions: Optional[List[Action]] = Field(default=None, description="Returns the list of actions available for the transaction")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "recipients", "status", "externalSource", "externalId", "createdAt", "updatedAt", "governmentIntegration", "actions"]
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "recipients", "status", "origin", "externalId", "createdAt", "parentId", "updatedAt", "governmentIntegration", "actions"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -139,9 +140,10 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "dueDate": obj.get("dueDate"),
             "recipients": [RecipientDetails.from_dict(_item) for _item in obj["recipients"]] if obj.get("recipients") is not None else None,
             "status": obj.get("status"),
-            "externalSource": obj.get("externalSource"),
+            "origin": obj.get("origin"),
             "externalId": obj.get("externalId"),
             "createdAt": obj.get("createdAt"),
+            "parentId": obj.get("parentId"),
             "updatedAt": obj.get("updatedAt"),
             "governmentIntegration": GovernmentIntegration.from_dict(obj["governmentIntegration"]) if obj.get("governmentIntegration") is not None else None,
             "actions": [Action.from_dict(_item) for _item in obj["actions"]] if obj.get("actions") is not None else None

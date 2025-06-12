@@ -11,7 +11,6 @@ Name | Type | Description | Notes
 **user_id** | **int** |  | [optional] 
 **method** | **str** |  | 
 **transaction_ids** | **List[int]** |  | [optional] 
-**guest_id** | **int** |  | 
 
 ## Example
 

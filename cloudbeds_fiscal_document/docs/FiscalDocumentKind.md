@@ -10,6 +10,8 @@ Kind of fiscal document
 
 * `RECEIPT` (value: `'RECEIPT'`)
 
+* `RECTIFY_INVOICE` (value: `'RECTIFY_INVOICE'`)
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 
