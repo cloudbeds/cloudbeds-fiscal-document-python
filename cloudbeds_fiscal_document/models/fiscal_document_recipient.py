@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress
 from cloudbeds_fiscal_document.models.recipient_contact_details import RecipientContactDetails
 from cloudbeds_fiscal_document.models.recipient_document import RecipientDocument
@@ -30,7 +31,7 @@ class FiscalDocumentRecipient(BaseModel):
     """
     FiscalDocumentRecipient
     """ # noqa: E501
-    id: Optional[StrictStr] = None
+    id: Optional[Annotated[str, Field(min_length=1, strict=True)]] = None
     first_name: Optional[StrictStr] = Field(default=None, alias="firstName")
     last_name: Optional[StrictStr] = Field(default=None, alias="lastName")
     email: Optional[StrictStr] = None
@@ -39,7 +40,7 @@ class FiscalDocumentRecipient(BaseModel):
     tax: Optional[RecipientTaxInfo] = None
     contact_details: Optional[RecipientContactDetails] = Field(default=None, alias="contactDetails")
     document: Optional[RecipientDocument] = None
-    country_data: Optional[Dict[str, Dict[str, Any]]] = Field(default=None, description="Arbitrary country-specific fields. Keys are ISO country codes like \"ES\", \"AR\", \"US\", and each value is a free-form object. ", alias="countryData")
+    country_data: Optional[Dict[str, Any]] = Field(default=None, description="Arbitrary country-specific fields. Keys are ISO country codes like \"ES\", \"AR\", \"US\", and each value is a free-form object. ", alias="countryData")
     __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email", "type", "address", "tax", "contactDetails", "document", "countryData"]
 
     @field_validator('type')

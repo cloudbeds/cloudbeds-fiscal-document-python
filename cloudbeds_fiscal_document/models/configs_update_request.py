@@ -84,6 +84,56 @@ class ConfigsUpdateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if due_days (nullable) is None
+        # and model_fields_set contains the field
+        if self.due_days is None and "due_days" in self.model_fields_set:
+            _dict['dueDays'] = None
+
+        # set to None if lang (nullable) is None
+        # and model_fields_set contains the field
+        if self.lang is None and "lang" in self.model_fields_set:
+            _dict['lang'] = None
+
+        # set to None if prefix (nullable) is None
+        # and model_fields_set contains the field
+        if self.prefix is None and "prefix" in self.model_fields_set:
+            _dict['prefix'] = None
+
+        # set to None if suffix (nullable) is None
+        # and model_fields_set contains the field
+        if self.suffix is None and "suffix" in self.model_fields_set:
+            _dict['suffix'] = None
+
+        # set to None if legal_company_name (nullable) is None
+        # and model_fields_set contains the field
+        if self.legal_company_name is None and "legal_company_name" in self.model_fields_set:
+            _dict['legalCompanyName'] = None
+
+        # set to None if title (nullable) is None
+        # and model_fields_set contains the field
+        if self.title is None and "title" in self.model_fields_set:
+            _dict['title'] = None
+
+        # set to None if tax_id1 (nullable) is None
+        # and model_fields_set contains the field
+        if self.tax_id1 is None and "tax_id1" in self.model_fields_set:
+            _dict['taxId1'] = None
+
+        # set to None if tax_id2 (nullable) is None
+        # and model_fields_set contains the field
+        if self.tax_id2 is None and "tax_id2" in self.model_fields_set:
+            _dict['taxId2'] = None
+
+        # set to None if cpf (nullable) is None
+        # and model_fields_set contains the field
+        if self.cpf is None and "cpf" in self.model_fields_set:
+            _dict['cpf'] = None
+
+        # set to None if custom_text (nullable) is None
+        # and model_fields_set contains the field
+        if self.custom_text is None and "custom_text" in self.model_fields_set:
+            _dict['customText'] = None
+
         return _dict
 
     @classmethod

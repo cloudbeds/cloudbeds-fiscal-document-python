@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,7 +27,7 @@ class RecipientDetails(BaseModel):
     """
     RecipientDetails
     """ # noqa: E501
-    id: Optional[StrictStr] = None
+    id: Optional[Annotated[str, Field(min_length=1, strict=True)]] = None
     first_name: Optional[StrictStr] = Field(default=None, alias="firstName")
     last_name: Optional[StrictStr] = Field(default=None, alias="lastName")
     email: Optional[StrictStr] = None

@@ -18,29 +18,20 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class FiscalDocumentStatus(str, Enum):
+class CreationMethod(str, Enum):
     """
-    Status of the fiscal document
+    CreationMethod
     """
 
     """
     allowed enum values
     """
-    COMPLETED = 'COMPLETED'
-    VOIDED = 'VOIDED'
-    PAID = 'PAID'
-    PENDING_INTEGRATION = 'PENDING_INTEGRATION'
-    CANCELED = 'CANCELED'
-    OPEN = 'OPEN'
-    REQUESTED = 'REQUESTED'
-    VOID_REQUESTED = 'VOID_REQUESTED'
-    FAILED = 'FAILED'
-    MANUALLY_RECONCILED = 'MANUALLY_RECONCILED'
-    REJECTED = 'REJECTED'
+    VOID = 'VOID'
+    ADJUSTMENT = 'ADJUSTMENT'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of FiscalDocumentStatus from a JSON string"""
+        """Create an instance of CreationMethod from a JSON string"""
         return cls(json.loads(json_str))
 
 

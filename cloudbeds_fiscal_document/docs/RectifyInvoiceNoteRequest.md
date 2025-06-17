@@ -1,11 +1,10 @@
-# CreateCreditNoteRequest
+# RectifyInvoiceNoteRequest
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**sequence_id** | **int** |  | [optional] 
 **invoice_id** | **int** |  | 
 **reason** | **str** |  | [optional] 
 **user_id** | **int** |  | [optional] 
@@ -15,19 +14,19 @@ Name | Type | Description | Notes
 ## Example
 
 ```python
-from cloudbeds_fiscal_document.models.create_credit_note_request import CreateCreditNoteRequest
+from cloudbeds_fiscal_document.models.rectify_invoice_note_request import RectifyInvoiceNoteRequest
 
 # TODO update the JSON string below
 json = "{}"
-# create an instance of CreateCreditNoteRequest from a JSON string
-create_credit_note_request_instance = CreateCreditNoteRequest.from_json(json)
+# create an instance of RectifyInvoiceNoteRequest from a JSON string
+rectify_invoice_note_request_instance = RectifyInvoiceNoteRequest.from_json(json)
 # print the JSON string representation of the object
-print(CreateCreditNoteRequest.to_json())
+print(RectifyInvoiceNoteRequest.to_json())
 
 # convert the object into a dict
-create_credit_note_request_dict = create_credit_note_request_instance.to_dict()
-# create an instance of CreateCreditNoteRequest from a dict
-create_credit_note_request_from_dict = CreateCreditNoteRequest.from_dict(create_credit_note_request_dict)
+rectify_invoice_note_request_dict = rectify_invoice_note_request_instance.to_dict()
+# create an instance of RectifyInvoiceNoteRequest from a dict
+rectify_invoice_note_request_from_dict = RectifyInvoiceNoteRequest.from_dict(rectify_invoice_note_request_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

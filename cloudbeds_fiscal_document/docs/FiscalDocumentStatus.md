@@ -10,6 +10,8 @@ Status of the fiscal document
 
 * `PAID` (value: `'PAID'`)
 
+* `PENDING_INTEGRATION` (value: `'PENDING_INTEGRATION'`)
+
 * `CANCELED` (value: `'CANCELED'`)
 
 * `OPEN` (value: `'OPEN'`)

@@ -77,6 +77,7 @@ Class | Method | HTTP request | Description
 *ConfigsApi* | [**update_configs**](cloudbeds_fiscal_document/docs/ConfigsApi.md#update_configs) | **PUT** /fiscal-document/v1/configs/{documentKind} | Updates a config of a specific kind
 *FiscalDocumentsApi* | [**create_credit_note**](cloudbeds_fiscal_document/docs/FiscalDocumentsApi.md#create_credit_note) | **POST** /fiscal-document/v1/fiscal-documents/credit-note | Create a fiscal document of the type credit note
 *FiscalDocumentsApi* | [**create_invoice**](cloudbeds_fiscal_document/docs/FiscalDocumentsApi.md#create_invoice) | **POST** /fiscal-document/v1/fiscal-documents/invoice | Create a fiscal document of the type invoice
+*FiscalDocumentsApi* | [**create_rectify_invoice**](cloudbeds_fiscal_document/docs/FiscalDocumentsApi.md#create_rectify_invoice) | **POST** /fiscal-document/v1/fiscal-documents/rectify-invoice | Create a fiscal document of the type rectify invoice
 *FiscalDocumentsApi* | [**download_fiscal_document**](cloudbeds_fiscal_document/docs/FiscalDocumentsApi.md#download_fiscal_document) | **GET** /fiscal-document/v1/fiscal-documents/{id}/download | Download fiscal document
 *FiscalDocumentsApi* | [**email_fiscal_document**](cloudbeds_fiscal_document/docs/FiscalDocumentsApi.md#email_fiscal_document) | **POST** /fiscal-document/v1/fiscal-documents/{id}/email | Email a fiscal document
 *FiscalDocumentsApi* | [**get_fiscal_document_recipients_by_id**](cloudbeds_fiscal_document/docs/FiscalDocumentsApi.md#get_fiscal_document_recipients_by_id) | **GET** /fiscal-document/v1/fiscal-documents/{id}/recipients | Get list of recipients associated to the fiscal document
@@ -94,6 +95,7 @@ Class | Method | HTTP request | Description
  - [ConfigsUpdateRequest](cloudbeds_fiscal_document/docs/ConfigsUpdateRequest.md)
  - [CreateCreditNoteRequest](cloudbeds_fiscal_document/docs/CreateCreditNoteRequest.md)
  - [CreateInvoiceRequest](cloudbeds_fiscal_document/docs/CreateInvoiceRequest.md)
+ - [CreationMethod](cloudbeds_fiscal_document/docs/CreationMethod.md)
  - [DocumentAction](cloudbeds_fiscal_document/docs/DocumentAction.md)
  - [FiscalDocumentDetailedResponse](cloudbeds_fiscal_document/docs/FiscalDocumentDetailedResponse.md)
  - [FiscalDocumentEmailRequest](cloudbeds_fiscal_document/docs/FiscalDocumentEmailRequest.md)
@@ -112,6 +114,7 @@ Class | Method | HTTP request | Description
  - [RecipientDetails](cloudbeds_fiscal_document/docs/RecipientDetails.md)
  - [RecipientDocument](cloudbeds_fiscal_document/docs/RecipientDocument.md)
  - [RecipientTaxInfo](cloudbeds_fiscal_document/docs/RecipientTaxInfo.md)
+ - [RectifyInvoiceNoteRequest](cloudbeds_fiscal_document/docs/RectifyInvoiceNoteRequest.md)
  - [SourceKind](cloudbeds_fiscal_document/docs/SourceKind.md)
 
 

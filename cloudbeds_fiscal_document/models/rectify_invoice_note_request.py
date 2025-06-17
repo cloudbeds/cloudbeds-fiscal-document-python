@@ -17,24 +17,23 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from cloudbeds_fiscal_document.models.source_kind import SourceKind
+from cloudbeds_fiscal_document.models.creation_method import CreationMethod
 from typing import Optional, Set
 from typing_extensions import Self
 
-class CreateInvoiceRequest(BaseModel):
+class RectifyInvoiceNoteRequest(BaseModel):
     """
-    CreateInvoiceRequest
+    RectifyInvoiceNoteRequest
     """ # noqa: E501
-    transaction_ids: Annotated[List[Annotated[int, Field(strict=True, ge=1)]], Field(min_length=1)] = Field(alias="transactionIds")
-    source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
-    sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
-    source_kind: SourceKind = Field(alias="sourceKind")
-    user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
-    guest_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="guestId")
-    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "guestId"]
+    invoice_id: StrictInt = Field(alias="invoiceId")
+    reason: Optional[StrictStr] = None
+    user_id: Optional[StrictInt] = Field(default=None, alias="userId")
+    method: CreationMethod
+    transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, alias="transactionIds")
+    __properties: ClassVar[List[str]] = ["invoiceId", "reason", "userId", "method", "transactionIds"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -54,7 +53,7 @@ class CreateInvoiceRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CreateInvoiceRequest from a JSON string"""
+        """Create an instance of RectifyInvoiceNoteRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,21 +74,16 @@ class CreateInvoiceRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if sequence_id (nullable) is None
+        # set to None if transaction_ids (nullable) is None
         # and model_fields_set contains the field
-        if self.sequence_id is None and "sequence_id" in self.model_fields_set:
-            _dict['sequenceId'] = None
-
-        # set to None if user_id (nullable) is None
-        # and model_fields_set contains the field
-        if self.user_id is None and "user_id" in self.model_fields_set:
-            _dict['userId'] = None
+        if self.transaction_ids is None and "transaction_ids" in self.model_fields_set:
+            _dict['transactionIds'] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CreateInvoiceRequest from a dict"""
+        """Create an instance of RectifyInvoiceNoteRequest from a dict"""
         if obj is None:
             return None
 
@@ -97,12 +91,11 @@ class CreateInvoiceRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "transactionIds": obj.get("transactionIds"),
-            "sourceId": obj.get("sourceId"),
-            "sequenceId": obj.get("sequenceId"),
-            "sourceKind": obj.get("sourceKind"),
+            "invoiceId": obj.get("invoiceId"),
+            "reason": obj.get("reason"),
             "userId": obj.get("userId"),
-            "guestId": obj.get("guestId")
+            "method": obj.get("method"),
+            "transactionIds": obj.get("transactionIds")
         })
         return _obj
 
