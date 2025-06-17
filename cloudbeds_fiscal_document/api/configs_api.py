@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictInt
+from pydantic import Field
 from typing import List
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.configs_response import ConfigsResponse
@@ -44,7 +44,7 @@ class ConfigsApi:
     @validate_call
     def get_configs(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -111,7 +111,7 @@ class ConfigsApi:
     @validate_call
     def get_configs_with_http_info(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -178,7 +178,7 @@ class ConfigsApi:
     @validate_call
     def get_configs_without_preload_content(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -305,7 +305,7 @@ class ConfigsApi:
     @validate_call
     def update_configs(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         document_kind: Annotated[FiscalDocumentKind, Field(description="The kind of the fiscal document.")],
         configs_update_request: ConfigsUpdateRequest,
         _request_timeout: Union[
@@ -380,7 +380,7 @@ class ConfigsApi:
     @validate_call
     def update_configs_with_http_info(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         document_kind: Annotated[FiscalDocumentKind, Field(description="The kind of the fiscal document.")],
         configs_update_request: ConfigsUpdateRequest,
         _request_timeout: Union[
@@ -455,7 +455,7 @@ class ConfigsApi:
     @validate_call
     def update_configs_without_preload_content(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         document_kind: Annotated[FiscalDocumentKind, Field(description="The kind of the fiscal document.")],
         configs_update_request: ConfigsUpdateRequest,
         _request_timeout: Union[

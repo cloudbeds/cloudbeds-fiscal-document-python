@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**create_credit_note**](FiscalDocumentsApi.md#create_credit_note) | **POST** /fiscal-document/v1/fiscal-documents/credit-note | Create a fiscal document of the type credit note
 [**create_invoice**](FiscalDocumentsApi.md#create_invoice) | **POST** /fiscal-document/v1/fiscal-documents/invoice | Create a fiscal document of the type invoice
+[**create_rectify_invoice**](FiscalDocumentsApi.md#create_rectify_invoice) | **POST** /fiscal-document/v1/fiscal-documents/rectify-invoice | Create a fiscal document of the type rectify invoice
 [**download_fiscal_document**](FiscalDocumentsApi.md#download_fiscal_document) | **GET** /fiscal-document/v1/fiscal-documents/{id}/download | Download fiscal document
 [**email_fiscal_document**](FiscalDocumentsApi.md#email_fiscal_document) | **POST** /fiscal-document/v1/fiscal-documents/{id}/email | Email a fiscal document
 [**get_fiscal_document_recipients_by_id**](FiscalDocumentsApi.md#get_fiscal_document_recipients_by_id) | **GET** /fiscal-document/v1/fiscal-documents/{id}/recipients | Get list of recipients associated to the fiscal document
@@ -155,6 +156,87 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **x_property_id** | **int**| Property id | 
  **create_invoice_request** | [**CreateInvoiceRequest**](CreateInvoiceRequest.md)|  | 
+
+### Return type
+
+[**FiscalDocumentSummaryResponse**](FiscalDocumentSummaryResponse.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_rectify_invoice**
+> FiscalDocumentSummaryResponse create_rectify_invoice(x_property_id, rectify_invoice_note_request)
+
+Create a fiscal document of the type rectify invoice
+
+Create a fiscal document of the type rectify invoice.
+
+### Example
+
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.fiscal_document_summary_response import FiscalDocumentSummaryResponse
+from cloudbeds_fiscal_document.models.rectify_invoice_note_request import RectifyInvoiceNoteRequest
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost:8700
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "http://localhost:8700"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    x_property_id = 56 # int | Property id
+    rectify_invoice_note_request = cloudbeds_fiscal_document.RectifyInvoiceNoteRequest() # RectifyInvoiceNoteRequest | 
+
+    try:
+        # Create a fiscal document of the type rectify invoice
+        api_response = api_instance.create_rectify_invoice(x_property_id, rectify_invoice_note_request)
+        print("The response of FiscalDocumentsApi->create_rectify_invoice:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->create_rectify_invoice: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **x_property_id** | **int**| Property id | 
+ **rectify_invoice_note_request** | [**RectifyInvoiceNoteRequest**](RectifyInvoiceNoteRequest.md)|  | 
 
 ### Return type
 

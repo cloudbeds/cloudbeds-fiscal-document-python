@@ -17,8 +17,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.creation_method import CreationMethod
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,20 +28,13 @@ class CreateCreditNoteRequest(BaseModel):
     """
     CreateCreditNoteRequest
     """ # noqa: E501
-    sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
-    invoice_id: StrictInt = Field(alias="invoiceId")
+    sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
+    invoice_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="invoiceId")
     reason: Optional[StrictStr] = None
-    user_id: Optional[StrictInt] = Field(default=None, alias="userId")
-    method: StrictStr
+    user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
+    method: CreationMethod
     transaction_ids: Optional[List[StrictInt]] = Field(default=None, alias="transactionIds")
     __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "method", "transactionIds"]
-
-    @field_validator('method')
-    def method_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['VOID', 'ADJUSTMENT']):
-            raise ValueError("must be one of enum values ('VOID', 'ADJUSTMENT')")
-        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -80,6 +75,21 @@ class CreateCreditNoteRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if sequence_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.sequence_id is None and "sequence_id" in self.model_fields_set:
+            _dict['sequenceId'] = None
+
+        # set to None if reason (nullable) is None
+        # and model_fields_set contains the field
+        if self.reason is None and "reason" in self.model_fields_set:
+            _dict['reason'] = None
+
+        # set to None if user_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.user_id is None and "user_id" in self.model_fields_set:
+            _dict['userId'] = None
+
         return _dict
 
     @classmethod

@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictBytes, StrictInt, StrictStr
+from pydantic import Field, StrictBytes, StrictStr
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.create_credit_note_request import CreateCreditNoteRequest
@@ -29,6 +29,7 @@ from cloudbeds_fiscal_document.models.fiscal_document_recipient import FiscalDoc
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.fiscal_document_summary_response import FiscalDocumentSummaryResponse
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_paginated import FiscalDocumentTransactionsPaginated
+from cloudbeds_fiscal_document.models.rectify_invoice_note_request import RectifyInvoiceNoteRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 
 from cloudbeds_fiscal_document.api_client import ApiClient, RequestSerialized
@@ -52,7 +53,7 @@ class FiscalDocumentsApi:
     @validate_call
     def create_credit_note(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         create_credit_note_request: CreateCreditNoteRequest,
         _request_timeout: Union[
             None,
@@ -123,7 +124,7 @@ class FiscalDocumentsApi:
     @validate_call
     def create_credit_note_with_http_info(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         create_credit_note_request: CreateCreditNoteRequest,
         _request_timeout: Union[
             None,
@@ -194,7 +195,7 @@ class FiscalDocumentsApi:
     @validate_call
     def create_credit_note_without_preload_content(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         create_credit_note_request: CreateCreditNoteRequest,
         _request_timeout: Union[
             None,
@@ -341,7 +342,7 @@ class FiscalDocumentsApi:
     @validate_call
     def create_invoice(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         create_invoice_request: CreateInvoiceRequest,
         _request_timeout: Union[
             None,
@@ -412,7 +413,7 @@ class FiscalDocumentsApi:
     @validate_call
     def create_invoice_with_http_info(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         create_invoice_request: CreateInvoiceRequest,
         _request_timeout: Union[
             None,
@@ -483,7 +484,7 @@ class FiscalDocumentsApi:
     @validate_call
     def create_invoice_without_preload_content(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         create_invoice_request: CreateInvoiceRequest,
         _request_timeout: Union[
             None,
@@ -628,10 +629,299 @@ class FiscalDocumentsApi:
 
 
     @validate_call
+    def create_rectify_invoice(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        rectify_invoice_note_request: RectifyInvoiceNoteRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> FiscalDocumentSummaryResponse:
+        """Create a fiscal document of the type rectify invoice
+
+        Create a fiscal document of the type rectify invoice.
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param rectify_invoice_note_request: (required)
+        :type rectify_invoice_note_request: RectifyInvoiceNoteRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_rectify_invoice_serialize(
+            x_property_id=x_property_id,
+            rectify_invoice_note_request=rectify_invoice_note_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def create_rectify_invoice_with_http_info(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        rectify_invoice_note_request: RectifyInvoiceNoteRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[FiscalDocumentSummaryResponse]:
+        """Create a fiscal document of the type rectify invoice
+
+        Create a fiscal document of the type rectify invoice.
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param rectify_invoice_note_request: (required)
+        :type rectify_invoice_note_request: RectifyInvoiceNoteRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_rectify_invoice_serialize(
+            x_property_id=x_property_id,
+            rectify_invoice_note_request=rectify_invoice_note_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def create_rectify_invoice_without_preload_content(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        rectify_invoice_note_request: RectifyInvoiceNoteRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Create a fiscal document of the type rectify invoice
+
+        Create a fiscal document of the type rectify invoice.
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param rectify_invoice_note_request: (required)
+        :type rectify_invoice_note_request: RectifyInvoiceNoteRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_rectify_invoice_serialize(
+            x_property_id=x_property_id,
+            rectify_invoice_note_request=rectify_invoice_note_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _create_rectify_invoice_serialize(
+        self,
+        x_property_id,
+        rectify_invoice_note_request,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-ID'] = x_property_id
+        # process the form parameters
+        # process the body parameter
+        if rectify_invoice_note_request is not None:
+            _body_params = rectify_invoice_note_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/fiscal-document/v1/fiscal-documents/rectify-invoice',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
     def download_fiscal_document(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -701,8 +991,8 @@ class FiscalDocumentsApi:
     @validate_call
     def download_fiscal_document_with_http_info(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -772,8 +1062,8 @@ class FiscalDocumentsApi:
     @validate_call
     def download_fiscal_document_without_preload_content(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -906,8 +1196,8 @@ class FiscalDocumentsApi:
     @validate_call
     def email_fiscal_document(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         fiscal_document_email_request: FiscalDocumentEmailRequest,
         _request_timeout: Union[
             None,
@@ -981,8 +1271,8 @@ class FiscalDocumentsApi:
     @validate_call
     def email_fiscal_document_with_http_info(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         fiscal_document_email_request: FiscalDocumentEmailRequest,
         _request_timeout: Union[
             None,
@@ -1056,8 +1346,8 @@ class FiscalDocumentsApi:
     @validate_call
     def email_fiscal_document_without_preload_content(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         fiscal_document_email_request: FiscalDocumentEmailRequest,
         _request_timeout: Union[
             None,
@@ -1210,8 +1500,8 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_recipients_by_id(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1281,8 +1571,8 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_recipients_by_id_with_http_info(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1352,8 +1642,8 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_recipients_by_id_without_preload_content(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1486,9 +1776,9 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_transactions(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         for_document_type: Annotated[FiscalDocumentKind, Field(description="Document type for which transactions are related.")],
-        source_id: Annotated[StrictInt, Field(description="source ID.")],
+        source_id: Annotated[int, Field(strict=True, ge=1, description="source ID.")],
         source_kind: Annotated[SourceKind, Field(description="Filter by source kind.")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
@@ -1573,9 +1863,9 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_transactions_with_http_info(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         for_document_type: Annotated[FiscalDocumentKind, Field(description="Document type for which transactions are related.")],
-        source_id: Annotated[StrictInt, Field(description="source ID.")],
+        source_id: Annotated[int, Field(strict=True, ge=1, description="source ID.")],
         source_kind: Annotated[SourceKind, Field(description="Filter by source kind.")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
@@ -1660,9 +1950,9 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_transactions_without_preload_content(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         for_document_type: Annotated[FiscalDocumentKind, Field(description="Document type for which transactions are related.")],
-        source_id: Annotated[StrictInt, Field(description="source ID.")],
+        source_id: Annotated[int, Field(strict=True, ge=1, description="source ID.")],
         source_kind: Annotated[SourceKind, Field(description="Filter by source kind.")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
@@ -1832,8 +2122,8 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_transactions_by_id(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         _request_timeout: Union[
@@ -1911,8 +2201,8 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_transactions_by_id_with_http_info(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         _request_timeout: Union[
@@ -1990,8 +2280,8 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_document_transactions_by_id_without_preload_content(
         self,
-        id: Annotated[StrictStr, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         _request_timeout: Union[
@@ -2142,7 +2432,7 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_documents(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields createdAt. Supported sort modes asc:desc If not supplied default is asc.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
@@ -2245,7 +2535,7 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_documents_with_http_info(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields createdAt. Supported sort modes asc:desc If not supplied default is asc.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
@@ -2348,7 +2638,7 @@ class FiscalDocumentsApi:
     @validate_call
     def get_fiscal_documents_without_preload_content(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields createdAt. Supported sort modes asc:desc If not supplied default is asc.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
@@ -2561,8 +2851,8 @@ class FiscalDocumentsApi:
     @validate_call
     def put_fiscal_document(
         self,
-        id: Annotated[StrictInt, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[int, Field(strict=True, ge=1, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         fiscal_document_patch_request: FiscalDocumentPatchRequest,
         _request_timeout: Union[
             None,
@@ -2636,8 +2926,8 @@ class FiscalDocumentsApi:
     @validate_call
     def put_fiscal_document_with_http_info(
         self,
-        id: Annotated[StrictInt, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[int, Field(strict=True, ge=1, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         fiscal_document_patch_request: FiscalDocumentPatchRequest,
         _request_timeout: Union[
             None,
@@ -2711,8 +3001,8 @@ class FiscalDocumentsApi:
     @validate_call
     def put_fiscal_document_without_preload_content(
         self,
-        id: Annotated[StrictInt, Field(description="Unique ID of the fiscal document to download.")],
-        x_property_id: Annotated[StrictInt, Field(description="Property id")],
+        id: Annotated[int, Field(strict=True, ge=1, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         fiscal_document_patch_request: FiscalDocumentPatchRequest,
         _request_timeout: Union[
             None,
