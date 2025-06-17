@@ -8,7 +8,7 @@
   "additionalProperties": {
     "packageName": "cloudbeds_fiscal_document",
     "projectName": "Cloudbeds Fiscal Document",
-    "packageVersion": "1.3.0",
+    "packageVersion": "1.4.0",
     "packageDescription": "OpenAPI client for Cloudbeds Fiscal Document API.",
     "generateSourceCodeOnly": true,
     "packageUrl": "https://github.com/cloudbeds/cloudbeds-fiscal-document-python"
