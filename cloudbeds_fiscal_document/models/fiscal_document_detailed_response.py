@@ -50,12 +50,13 @@ class FiscalDocumentDetailedResponse(BaseModel):
     status: Optional[FiscalDocumentStatus] = None
     origin: Optional[StrictStr] = None
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
+    fail_reason: Optional[StrictStr] = Field(default=None, alias="failReason")
     created_at: Optional[datetime] = Field(default=None, alias="createdAt")
     parent_id: Optional[StrictStr] = Field(default=None, alias="parentId")
     updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
     government_integration: Optional[GovernmentIntegration] = Field(default=None, alias="governmentIntegration")
     actions: Optional[List[Action]] = Field(default=None, description="Returns the list of actions available for the transaction")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "recipients", "status", "origin", "externalId", "createdAt", "parentId", "updatedAt", "governmentIntegration", "actions"]
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "recipients", "status", "origin", "externalId", "failReason", "createdAt", "parentId", "updatedAt", "governmentIntegration", "actions"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -142,6 +143,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "status": obj.get("status"),
             "origin": obj.get("origin"),
             "externalId": obj.get("externalId"),
+            "failReason": obj.get("failReason"),
             "createdAt": obj.get("createdAt"),
             "parentId": obj.get("parentId"),
             "updatedAt": obj.get("updatedAt"),
