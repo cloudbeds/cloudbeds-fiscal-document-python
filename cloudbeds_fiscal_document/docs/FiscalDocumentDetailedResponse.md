@@ -22,6 +22,7 @@ Name | Type | Description | Notes
 **status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
 **origin** | **str** |  | [optional] 
 **external_id** | **str** |  | [optional] 
+**fail_reason** | **str** |  | [optional] 
 **created_at** | **datetime** |  | [optional] 
 **parent_id** | **str** |  | [optional] 
 **updated_at** | **datetime** |  | [optional] 

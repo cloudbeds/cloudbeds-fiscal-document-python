@@ -6,6 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
+**fail_reason** | **str** |  | [optional] 
 **government_integration** | [**GovernmentIntegration**](GovernmentIntegration.md) |  | [optional] 
 
 ## Example

@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration
@@ -29,8 +29,9 @@ class FiscalDocumentPatchRequest(BaseModel):
     FiscalDocumentPatchRequest
     """ # noqa: E501
     status: Optional[FiscalDocumentStatus] = None
+    fail_reason: Optional[StrictStr] = Field(default=None, alias="failReason")
     government_integration: Optional[GovernmentIntegration] = Field(default=None, alias="governmentIntegration")
-    __properties: ClassVar[List[str]] = ["status", "governmentIntegration"]
+    __properties: ClassVar[List[str]] = ["status", "failReason", "governmentIntegration"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -87,6 +88,7 @@ class FiscalDocumentPatchRequest(BaseModel):
 
         _obj = cls.model_validate({
             "status": obj.get("status"),
+            "failReason": obj.get("failReason"),
             "governmentIntegration": GovernmentIntegration.from_dict(obj["governmentIntegration"]) if obj.get("governmentIntegration") is not None else None
         })
         return _obj
