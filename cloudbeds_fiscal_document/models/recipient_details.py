@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.recipient_type import RecipientType
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -31,7 +32,9 @@ class RecipientDetails(BaseModel):
     first_name: Optional[StrictStr] = Field(default=None, alias="firstName")
     last_name: Optional[StrictStr] = Field(default=None, alias="lastName")
     email: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email"]
+    type: Optional[RecipientType] = None
+    company_name: Optional[StrictStr] = Field(default=None, alias="companyName")
+    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email", "type", "companyName"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -87,7 +90,9 @@ class RecipientDetails(BaseModel):
             "id": obj.get("id"),
             "firstName": obj.get("firstName"),
             "lastName": obj.get("lastName"),
-            "email": obj.get("email")
+            "email": obj.get("email"),
+            "type": obj.get("type"),
+            "companyName": obj.get("companyName")
         })
         return _obj
 

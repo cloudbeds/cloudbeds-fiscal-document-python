@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictBytes, StrictStr
+from pydantic import Field, StrictBool, StrictBytes, StrictStr
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.create_credit_note_request import CreateCreditNoteRequest
@@ -2125,6 +2125,7 @@ class FiscalDocumentsApi:
         id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
+        include_linked_document_transactions: Annotated[Optional[StrictBool], Field(description="Include transactions from linked documents.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         _request_timeout: Union[
             None,
@@ -2149,6 +2150,8 @@ class FiscalDocumentsApi:
         :type x_property_id: int
         :param page_token: Token for fetching the next page, as per cursor-based pagination.
         :type page_token: str
+        :param include_linked_document_transactions: Include transactions from linked documents.
+        :type include_linked_document_transactions: bool
         :param limit: Number of results to return per page.
         :type limit: int
         :param _request_timeout: timeout setting for this request. If one
@@ -2177,6 +2180,7 @@ class FiscalDocumentsApi:
             id=id,
             x_property_id=x_property_id,
             page_token=page_token,
+            include_linked_document_transactions=include_linked_document_transactions,
             limit=limit,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2204,6 +2208,7 @@ class FiscalDocumentsApi:
         id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
+        include_linked_document_transactions: Annotated[Optional[StrictBool], Field(description="Include transactions from linked documents.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         _request_timeout: Union[
             None,
@@ -2228,6 +2233,8 @@ class FiscalDocumentsApi:
         :type x_property_id: int
         :param page_token: Token for fetching the next page, as per cursor-based pagination.
         :type page_token: str
+        :param include_linked_document_transactions: Include transactions from linked documents.
+        :type include_linked_document_transactions: bool
         :param limit: Number of results to return per page.
         :type limit: int
         :param _request_timeout: timeout setting for this request. If one
@@ -2256,6 +2263,7 @@ class FiscalDocumentsApi:
             id=id,
             x_property_id=x_property_id,
             page_token=page_token,
+            include_linked_document_transactions=include_linked_document_transactions,
             limit=limit,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2283,6 +2291,7 @@ class FiscalDocumentsApi:
         id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         page_token: Annotated[Optional[StrictStr], Field(description="Token for fetching the next page, as per cursor-based pagination.")] = None,
+        include_linked_document_transactions: Annotated[Optional[StrictBool], Field(description="Include transactions from linked documents.")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         _request_timeout: Union[
             None,
@@ -2307,6 +2316,8 @@ class FiscalDocumentsApi:
         :type x_property_id: int
         :param page_token: Token for fetching the next page, as per cursor-based pagination.
         :type page_token: str
+        :param include_linked_document_transactions: Include transactions from linked documents.
+        :type include_linked_document_transactions: bool
         :param limit: Number of results to return per page.
         :type limit: int
         :param _request_timeout: timeout setting for this request. If one
@@ -2335,6 +2346,7 @@ class FiscalDocumentsApi:
             id=id,
             x_property_id=x_property_id,
             page_token=page_token,
+            include_linked_document_transactions=include_linked_document_transactions,
             limit=limit,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2357,6 +2369,7 @@ class FiscalDocumentsApi:
         id,
         x_property_id,
         page_token,
+        include_linked_document_transactions,
         limit,
         _request_auth,
         _content_type,
@@ -2385,6 +2398,10 @@ class FiscalDocumentsApi:
         if page_token is not None:
             
             _query_params.append(('pageToken', page_token))
+            
+        if include_linked_document_transactions is not None:
+            
+            _query_params.append(('includeLinkedDocumentTransactions', include_linked_document_transactions))
             
         if limit is not None:
             
@@ -2440,6 +2457,7 @@ class FiscalDocumentsApi:
         source_ids: Annotated[Optional[List[StrictStr]], Field(description="Comma-separated list of source IDs.")] = None,
         source_identifiers: Annotated[Optional[List[StrictStr]], Field(description="Comma-separated list of source-specific identifiers.")] = None,
         source_kind: Annotated[Optional[SourceKind], Field(description="Filter by source kind.")] = None,
+        number_contains: Annotated[Optional[StrictStr], Field(description="Filter by document number partial match.")] = None,
         statuses: Annotated[Optional[List[FiscalDocumentStatus]], Field(description="Comma-separated list of fiscal document statuses.")] = None,
         kinds: Annotated[Optional[List[FiscalDocumentKind]], Field(description="Comma-separated list of fiscal document kinds.")] = None,
         _request_timeout: Union[
@@ -2475,6 +2493,8 @@ class FiscalDocumentsApi:
         :type source_identifiers: List[str]
         :param source_kind: Filter by source kind.
         :type source_kind: SourceKind
+        :param number_contains: Filter by document number partial match.
+        :type number_contains: str
         :param statuses: Comma-separated list of fiscal document statuses.
         :type statuses: List[FiscalDocumentStatus]
         :param kinds: Comma-separated list of fiscal document kinds.
@@ -2510,6 +2530,7 @@ class FiscalDocumentsApi:
             source_ids=source_ids,
             source_identifiers=source_identifiers,
             source_kind=source_kind,
+            number_contains=number_contains,
             statuses=statuses,
             kinds=kinds,
             _request_auth=_request_auth,
@@ -2543,6 +2564,7 @@ class FiscalDocumentsApi:
         source_ids: Annotated[Optional[List[StrictStr]], Field(description="Comma-separated list of source IDs.")] = None,
         source_identifiers: Annotated[Optional[List[StrictStr]], Field(description="Comma-separated list of source-specific identifiers.")] = None,
         source_kind: Annotated[Optional[SourceKind], Field(description="Filter by source kind.")] = None,
+        number_contains: Annotated[Optional[StrictStr], Field(description="Filter by document number partial match.")] = None,
         statuses: Annotated[Optional[List[FiscalDocumentStatus]], Field(description="Comma-separated list of fiscal document statuses.")] = None,
         kinds: Annotated[Optional[List[FiscalDocumentKind]], Field(description="Comma-separated list of fiscal document kinds.")] = None,
         _request_timeout: Union[
@@ -2578,6 +2600,8 @@ class FiscalDocumentsApi:
         :type source_identifiers: List[str]
         :param source_kind: Filter by source kind.
         :type source_kind: SourceKind
+        :param number_contains: Filter by document number partial match.
+        :type number_contains: str
         :param statuses: Comma-separated list of fiscal document statuses.
         :type statuses: List[FiscalDocumentStatus]
         :param kinds: Comma-separated list of fiscal document kinds.
@@ -2613,6 +2637,7 @@ class FiscalDocumentsApi:
             source_ids=source_ids,
             source_identifiers=source_identifiers,
             source_kind=source_kind,
+            number_contains=number_contains,
             statuses=statuses,
             kinds=kinds,
             _request_auth=_request_auth,
@@ -2646,6 +2671,7 @@ class FiscalDocumentsApi:
         source_ids: Annotated[Optional[List[StrictStr]], Field(description="Comma-separated list of source IDs.")] = None,
         source_identifiers: Annotated[Optional[List[StrictStr]], Field(description="Comma-separated list of source-specific identifiers.")] = None,
         source_kind: Annotated[Optional[SourceKind], Field(description="Filter by source kind.")] = None,
+        number_contains: Annotated[Optional[StrictStr], Field(description="Filter by document number partial match.")] = None,
         statuses: Annotated[Optional[List[FiscalDocumentStatus]], Field(description="Comma-separated list of fiscal document statuses.")] = None,
         kinds: Annotated[Optional[List[FiscalDocumentKind]], Field(description="Comma-separated list of fiscal document kinds.")] = None,
         _request_timeout: Union[
@@ -2681,6 +2707,8 @@ class FiscalDocumentsApi:
         :type source_identifiers: List[str]
         :param source_kind: Filter by source kind.
         :type source_kind: SourceKind
+        :param number_contains: Filter by document number partial match.
+        :type number_contains: str
         :param statuses: Comma-separated list of fiscal document statuses.
         :type statuses: List[FiscalDocumentStatus]
         :param kinds: Comma-separated list of fiscal document kinds.
@@ -2716,6 +2744,7 @@ class FiscalDocumentsApi:
             source_ids=source_ids,
             source_identifiers=source_identifiers,
             source_kind=source_kind,
+            number_contains=number_contains,
             statuses=statuses,
             kinds=kinds,
             _request_auth=_request_auth,
@@ -2744,6 +2773,7 @@ class FiscalDocumentsApi:
         source_ids,
         source_identifiers,
         source_kind,
+        number_contains,
         statuses,
         kinds,
         _request_auth,
@@ -2800,6 +2830,10 @@ class FiscalDocumentsApi:
         if source_kind is not None:
             
             _query_params.append(('sourceKind', source_kind.value))
+            
+        if number_contains is not None:
+            
+            _query_params.append(('numberContains', number_contains))
             
         if statuses is not None:
             

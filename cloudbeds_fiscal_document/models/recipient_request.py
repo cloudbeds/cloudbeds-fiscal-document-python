@@ -17,22 +17,26 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-class RecipientDocument(BaseModel):
+class RecipientRequest(BaseModel):
     """
-    RecipientDocument
+    RecipientRequest
     """ # noqa: E501
-    type: Optional[StrictStr] = None
-    number: Optional[StrictStr] = None
-    issuing_country: Optional[StrictStr] = Field(default=None, alias="issuingCountry")
-    issue_date: Optional[datetime] = Field(default=None, alias="issueDate")
-    expiration_date: Optional[datetime] = Field(default=None, alias="expirationDate")
-    __properties: ClassVar[List[str]] = ["type", "number", "issuingCountry", "issueDate", "expirationDate"]
+    type: StrictStr = Field(description="Type of the recipient.")
+    id: Annotated[int, Field(strict=True, ge=1)] = Field(description="ID of the recipient, references guestId, contactId, groupId, etc. depending on type.")
+    __properties: ClassVar[List[str]] = ["type", "id"]
+
+    @field_validator('type')
+    def type_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in set(['GUEST', 'CONTACT', 'GROUP', 'COMPANY']):
+            raise ValueError("must be one of enum values ('GUEST', 'CONTACT', 'GROUP', 'COMPANY')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -52,7 +56,7 @@ class RecipientDocument(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of RecipientDocument from a JSON string"""
+        """Create an instance of RecipientRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,7 +81,7 @@ class RecipientDocument(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of RecipientDocument from a dict"""
+        """Create an instance of RecipientRequest from a dict"""
         if obj is None:
             return None
 
@@ -86,10 +90,7 @@ class RecipientDocument(BaseModel):
 
         _obj = cls.model_validate({
             "type": obj.get("type"),
-            "number": obj.get("number"),
-            "issuingCountry": obj.get("issuingCountry"),
-            "issueDate": obj.get("issueDate"),
-            "expirationDate": obj.get("expirationDate")
+            "id": obj.get("id")
         })
         return _obj
 

@@ -591,7 +591,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_fiscal_document_transactions_by_id**
-> FiscalDocumentTransactionsPaginated get_fiscal_document_transactions_by_id(id, x_property_id, page_token=page_token, limit=limit)
+> FiscalDocumentTransactionsPaginated get_fiscal_document_transactions_by_id(id, x_property_id, page_token=page_token, include_linked_document_transactions=include_linked_document_transactions, limit=limit)
 
 Get list of transactions for a given fiscal document id
 
@@ -630,11 +630,12 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     id = 'id_example' # str | Unique ID of the fiscal document to download.
     x_property_id = 56 # int | Property id
     page_token = 'page_token_example' # str | Token for fetching the next page, as per cursor-based pagination. (optional)
+    include_linked_document_transactions = False # bool | Include transactions from linked documents. (optional) (default to False)
     limit = 20 # int | Number of results to return per page. (optional) (default to 20)
 
     try:
         # Get list of transactions for a given fiscal document id
-        api_response = api_instance.get_fiscal_document_transactions_by_id(id, x_property_id, page_token=page_token, limit=limit)
+        api_response = api_instance.get_fiscal_document_transactions_by_id(id, x_property_id, page_token=page_token, include_linked_document_transactions=include_linked_document_transactions, limit=limit)
         print("The response of FiscalDocumentsApi->get_fiscal_document_transactions_by_id:\n")
         pprint(api_response)
     except Exception as e:
@@ -651,6 +652,7 @@ Name | Type | Description  | Notes
  **id** | **str**| Unique ID of the fiscal document to download. | 
  **x_property_id** | **int**| Property id | 
  **page_token** | **str**| Token for fetching the next page, as per cursor-based pagination. | [optional] 
+ **include_linked_document_transactions** | **bool**| Include transactions from linked documents. | [optional] [default to False]
  **limit** | **int**| Number of results to return per page. | [optional] [default to 20]
 
 ### Return type
@@ -675,7 +677,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_fiscal_documents**
-> FiscalDocumentPaginated get_fiscal_documents(x_property_id, page_token=page_token, sort=sort, limit=limit, ids=ids, source_ids=source_ids, source_identifiers=source_identifiers, source_kind=source_kind, statuses=statuses, kinds=kinds)
+> FiscalDocumentPaginated get_fiscal_documents(x_property_id, page_token=page_token, sort=sort, limit=limit, ids=ids, source_ids=source_ids, source_identifiers=source_identifiers, source_kind=source_kind, number_contains=number_contains, statuses=statuses, kinds=kinds)
 
 Get list of fiscal documents
 
@@ -722,12 +724,13 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     source_ids = ['[\"123\",\"456\",\"789\"]'] # List[str] | Comma-separated list of source IDs. (optional)
     source_identifiers = ['[\"ABC123\",\"XYZ789\"]'] # List[str] | Comma-separated list of source-specific identifiers. (optional)
     source_kind = cloudbeds_fiscal_document.SourceKind() # SourceKind | Filter by source kind. (optional)
+    number_contains = 'number_contains_example' # str | Filter by document number partial match. (optional)
     statuses = [cloudbeds_fiscal_document.FiscalDocumentStatus()] # List[FiscalDocumentStatus] | Comma-separated list of fiscal document statuses. (optional)
     kinds = [cloudbeds_fiscal_document.FiscalDocumentKind()] # List[FiscalDocumentKind] | Comma-separated list of fiscal document kinds. (optional)
 
     try:
         # Get list of fiscal documents
-        api_response = api_instance.get_fiscal_documents(x_property_id, page_token=page_token, sort=sort, limit=limit, ids=ids, source_ids=source_ids, source_identifiers=source_identifiers, source_kind=source_kind, statuses=statuses, kinds=kinds)
+        api_response = api_instance.get_fiscal_documents(x_property_id, page_token=page_token, sort=sort, limit=limit, ids=ids, source_ids=source_ids, source_identifiers=source_identifiers, source_kind=source_kind, number_contains=number_contains, statuses=statuses, kinds=kinds)
         print("The response of FiscalDocumentsApi->get_fiscal_documents:\n")
         pprint(api_response)
     except Exception as e:
@@ -749,6 +752,7 @@ Name | Type | Description  | Notes
  **source_ids** | [**List[str]**](str.md)| Comma-separated list of source IDs. | [optional] 
  **source_identifiers** | [**List[str]**](str.md)| Comma-separated list of source-specific identifiers. | [optional] 
  **source_kind** | [**SourceKind**](.md)| Filter by source kind. | [optional] 
+ **number_contains** | **str**| Filter by document number partial match. | [optional] 
  **statuses** | [**List[FiscalDocumentStatus]**](FiscalDocumentStatus.md)| Comma-separated list of fiscal document statuses. | [optional] 
  **kinds** | [**List[FiscalDocumentKind]**](FiscalDocumentKind.md)| Comma-separated list of fiscal document kinds. | [optional] 
 

@@ -32,7 +32,9 @@ cloudbeds_fiscal_document/docs/RecipientAddress.md
 cloudbeds_fiscal_document/docs/RecipientContactDetails.md
 cloudbeds_fiscal_document/docs/RecipientDetails.md
 cloudbeds_fiscal_document/docs/RecipientDocument.md
+cloudbeds_fiscal_document/docs/RecipientRequest.md
 cloudbeds_fiscal_document/docs/RecipientTaxInfo.md
+cloudbeds_fiscal_document/docs/RecipientType.md
 cloudbeds_fiscal_document/docs/RectifyInvoiceNoteRequest.md
 cloudbeds_fiscal_document/docs/SourceKind.md
 cloudbeds_fiscal_document/exceptions.py
@@ -61,7 +63,9 @@ cloudbeds_fiscal_document/models/recipient_address.py
 cloudbeds_fiscal_document/models/recipient_contact_details.py
 cloudbeds_fiscal_document/models/recipient_details.py
 cloudbeds_fiscal_document/models/recipient_document.py
+cloudbeds_fiscal_document/models/recipient_request.py
 cloudbeds_fiscal_document/models/recipient_tax_info.py
+cloudbeds_fiscal_document/models/recipient_type.py
 cloudbeds_fiscal_document/models/rectify_invoice_note_request.py
 cloudbeds_fiscal_document/models/source_kind.py
 cloudbeds_fiscal_document/rest.py
