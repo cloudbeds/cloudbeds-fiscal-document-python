@@ -17,13 +17,14 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress
 from cloudbeds_fiscal_document.models.recipient_contact_details import RecipientContactDetails
 from cloudbeds_fiscal_document.models.recipient_document import RecipientDocument
 from cloudbeds_fiscal_document.models.recipient_tax_info import RecipientTaxInfo
+from cloudbeds_fiscal_document.models.recipient_type import RecipientType
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -35,23 +36,13 @@ class FiscalDocumentRecipient(BaseModel):
     first_name: Optional[StrictStr] = Field(default=None, alias="firstName")
     last_name: Optional[StrictStr] = Field(default=None, alias="lastName")
     email: Optional[StrictStr] = None
-    type: Optional[StrictStr] = None
+    type: Optional[RecipientType] = None
     address: Optional[RecipientAddress] = None
     tax: Optional[RecipientTaxInfo] = None
     contact_details: Optional[RecipientContactDetails] = Field(default=None, alias="contactDetails")
     document: Optional[RecipientDocument] = None
-    country_data: Optional[Dict[str, Any]] = Field(default=None, description="Arbitrary country-specific fields. Keys are ISO country codes like \"ES\", \"AR\", \"US\", and each value is a free-form object. ", alias="countryData")
+    country_data: Optional[Dict[str, Any]] = Field(default=None, description="Arbitrary country-specific fields from guest requirements. ", alias="countryData")
     __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email", "type", "address", "tax", "contactDetails", "document", "countryData"]
-
-    @field_validator('type')
-    def type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['COMPANY', 'PERSON']):
-            raise ValueError("must be one of enum values ('COMPANY', 'PERSON')")
-        return value
 
     model_config = ConfigDict(
         populate_by_name=True,

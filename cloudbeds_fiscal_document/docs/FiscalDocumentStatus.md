@@ -14,6 +14,10 @@ Status of the fiscal document
 
 * `COMPLETED_INTEGRATION` (value: `'COMPLETED_INTEGRATION'`)
 
+* `FAILED_INTEGRATION` (value: `'FAILED_INTEGRATION'`)
+
+* `CORRECTION_NEEDED` (value: `'CORRECTION_NEEDED'`)
+
 * `CANCELED` (value: `'CANCELED'`)
 
 * `OPEN` (value: `'OPEN'`)

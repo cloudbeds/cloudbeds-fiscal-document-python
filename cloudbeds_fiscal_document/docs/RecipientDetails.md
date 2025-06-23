@@ -9,6 +9,8 @@ Name | Type | Description | Notes
 **first_name** | **str** |  | [optional] 
 **last_name** | **str** |  | [optional] 
 **email** | **str** |  | [optional] 
+**type** | [**RecipientType**](RecipientType.md) |  | [optional] 
+**company_name** | **str** |  | [optional] 
 
 ## Example
 

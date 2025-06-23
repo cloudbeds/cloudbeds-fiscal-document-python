@@ -9,12 +9,12 @@ Name | Type | Description | Notes
 **first_name** | **str** |  | [optional] 
 **last_name** | **str** |  | [optional] 
 **email** | **str** |  | [optional] 
-**type** | **str** |  | [optional] 
+**type** | [**RecipientType**](RecipientType.md) |  | [optional] 
 **address** | [**RecipientAddress**](RecipientAddress.md) |  | [optional] 
 **tax** | [**RecipientTaxInfo**](RecipientTaxInfo.md) |  | [optional] 
 **contact_details** | [**RecipientContactDetails**](RecipientContactDetails.md) |  | [optional] 
 **document** | [**RecipientDocument**](RecipientDocument.md) |  | [optional] 
-**country_data** | **Dict[str, object]** | Arbitrary country-specific fields. Keys are ISO country codes like \&quot;ES\&quot;, \&quot;AR\&quot;, \&quot;US\&quot;, and each value is a free-form object.  | [optional] 
+**country_data** | **Dict[str, object]** | Arbitrary country-specific fields from guest requirements.  | [optional] 
 
 ## Example
 

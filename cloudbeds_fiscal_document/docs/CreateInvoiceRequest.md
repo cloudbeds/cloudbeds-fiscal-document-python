@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **sequence_id** | **int** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **user_id** | **int** |  | [optional] 
-**guest_id** | **int** |  | 
+**recipient** | [**RecipientRequest**](RecipientRequest.md) |  | 
 
 ## Example
 

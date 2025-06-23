@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.5.0"
+__version__ = "1.6.0"
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi
@@ -56,6 +56,8 @@ from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress
 from cloudbeds_fiscal_document.models.recipient_contact_details import RecipientContactDetails
 from cloudbeds_fiscal_document.models.recipient_details import RecipientDetails
 from cloudbeds_fiscal_document.models.recipient_document import RecipientDocument
+from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.recipient_tax_info import RecipientTaxInfo
+from cloudbeds_fiscal_document.models.recipient_type import RecipientType
 from cloudbeds_fiscal_document.models.rectify_invoice_note_request import RectifyInvoiceNoteRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind

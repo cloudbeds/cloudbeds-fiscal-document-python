@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
 from typing_extensions import Self
@@ -33,8 +34,8 @@ class CreateInvoiceRequest(BaseModel):
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
     source_kind: SourceKind = Field(alias="sourceKind")
     user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
-    guest_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="guestId")
-    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "guestId"]
+    recipient: RecipientRequest
+    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -75,6 +76,9 @@ class CreateInvoiceRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of recipient
+        if self.recipient:
+            _dict['recipient'] = self.recipient.to_dict()
         # set to None if sequence_id (nullable) is None
         # and model_fields_set contains the field
         if self.sequence_id is None and "sequence_id" in self.model_fields_set:
@@ -102,7 +106,7 @@ class CreateInvoiceRequest(BaseModel):
             "sequenceId": obj.get("sequenceId"),
             "sourceKind": obj.get("sourceKind"),
             "userId": obj.get("userId"),
-            "guestId": obj.get("guestId")
+            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None
         })
         return _obj
 
