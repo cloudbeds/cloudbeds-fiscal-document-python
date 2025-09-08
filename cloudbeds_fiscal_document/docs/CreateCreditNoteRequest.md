@@ -10,7 +10,10 @@ Name | Type | Description | Notes
 **reason** | **str** |  | [optional] 
 **user_id** | **int** |  | [optional] 
 **method** | [**CreationMethod**](CreationMethod.md) |  | 
-**transaction_ids** | **List[int]** |  | [optional] 
+**transaction_ids** | **List[int]** | Include transactions with the specified IDs (deprecated, use &#x60;includeTransactionIds&#x60; instead) | [optional] 
+**folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
+**exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs associated with selected folio IDs | [optional] 
+**include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
 
 ## Example
 

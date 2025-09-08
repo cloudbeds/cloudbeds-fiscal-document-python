@@ -1,15 +1,19 @@
 # RectifyInvoiceNoteRequest
 
+Request to create a rectifying invoice. Only available for Spanish properties.  **Important:** The specified invoice must not have been previously rectified. If it has been rectified, you must rectify the most recent invoice in the rectification chain instead. 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**invoice_id** | **int** |  | 
-**reason** | **str** |  | [optional] 
-**user_id** | **int** |  | [optional] 
+**invoice_id** | **int** | ID of the invoice to be rectified.  **Validation:** This invoice must not have been previously rectified according to Spanish fiscal regulations.  | 
+**reason** | **str** | Reason for rectifying the invoice | [optional] 
+**user_id** | **int** | ID of the user creating the rectification | [optional] 
 **method** | [**CreationMethod**](CreationMethod.md) |  | 
-**transaction_ids** | **List[int]** |  | [optional] 
+**transaction_ids** | **List[int]** | Include transactions with the specified IDs (deprecated, use &#x60;includeTransactionIds&#x60; instead) | [optional] 
+**folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
+**exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs associated with selected folio IDs | [optional] 
+**include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
 
 ## Example
 

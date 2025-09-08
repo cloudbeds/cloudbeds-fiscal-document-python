@@ -12,6 +12,8 @@ Status of the fiscal document
 
 * `PENDING_INTEGRATION` (value: `'PENDING_INTEGRATION'`)
 
+* `PARTIALLY_PAID` (value: `'PARTIALLY_PAID'`)
+
 * `COMPLETED_INTEGRATION` (value: `'COMPLETED_INTEGRATION'`)
 
 * `FAILED_INTEGRATION` (value: `'FAILED_INTEGRATION'`)
@@ -19,6 +21,8 @@ Status of the fiscal document
 * `CORRECTION_NEEDED` (value: `'CORRECTION_NEEDED'`)
 
 * `CANCELED` (value: `'CANCELED'`)
+
+* `CANCEL_REQUESTED` (value: `'CANCEL_REQUESTED'`)
 
 * `OPEN` (value: `'OPEN'`)
 
@@ -31,6 +35,10 @@ Status of the fiscal document
 * `MANUALLY_RECONCILED` (value: `'MANUALLY_RECONCILED'`)
 
 * `REJECTED` (value: `'REJECTED'`)
+
+* `ACCEPTED` (value: `'ACCEPTED'`)
+
+* `PENDING_TRANSACTION` (value: `'PENDING_TRANSACTION'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

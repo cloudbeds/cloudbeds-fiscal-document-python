@@ -33,8 +33,11 @@ class CreateCreditNoteRequest(BaseModel):
     reason: Optional[StrictStr] = None
     user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
     method: CreationMethod
-    transaction_ids: Optional[List[StrictInt]] = Field(default=None, alias="transactionIds")
-    __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "method", "transactionIds"]
+    transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions with the specified IDs (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
+    folio_ids: Optional[List[StrictInt]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
+    exclude_transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Exclude transactions with the specified IDs associated with selected folio IDs", alias="excludeTransactionIds")
+    include_transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
+    __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "method", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -107,7 +110,10 @@ class CreateCreditNoteRequest(BaseModel):
             "reason": obj.get("reason"),
             "userId": obj.get("userId"),
             "method": obj.get("method"),
-            "transactionIds": obj.get("transactionIds")
+            "transactionIds": obj.get("transactionIds"),
+            "folioIds": obj.get("folioIds"),
+            "excludeTransactionIds": obj.get("excludeTransactionIds"),
+            "includeTransactionIds": obj.get("includeTransactionIds")
         })
         return _obj
 

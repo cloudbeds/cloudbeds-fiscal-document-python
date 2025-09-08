@@ -10,14 +10,17 @@ Name | Type | Description | Notes
 **property_id** | **str** |  | [optional] 
 **user_id** | **str** |  | [optional] 
 **user_full_name** | **str** |  | [optional] 
+**source_name** | **str** |  | [optional] 
 **source_id** | **str** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | [optional] 
 **kind** | [**FiscalDocumentKind**](FiscalDocumentKind.md) |  | [optional] 
 **invoice_date** | **date** |  | [optional] 
+**invoice_date_property_timezone** | **date** |  | [optional] 
 **file_name** | **str** |  | [optional] 
 **amount** | **float** |  | [optional] 
 **balance** | **float** |  | [optional] 
 **due_date** | **date** |  | [optional] 
+**due_date_property_timezone** | **date** |  | [optional] 
 **recipients** | [**List[RecipientDetails]**](RecipientDetails.md) |  | [optional] 
 **status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
 **origin** | **str** |  | [optional] 
@@ -27,7 +30,10 @@ Name | Type | Description | Notes
 **parent_id** | **str** |  | [optional] 
 **updated_at** | **datetime** |  | [optional] 
 **government_integration** | [**GovernmentIntegration**](GovernmentIntegration.md) |  | [optional] 
+**latest_linked_document** | [**LatestLinkedDocument**](LatestLinkedDocument.md) |  | [optional] 
+**linked_documents** | [**List[LinkedDocument]**](LinkedDocument.md) | List of documents linked to this fiscal document (both parent and child relationships) | [optional] 
 **actions** | [**List[Action]**](Action.md) | Returns the list of actions available for the transaction | [optional] 
+**source_identifier** | **str** | Reservation Identifier or a group code | [optional] 
 
 ## Example
 
