@@ -24,6 +24,8 @@ from cloudbeds_fiscal_document.models.action import Action
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration
+from cloudbeds_fiscal_document.models.latest_linked_document import LatestLinkedDocument
+from cloudbeds_fiscal_document.models.linked_document import LinkedDocument
 from cloudbeds_fiscal_document.models.recipient_details import RecipientDetails
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
@@ -38,14 +40,17 @@ class FiscalDocumentDetailedResponse(BaseModel):
     property_id: Optional[StrictStr] = Field(default=None, alias="propertyId")
     user_id: Optional[StrictStr] = Field(default=None, alias="userId")
     user_full_name: Optional[StrictStr] = Field(default=None, alias="userFullName")
+    source_name: Optional[StrictStr] = Field(default=None, alias="sourceName")
     source_id: Optional[StrictStr] = Field(default=None, alias="sourceId")
     source_kind: Optional[SourceKind] = Field(default=None, alias="sourceKind")
     kind: Optional[FiscalDocumentKind] = None
     invoice_date: Optional[date] = Field(default=None, alias="invoiceDate")
+    invoice_date_property_timezone: Optional[date] = Field(default=None, alias="invoiceDatePropertyTimezone")
     file_name: Optional[StrictStr] = Field(default=None, alias="fileName")
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     balance: Optional[Union[StrictFloat, StrictInt]] = None
     due_date: Optional[date] = Field(default=None, alias="dueDate")
+    due_date_property_timezone: Optional[date] = Field(default=None, alias="dueDatePropertyTimezone")
     recipients: Optional[List[RecipientDetails]] = None
     status: Optional[FiscalDocumentStatus] = None
     origin: Optional[StrictStr] = None
@@ -55,8 +60,11 @@ class FiscalDocumentDetailedResponse(BaseModel):
     parent_id: Optional[StrictStr] = Field(default=None, alias="parentId")
     updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
     government_integration: Optional[GovernmentIntegration] = Field(default=None, alias="governmentIntegration")
+    latest_linked_document: Optional[LatestLinkedDocument] = Field(default=None, alias="latestLinkedDocument")
+    linked_documents: Optional[List[LinkedDocument]] = Field(default=None, description="List of documents linked to this fiscal document (both parent and child relationships)", alias="linkedDocuments")
     actions: Optional[List[Action]] = Field(default=None, description="Returns the list of actions available for the transaction")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceId", "sourceKind", "kind", "invoiceDate", "fileName", "amount", "balance", "dueDate", "recipients", "status", "origin", "externalId", "failReason", "createdAt", "parentId", "updatedAt", "governmentIntegration", "actions"]
+    source_identifier: Optional[StrictStr] = Field(default=None, description="Reservation Identifier or a group code", alias="sourceIdentifier")
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -107,6 +115,16 @@ class FiscalDocumentDetailedResponse(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of government_integration
         if self.government_integration:
             _dict['governmentIntegration'] = self.government_integration.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of latest_linked_document
+        if self.latest_linked_document:
+            _dict['latestLinkedDocument'] = self.latest_linked_document.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in linked_documents (list)
+        _items = []
+        if self.linked_documents:
+            for _item_linked_documents in self.linked_documents:
+                if _item_linked_documents:
+                    _items.append(_item_linked_documents.to_dict())
+            _dict['linkedDocuments'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in actions (list)
         _items = []
         if self.actions:
@@ -131,14 +149,17 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "propertyId": obj.get("propertyId"),
             "userId": obj.get("userId"),
             "userFullName": obj.get("userFullName"),
+            "sourceName": obj.get("sourceName"),
             "sourceId": obj.get("sourceId"),
             "sourceKind": obj.get("sourceKind"),
             "kind": obj.get("kind"),
             "invoiceDate": obj.get("invoiceDate"),
+            "invoiceDatePropertyTimezone": obj.get("invoiceDatePropertyTimezone"),
             "fileName": obj.get("fileName"),
             "amount": obj.get("amount"),
             "balance": obj.get("balance"),
             "dueDate": obj.get("dueDate"),
+            "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone"),
             "recipients": [RecipientDetails.from_dict(_item) for _item in obj["recipients"]] if obj.get("recipients") is not None else None,
             "status": obj.get("status"),
             "origin": obj.get("origin"),
@@ -148,7 +169,10 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "parentId": obj.get("parentId"),
             "updatedAt": obj.get("updatedAt"),
             "governmentIntegration": GovernmentIntegration.from_dict(obj["governmentIntegration"]) if obj.get("governmentIntegration") is not None else None,
-            "actions": [Action.from_dict(_item) for _item in obj["actions"]] if obj.get("actions") is not None else None
+            "latestLinkedDocument": LatestLinkedDocument.from_dict(obj["latestLinkedDocument"]) if obj.get("latestLinkedDocument") is not None else None,
+            "linkedDocuments": [LinkedDocument.from_dict(_item) for _item in obj["linkedDocuments"]] if obj.get("linkedDocuments") is not None else None,
+            "actions": [Action.from_dict(_item) for _item in obj["actions"]] if obj.get("actions") is not None else None,
+            "sourceIdentifier": obj.get("sourceIdentifier")
         })
         return _obj
 

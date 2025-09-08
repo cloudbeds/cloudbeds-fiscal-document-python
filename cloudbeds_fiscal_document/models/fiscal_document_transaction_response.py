@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
@@ -38,7 +38,18 @@ class FiscalDocumentTransactionResponse(BaseModel):
     internal_code: Optional[StrictStr] = Field(default=None, alias="internalCode")
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     folio_id: Optional[StrictStr] = Field(default=None, alias="folioId")
-    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "folioId"]
+    status: Optional[StrictStr] = Field(default=None, description="Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions")
+    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "folioId", "status"]
+
+    @field_validator('status')
+    def status_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['PENDING', 'POSTED']):
+            raise ValueError("must be one of enum values ('PENDING', 'POSTED')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -100,7 +111,8 @@ class FiscalDocumentTransactionResponse(BaseModel):
             "description": obj.get("description"),
             "internalCode": obj.get("internalCode"),
             "amount": obj.get("amount"),
-            "folioId": obj.get("folioId")
+            "folioId": obj.get("folioId"),
+            "status": obj.get("status")
         })
         return _obj
 

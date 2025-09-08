@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **internal_code** | **str** |  | [optional] 
 **amount** | **float** |  | [optional] 
 **folio_id** | **str** |  | [optional] 
+**status** | **str** | Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions | [optional] 
 
 ## Example
 

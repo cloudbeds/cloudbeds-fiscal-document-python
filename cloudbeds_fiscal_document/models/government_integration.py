@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr
 from typing import Optional, Set
 from typing_extensions import Self
@@ -35,7 +36,8 @@ class GovernmentIntegration(BaseModel):
     official_id: Optional[StrictStr] = Field(default=None, alias="officialId")
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
     rectifying_invoice_type: Optional[StrictStr] = Field(default=None, alias="rectifyingInvoiceType")
-    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType"]
+    cancellation_failed_fallback_status: Optional[FiscalDocumentStatus] = Field(default=None, alias="cancellationFailedFallbackStatus")
+    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -98,7 +100,8 @@ class GovernmentIntegration(BaseModel):
             "url": obj.get("url"),
             "officialId": obj.get("officialId"),
             "externalId": obj.get("externalId"),
-            "rectifyingInvoiceType": obj.get("rectifyingInvoiceType")
+            "rectifyingInvoiceType": obj.get("rectifyingInvoiceType"),
+            "cancellationFailedFallbackStatus": obj.get("cancellationFailedFallbackStatus")
         })
         return _obj
 

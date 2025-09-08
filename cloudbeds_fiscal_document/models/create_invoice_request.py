@@ -29,13 +29,16 @@ class CreateInvoiceRequest(BaseModel):
     """
     CreateInvoiceRequest
     """ # noqa: E501
-    transaction_ids: Annotated[List[Annotated[int, Field(strict=True, ge=1)]], Field(min_length=1)] = Field(alias="transactionIds")
+    transaction_ids: List[Annotated[int, Field(strict=True, ge=1)]] = Field(description="Include transactions with the specified IDs (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
     source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
     source_kind: SourceKind = Field(alias="sourceKind")
     user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
     recipient: RecipientRequest
-    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient"]
+    folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
+    exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs associated with selected folio IDs", alias="excludeTransactionIds")
+    include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
+    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -106,7 +109,10 @@ class CreateInvoiceRequest(BaseModel):
             "sequenceId": obj.get("sequenceId"),
             "sourceKind": obj.get("sourceKind"),
             "userId": obj.get("userId"),
-            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None
+            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
+            "folioIds": obj.get("folioIds"),
+            "excludeTransactionIds": obj.get("excludeTransactionIds"),
+            "includeTransactionIds": obj.get("includeTransactionIds")
         })
         return _obj
 

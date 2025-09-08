@@ -26,14 +26,17 @@ from typing_extensions import Self
 
 class RectifyInvoiceNoteRequest(BaseModel):
     """
-    RectifyInvoiceNoteRequest
+    Request to create a rectifying invoice. Only available for Spanish properties.  **Important:** The specified invoice must not have been previously rectified. If it has been rectified, you must rectify the most recent invoice in the rectification chain instead. 
     """ # noqa: E501
-    invoice_id: StrictInt = Field(alias="invoiceId")
-    reason: Optional[StrictStr] = None
-    user_id: Optional[StrictInt] = Field(default=None, alias="userId")
+    invoice_id: StrictInt = Field(description="ID of the invoice to be rectified.  **Validation:** This invoice must not have been previously rectified according to Spanish fiscal regulations. ", alias="invoiceId")
+    reason: Optional[StrictStr] = Field(default=None, description="Reason for rectifying the invoice")
+    user_id: Optional[StrictInt] = Field(default=None, description="ID of the user creating the rectification", alias="userId")
     method: CreationMethod
-    transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, alias="transactionIds")
-    __properties: ClassVar[List[str]] = ["invoiceId", "reason", "userId", "method", "transactionIds"]
+    transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
+    folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
+    exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs associated with selected folio IDs", alias="excludeTransactionIds")
+    include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
+    __properties: ClassVar[List[str]] = ["invoiceId", "reason", "userId", "method", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -79,6 +82,21 @@ class RectifyInvoiceNoteRequest(BaseModel):
         if self.transaction_ids is None and "transaction_ids" in self.model_fields_set:
             _dict['transactionIds'] = None
 
+        # set to None if folio_ids (nullable) is None
+        # and model_fields_set contains the field
+        if self.folio_ids is None and "folio_ids" in self.model_fields_set:
+            _dict['folioIds'] = None
+
+        # set to None if exclude_transaction_ids (nullable) is None
+        # and model_fields_set contains the field
+        if self.exclude_transaction_ids is None and "exclude_transaction_ids" in self.model_fields_set:
+            _dict['excludeTransactionIds'] = None
+
+        # set to None if include_transaction_ids (nullable) is None
+        # and model_fields_set contains the field
+        if self.include_transaction_ids is None and "include_transaction_ids" in self.model_fields_set:
+            _dict['includeTransactionIds'] = None
+
         return _dict
 
     @classmethod
@@ -95,7 +113,10 @@ class RectifyInvoiceNoteRequest(BaseModel):
             "reason": obj.get("reason"),
             "userId": obj.get("userId"),
             "method": obj.get("method"),
-            "transactionIds": obj.get("transactionIds")
+            "transactionIds": obj.get("transactionIds"),
+            "folioIds": obj.get("folioIds"),
+            "excludeTransactionIds": obj.get("excludeTransactionIds"),
+            "includeTransactionIds": obj.get("includeTransactionIds")
         })
         return _obj
 

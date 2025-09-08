@@ -5,12 +5,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**transaction_ids** | **List[int]** |  | 
+**transaction_ids** | **List[int]** | Include transactions with the specified IDs (deprecated, use &#x60;includeTransactionIds&#x60; instead) | 
 **source_id** | **int** |  | 
 **sequence_id** | **int** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **user_id** | **int** |  | [optional] 
 **recipient** | [**RecipientRequest**](RecipientRequest.md) |  | 
+**folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
+**exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs associated with selected folio IDs | [optional] 
+**include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
 
 ## Example
 

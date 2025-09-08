@@ -30,6 +30,7 @@ class FiscalDocumentKind(str, Enum):
     CREDIT_NOTE = 'CREDIT_NOTE'
     RECEIPT = 'RECEIPT'
     RECTIFY_INVOICE = 'RECTIFY_INVOICE'
+    PRO_FORMA_INVOICE = 'PRO_FORMA_INVOICE'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

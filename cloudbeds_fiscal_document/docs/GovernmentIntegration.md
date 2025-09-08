@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **official_id** | **str** |  | [optional] 
 **external_id** | **str** |  | [optional] 
 **rectifying_invoice_type** | **str** |  | [optional] 
+**cancellation_failed_fallback_status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
 
 ## Example
 
