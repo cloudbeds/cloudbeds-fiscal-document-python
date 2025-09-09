@@ -98,6 +98,16 @@ jobs:
           find $(cat PACKAGE) -mindepth 1 ! -name 'py.typed' -delete
           java -jar openapi-generator-cli.jar generate -c openapitools.json
 
+      - name: Setup Python for post-generation fixes
+        if: inputs.version == ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Fix filters serialization
+        if: inputs.version == ''
+        run: python fix_filters_serialization.py
+
       - name: Git Setup
         if: inputs.version == ''
         run: |
