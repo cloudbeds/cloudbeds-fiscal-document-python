@@ -10,6 +10,8 @@ Kind of fiscal document
 
 * `RECEIPT` (value: `'RECEIPT'`)
 
+* `FISCALIZED_RECEIPT` (value: `'FISCALIZED_RECEIPT'`)
+
 * `RECTIFY_INVOICE` (value: `'RECTIFY_INVOICE'`)
 
 * `PRO_FORMA_INVOICE` (value: `'PRO_FORMA_INVOICE'`)

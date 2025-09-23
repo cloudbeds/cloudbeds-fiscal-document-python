@@ -5,23 +5,30 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**trigger_events** | [**List[DocumentTriggerEvent]**](DocumentTriggerEvent.md) |  | [optional] 
 **show_detailed_tax_fee** | **bool** |  | 
 **charge_breakdown** | **bool** |  | 
 **use_guest_lang** | **bool** |  | 
-**due_days** | **int** |  | [optional] 
+**due_days** | **int** |  | [optional] [default to 0]
+**sequence_start_number** | **int** |  | [optional] [default to 0]
 **lang** | **str** |  | [optional] 
 **prefix** | **str** |  | [optional] 
 **suffix** | **str** |  | [optional] 
 **legal_company_name** | **str** |  | [optional] 
 **title** | **Dict[str, str]** |  | [optional] 
-**show_legal_company_name** | **bool** |  | 
-**include_room_number** | **bool** |  | 
+**show_legal_company_name** | **bool** |  | [default to False]
+**include_room_number** | **bool** |  | [default to False]
 **use_document_number** | **bool** |  | 
-**is_compact** | **bool** |  | 
+**create_invoice_on_allocation** | **bool** |  | [optional] [default to False]
+**is_compact** | **bool** |  | [default to False]
+**use_invoice_title_and_numbering** | **bool** | Flag to determine if invoice title, sequenceStartNumber, prefix and suffix should be used. | [optional] [default to False]
+**use_invoice_document_settings** | **bool** | Flag to determine if invoice document settings should be used. | [optional] [default to False]
+**show_credit_notes_and_receipts** | **bool** | Flag to determine if linked credit notes and receipts should be rendered in Invoice. | [optional] [default to False]
 **tax_id1** | **str** |  | [optional] 
 **tax_id2** | **str** |  | [optional] 
 **cpf** | **str** |  | [optional] 
 **custom_text** | **Dict[str, str]** |  | [optional] 
+**logo_id** | **int** |  | [optional] 
 
 ## Example
 

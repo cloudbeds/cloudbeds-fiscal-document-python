@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **property_id** | **str** |  | [optional] 
 **source_id** | **str** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | [optional] 
+**allocated_payment_transactions** | [**List[FiscalDocumentTransactionResponse]**](FiscalDocumentTransactionResponse.md) |  | [optional] 
 **transaction_date** | **datetime** |  | [optional] 
 **guest_name** | **str** |  | [optional] 
 **description** | **str** |  | [optional] 

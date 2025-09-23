@@ -35,7 +35,7 @@ class CreateCreditNoteRequest(BaseModel):
     method: CreationMethod
     transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions with the specified IDs (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
     folio_ids: Optional[List[StrictInt]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
-    exclude_transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Exclude transactions with the specified IDs associated with selected folio IDs", alias="excludeTransactionIds")
+    exclude_transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
     __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "method", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
 

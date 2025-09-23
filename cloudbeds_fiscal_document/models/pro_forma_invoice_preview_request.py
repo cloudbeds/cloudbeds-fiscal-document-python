@@ -39,7 +39,7 @@ class ProFormaInvoicePreviewRequest(BaseModel):
     recipient: RecipientRequest
     invoice_date: Optional[date] = Field(default=None, description="Date for the pro forma invoice (defaults to current date if not provided)", alias="invoiceDate")
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
-    exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs associated with selected folio IDs", alias="excludeTransactionIds")
+    exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
     __properties: ClassVar[List[str]] = ["transactionIds", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
 

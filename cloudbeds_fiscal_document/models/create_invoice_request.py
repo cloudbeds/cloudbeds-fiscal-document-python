@@ -36,7 +36,7 @@ class CreateInvoiceRequest(BaseModel):
     user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
     recipient: RecipientRequest
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
-    exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs associated with selected folio IDs", alias="excludeTransactionIds")
+    exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
     __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
 
