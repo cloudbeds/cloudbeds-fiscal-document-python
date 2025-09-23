@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **user_id** | **int** |  | [optional] 
 **recipient** | [**RecipientRequest**](RecipientRequest.md) |  | 
 **folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
-**exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs associated with selected folio IDs | [optional] 
+**exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs | [optional] 
 **include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
 
 ## Example

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **property_id** | **str** |  | [optional] 
 **document_kind** | [**FiscalDocumentKind**](FiscalDocumentKind.md) |  | [optional] 
 **show_detailed_tax_fee** | **bool** |  | [optional] 
+**show_credit_notes_and_receipts** | **bool** |  | [optional] 
 **charge_breakdown** | **bool** |  | [optional] 
 **use_guest_lang** | **bool** |  | [optional] 
 **due_days** | **int** |  | [optional] 

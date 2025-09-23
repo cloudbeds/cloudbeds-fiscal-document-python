@@ -5301,24 +5301,7 @@ class FiscalDocumentsApi:
             
         if filters is not None:
             
-            # Custom form serialization for filters
-            if hasattr(filters, 'to_dict'):
-                filters_dict = filters.to_dict()
-                for key, value in filters_dict.items():
-                    if value is not None:
-                        if isinstance(value, list):
-                            for item in value:
-                                if hasattr(item, 'value'):  # Handle enums
-                                    _query_params.append((key, item.value))
-                                else:
-                                    _query_params.append((key, item))
-                        else:
-                            if hasattr(value, 'value'):  # Handle enums
-                                _query_params.append((key, value.value))
-                            else:
-                                _query_params.append((key, value))
-            else:
-                _query_params.append(('filters', filters))
+            _query_params.append(('filters', filters))
             
         # process the header parameters
         if x_property_id is not None:
@@ -6634,7 +6617,7 @@ class FiscalDocumentsApi:
     ) -> FiscalDocumentSummaryResponse:
         """Update a fiscal document by id
 
-        Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
+        Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN, PAID, PARTIALLY_PAID or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
 
         :param id: Unique ID of the fiscal document to download. (required)
         :type id: int
@@ -6709,7 +6692,7 @@ class FiscalDocumentsApi:
     ) -> ApiResponse[FiscalDocumentSummaryResponse]:
         """Update a fiscal document by id
 
-        Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
+        Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN, PAID, PARTIALLY_PAID or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
 
         :param id: Unique ID of the fiscal document to download. (required)
         :type id: int
@@ -6784,7 +6767,7 @@ class FiscalDocumentsApi:
     ) -> RESTResponseType:
         """Update a fiscal document by id
 
-        Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
+        Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN, PAID, PARTIALLY_PAID or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
 
         :param id: Unique ID of the fiscal document to download. (required)
         :type id: int

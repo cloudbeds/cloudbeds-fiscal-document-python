@@ -1795,7 +1795,7 @@ Name | Type | Description  | Notes
 
 Update a fiscal document by id
 
-Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
+Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN, PAID, PARTIALLY_PAID or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
 
 ### Example
 

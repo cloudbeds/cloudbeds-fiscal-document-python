@@ -18,24 +18,22 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class FiscalDocumentKind(str, Enum):
+class DocumentTriggerEvent(str, Enum):
     """
-    Kind of fiscal document
+    DocumentTriggerEvent
     """
 
     """
     allowed enum values
     """
-    INVOICE = 'INVOICE'
-    CREDIT_NOTE = 'CREDIT_NOTE'
-    RECEIPT = 'RECEIPT'
-    FISCALIZED_RECEIPT = 'FISCALIZED_RECEIPT'
-    RECTIFY_INVOICE = 'RECTIFY_INVOICE'
-    PRO_FORMA_INVOICE = 'PRO_FORMA_INVOICE'
+    MANUAL = 'manual'
+    AT_CHECK_OUT = 'at_check_out'
+    ON_RESERVATION_CREATED = 'on_reservation_created'
+    ON_PAYMENT_CREATION = 'on_payment_creation'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of FiscalDocumentKind from a JSON string"""
+        """Create an instance of DocumentTriggerEvent from a JSON string"""
         return cls(json.loads(json_str))
 
 

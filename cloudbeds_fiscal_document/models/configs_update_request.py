@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,10 +27,12 @@ class ConfigsUpdateRequest(BaseModel):
     """
     ConfigsUpdateRequest
     """ # noqa: E501
+    trigger_events: Optional[List[DocumentTriggerEvent]] = Field(default=None, alias="triggerEvents")
     show_detailed_tax_fee: StrictBool = Field(alias="showDetailedTaxFee")
     charge_breakdown: StrictBool = Field(alias="chargeBreakdown")
     use_guest_lang: StrictBool = Field(alias="useGuestLang")
-    due_days: Optional[StrictInt] = Field(default=None, alias="dueDays")
+    due_days: Optional[StrictInt] = Field(default=0, alias="dueDays")
+    sequence_start_number: Optional[StrictInt] = Field(default=0, alias="sequenceStartNumber")
     lang: Optional[StrictStr] = None
     prefix: Optional[StrictStr] = None
     suffix: Optional[StrictStr] = None
@@ -38,12 +41,17 @@ class ConfigsUpdateRequest(BaseModel):
     show_legal_company_name: StrictBool = Field(alias="showLegalCompanyName")
     include_room_number: StrictBool = Field(alias="includeRoomNumber")
     use_document_number: StrictBool = Field(alias="useDocumentNumber")
+    create_invoice_on_allocation: Optional[StrictBool] = Field(default=False, alias="createInvoiceOnAllocation")
     is_compact: StrictBool = Field(alias="isCompact")
+    use_invoice_title_and_numbering: Optional[StrictBool] = Field(default=False, description="Flag to determine if invoice title, sequenceStartNumber, prefix and suffix should be used.", alias="useInvoiceTitleAndNumbering")
+    use_invoice_document_settings: Optional[StrictBool] = Field(default=False, description="Flag to determine if invoice document settings should be used.", alias="useInvoiceDocumentSettings")
+    show_credit_notes_and_receipts: Optional[StrictBool] = Field(default=False, description="Flag to determine if linked credit notes and receipts should be rendered in Invoice.", alias="showCreditNotesAndReceipts")
     tax_id1: Optional[StrictStr] = Field(default=None, alias="taxId1")
     tax_id2: Optional[StrictStr] = Field(default=None, alias="taxId2")
     cpf: Optional[StrictStr] = None
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
-    __properties: ClassVar[List[str]] = ["showDetailedTaxFee", "chargeBreakdown", "useGuestLang", "dueDays", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText"]
+    logo_id: Optional[StrictInt] = Field(default=None, alias="logoId")
+    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "createInvoiceOnAllocation", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "customText", "logoId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -84,11 +92,6 @@ class ConfigsUpdateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if due_days (nullable) is None
-        # and model_fields_set contains the field
-        if self.due_days is None and "due_days" in self.model_fields_set:
-            _dict['dueDays'] = None
-
         # set to None if lang (nullable) is None
         # and model_fields_set contains the field
         if self.lang is None and "lang" in self.model_fields_set:
@@ -134,6 +137,11 @@ class ConfigsUpdateRequest(BaseModel):
         if self.custom_text is None and "custom_text" in self.model_fields_set:
             _dict['customText'] = None
 
+        # set to None if logo_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.logo_id is None and "logo_id" in self.model_fields_set:
+            _dict['logoId'] = None
+
         return _dict
 
     @classmethod
@@ -146,23 +154,30 @@ class ConfigsUpdateRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "triggerEvents": obj.get("triggerEvents"),
             "showDetailedTaxFee": obj.get("showDetailedTaxFee"),
             "chargeBreakdown": obj.get("chargeBreakdown"),
             "useGuestLang": obj.get("useGuestLang"),
-            "dueDays": obj.get("dueDays"),
+            "dueDays": obj.get("dueDays") if obj.get("dueDays") is not None else 0,
+            "sequenceStartNumber": obj.get("sequenceStartNumber") if obj.get("sequenceStartNumber") is not None else 0,
             "lang": obj.get("lang"),
             "prefix": obj.get("prefix"),
             "suffix": obj.get("suffix"),
             "legalCompanyName": obj.get("legalCompanyName"),
             "title": obj.get("title"),
-            "showLegalCompanyName": obj.get("showLegalCompanyName"),
-            "includeRoomNumber": obj.get("includeRoomNumber"),
+            "showLegalCompanyName": obj.get("showLegalCompanyName") if obj.get("showLegalCompanyName") is not None else False,
+            "includeRoomNumber": obj.get("includeRoomNumber") if obj.get("includeRoomNumber") is not None else False,
             "useDocumentNumber": obj.get("useDocumentNumber"),
-            "isCompact": obj.get("isCompact"),
+            "createInvoiceOnAllocation": obj.get("createInvoiceOnAllocation") if obj.get("createInvoiceOnAllocation") is not None else False,
+            "isCompact": obj.get("isCompact") if obj.get("isCompact") is not None else False,
+            "useInvoiceTitleAndNumbering": obj.get("useInvoiceTitleAndNumbering") if obj.get("useInvoiceTitleAndNumbering") is not None else False,
+            "useInvoiceDocumentSettings": obj.get("useInvoiceDocumentSettings") if obj.get("useInvoiceDocumentSettings") is not None else False,
+            "showCreditNotesAndReceipts": obj.get("showCreditNotesAndReceipts") if obj.get("showCreditNotesAndReceipts") is not None else False,
             "taxId1": obj.get("taxId1"),
             "taxId2": obj.get("taxId2"),
             "cpf": obj.get("cpf"),
-            "customText": obj.get("customText")
+            "customText": obj.get("customText"),
+            "logoId": obj.get("logoId")
         })
         return _obj
 

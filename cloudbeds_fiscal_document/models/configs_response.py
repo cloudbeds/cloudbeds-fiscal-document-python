@@ -30,6 +30,7 @@ class ConfigsResponse(BaseModel):
     property_id: Optional[StrictStr] = Field(default=None, alias="propertyId")
     document_kind: Optional[FiscalDocumentKind] = Field(default=None, alias="documentKind")
     show_detailed_tax_fee: Optional[StrictBool] = Field(default=None, alias="showDetailedTaxFee")
+    show_credit_notes_and_receipts: Optional[StrictBool] = Field(default=None, alias="showCreditNotesAndReceipts")
     charge_breakdown: Optional[StrictBool] = Field(default=None, alias="chargeBreakdown")
     use_guest_lang: Optional[StrictBool] = Field(default=None, alias="useGuestLang")
     due_days: Optional[StrictInt] = Field(default=None, alias="dueDays")
@@ -46,7 +47,7 @@ class ConfigsResponse(BaseModel):
     tax_id2: Optional[StrictStr] = Field(default=None, alias="taxId2")
     cpf: Optional[StrictStr] = None
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
-    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "chargeBreakdown", "useGuestLang", "dueDays", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText"]
+    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "dueDays", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -102,6 +103,7 @@ class ConfigsResponse(BaseModel):
             "propertyId": obj.get("propertyId"),
             "documentKind": obj.get("documentKind"),
             "showDetailedTaxFee": obj.get("showDetailedTaxFee"),
+            "showCreditNotesAndReceipts": obj.get("showCreditNotesAndReceipts"),
             "chargeBreakdown": obj.get("chargeBreakdown"),
             "useGuestLang": obj.get("useGuestLang"),
             "dueDays": obj.get("dueDays"),

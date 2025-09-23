@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.7.1"
+__version__ = "1.8.0"
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi
@@ -45,6 +45,7 @@ from cloudbeds_fiscal_document.models.create_receipt_request import CreateReceip
 from cloudbeds_fiscal_document.models.create_simple_receipt_request import CreateSimpleReceiptRequest
 from cloudbeds_fiscal_document.models.creation_method import CreationMethod
 from cloudbeds_fiscal_document.models.document_action import DocumentAction
+from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
 from cloudbeds_fiscal_document.models.fiscal_document_detailed_response import FiscalDocumentDetailedResponse
 from cloudbeds_fiscal_document.models.fiscal_document_email_request import FiscalDocumentEmailRequest
 from cloudbeds_fiscal_document.models.fiscal_document_filters import FiscalDocumentFilters
