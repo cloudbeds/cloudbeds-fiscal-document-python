@@ -21,6 +21,7 @@ from datetime import date, datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.action import Action
+from cloudbeds_fiscal_document.models.creation_method import CreationMethod
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration
@@ -56,6 +57,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
     origin: Optional[StrictStr] = None
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
     fail_reason: Optional[StrictStr] = Field(default=None, alias="failReason")
+    method: Optional[CreationMethod] = None
     created_at: Optional[datetime] = Field(default=None, alias="createdAt")
     parent_id: Optional[StrictStr] = Field(default=None, alias="parentId")
     updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
@@ -64,7 +66,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
     linked_documents: Optional[List[LinkedDocument]] = Field(default=None, description="List of documents linked to this fiscal document (both parent and child relationships)", alias="linkedDocuments")
     actions: Optional[List[Action]] = Field(default=None, description="Returns the list of actions available for the transaction")
     source_identifier: Optional[StrictStr] = Field(default=None, description="Reservation Identifier or a group code", alias="sourceIdentifier")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier"]
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "method", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -165,6 +167,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "origin": obj.get("origin"),
             "externalId": obj.get("externalId"),
             "failReason": obj.get("failReason"),
+            "method": obj.get("method"),
             "createdAt": obj.get("createdAt"),
             "parentId": obj.get("parentId"),
             "updatedAt": obj.get("updatedAt"),

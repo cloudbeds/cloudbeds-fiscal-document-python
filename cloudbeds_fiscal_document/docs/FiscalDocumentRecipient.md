@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **email** | **str** |  | [optional] 
 **type** | [**RecipientType**](RecipientType.md) |  | [optional] 
 **address** | [**RecipientAddress**](RecipientAddress.md) |  | [optional] 
+**company** | [**RecipientCompany**](RecipientCompany.md) |  | [optional] 
 **tax** | [**RecipientTaxInfo**](RecipientTaxInfo.md) |  | [optional] 
 **contact_details** | [**RecipientContactDetails**](RecipientContactDetails.md) |  | [optional] 
 **document** | [**RecipientDocument**](RecipientDocument.md) |  | [optional] 

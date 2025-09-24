@@ -26,6 +26,7 @@ Name | Type | Description | Notes
 **origin** | **str** |  | [optional] 
 **external_id** | **str** |  | [optional] 
 **fail_reason** | **str** |  | [optional] 
+**method** | [**CreationMethod**](CreationMethod.md) |  | [optional] 
 **created_at** | **datetime** |  | [optional] 
 **parent_id** | **str** |  | [optional] 
 **updated_at** | **datetime** |  | [optional] 

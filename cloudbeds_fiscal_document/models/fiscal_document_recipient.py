@@ -21,6 +21,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress
+from cloudbeds_fiscal_document.models.recipient_company import RecipientCompany
 from cloudbeds_fiscal_document.models.recipient_contact_details import RecipientContactDetails
 from cloudbeds_fiscal_document.models.recipient_document import RecipientDocument
 from cloudbeds_fiscal_document.models.recipient_tax_info import RecipientTaxInfo
@@ -38,11 +39,12 @@ class FiscalDocumentRecipient(BaseModel):
     email: Optional[StrictStr] = None
     type: Optional[RecipientType] = None
     address: Optional[RecipientAddress] = None
+    company: Optional[RecipientCompany] = None
     tax: Optional[RecipientTaxInfo] = None
     contact_details: Optional[RecipientContactDetails] = Field(default=None, alias="contactDetails")
     document: Optional[RecipientDocument] = None
     country_data: Optional[Dict[str, Any]] = Field(default=None, description="Arbitrary country-specific fields from guest requirements. ", alias="countryData")
-    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email", "type", "address", "tax", "contactDetails", "document", "countryData"]
+    __properties: ClassVar[List[str]] = ["id", "firstName", "lastName", "email", "type", "address", "company", "tax", "contactDetails", "document", "countryData"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -86,6 +88,9 @@ class FiscalDocumentRecipient(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of address
         if self.address:
             _dict['address'] = self.address.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of company
+        if self.company:
+            _dict['company'] = self.company.to_dict()
         # override the default output from pydantic by calling `to_dict()` of tax
         if self.tax:
             _dict['tax'] = self.tax.to_dict()
@@ -113,6 +118,7 @@ class FiscalDocumentRecipient(BaseModel):
             "email": obj.get("email"),
             "type": obj.get("type"),
             "address": RecipientAddress.from_dict(obj["address"]) if obj.get("address") is not None else None,
+            "company": RecipientCompany.from_dict(obj["company"]) if obj.get("company") is not None else None,
             "tax": RecipientTaxInfo.from_dict(obj["tax"]) if obj.get("tax") is not None else None,
             "contactDetails": RecipientContactDetails.from_dict(obj["contactDetails"]) if obj.get("contactDetails") is not None else None,
             "document": RecipientDocument.from_dict(obj["document"]) if obj.get("document") is not None else None,
