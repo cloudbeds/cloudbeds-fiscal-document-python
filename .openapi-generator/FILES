@@ -49,6 +49,7 @@ cloudbeds_fiscal_document/docs/ProFormaInvoiceRequest.md
 cloudbeds_fiscal_document/docs/ProFormaStatusUpdateRequest.md
 cloudbeds_fiscal_document/docs/ReceiptTransactionAllocation.md
 cloudbeds_fiscal_document/docs/RecipientAddress.md
+cloudbeds_fiscal_document/docs/RecipientCompany.md
 cloudbeds_fiscal_document/docs/RecipientContactDetails.md
 cloudbeds_fiscal_document/docs/RecipientDetails.md
 cloudbeds_fiscal_document/docs/RecipientDocument.md
@@ -99,6 +100,7 @@ cloudbeds_fiscal_document/models/pro_forma_invoice_request.py
 cloudbeds_fiscal_document/models/pro_forma_status_update_request.py
 cloudbeds_fiscal_document/models/receipt_transaction_allocation.py
 cloudbeds_fiscal_document/models/recipient_address.py
+cloudbeds_fiscal_document/models/recipient_company.py
 cloudbeds_fiscal_document/models/recipient_contact_details.py
 cloudbeds_fiscal_document/models/recipient_details.py
 cloudbeds_fiscal_document/models/recipient_document.py
@@ -110,4 +112,3 @@ cloudbeds_fiscal_document/models/source_kind.py
 cloudbeds_fiscal_document/models/transaction_for_allocation_response.py
 cloudbeds_fiscal_document/rest.py
 cloudbeds_fiscal_document/test/__init__.py
-cloudbeds_fiscal_document/test/test_document_trigger_event.py

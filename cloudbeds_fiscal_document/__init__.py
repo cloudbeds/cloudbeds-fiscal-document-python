@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.8.0"
+__version__ = "1.9.0"
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi
@@ -72,6 +72,7 @@ from cloudbeds_fiscal_document.models.pro_forma_invoice_request import ProFormaI
 from cloudbeds_fiscal_document.models.pro_forma_status_update_request import ProFormaStatusUpdateRequest
 from cloudbeds_fiscal_document.models.receipt_transaction_allocation import ReceiptTransactionAllocation
 from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress
+from cloudbeds_fiscal_document.models.recipient_company import RecipientCompany
 from cloudbeds_fiscal_document.models.recipient_contact_details import RecipientContactDetails
 from cloudbeds_fiscal_document.models.recipient_details import RecipientDetails
 from cloudbeds_fiscal_document.models.recipient_document import RecipientDocument
