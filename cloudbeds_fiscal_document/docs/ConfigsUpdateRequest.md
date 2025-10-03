@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **include_room_number** | **bool** |  | [default to False]
 **use_document_number** | **bool** |  | 
 **create_invoice_on_allocation** | **bool** |  | [optional] [default to False]
+**update_invoice_on_link_document** | **bool** |  | [optional] [default to False]
 **is_compact** | **bool** |  | [default to False]
 **use_invoice_title_and_numbering** | **bool** | Flag to determine if invoice title, sequenceStartNumber, prefix and suffix should be used. | [optional] [default to False]
 **use_invoice_document_settings** | **bool** | Flag to determine if invoice document settings should be used. | [optional] [default to False]

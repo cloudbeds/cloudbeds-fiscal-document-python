@@ -9,7 +9,6 @@ Name | Type | Description | Notes
 **property_id** | **str** |  | [optional] 
 **source_id** | **str** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | [optional] 
-**allocated_payment_transactions** | [**List[FiscalDocumentTransactionResponse]**](FiscalDocumentTransactionResponse.md) |  | [optional] 
 **transaction_date** | **datetime** |  | [optional] 
 **guest_name** | **str** |  | [optional] 
 **description** | **str** |  | [optional] 
@@ -17,6 +16,8 @@ Name | Type | Description | Notes
 **amount** | **float** |  | [optional] 
 **folio_id** | **str** |  | [optional] 
 **status** | **str** | Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions | [optional] 
+**paid_amount** | **float** |  | [optional] 
+**allocations** | [**List[FiscalDocumentTransactionAllocation]**](FiscalDocumentTransactionAllocation.md) |  | [optional] 
 
 ## Example
 

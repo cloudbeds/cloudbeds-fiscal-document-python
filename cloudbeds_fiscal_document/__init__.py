@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.9.0"
+__version__ = "1.9.2"
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi
@@ -35,6 +35,7 @@ from cloudbeds_fiscal_document.exceptions import ApiException
 # import models into sdk package
 from cloudbeds_fiscal_document.models.action import Action
 from cloudbeds_fiscal_document.models.allocate_receipt_payment_request import AllocateReceiptPaymentRequest
+from cloudbeds_fiscal_document.models.allocations_data import AllocationsData
 from cloudbeds_fiscal_document.models.allocations_summary import AllocationsSummary
 from cloudbeds_fiscal_document.models.api_error import ApiError
 from cloudbeds_fiscal_document.models.configs_response import ConfigsResponse
@@ -55,6 +56,7 @@ from cloudbeds_fiscal_document.models.fiscal_document_patch_request import Fisca
 from cloudbeds_fiscal_document.models.fiscal_document_recipient import FiscalDocumentRecipient
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.fiscal_document_summary_response import FiscalDocumentSummaryResponse
+from cloudbeds_fiscal_document.models.fiscal_document_transaction_allocation import FiscalDocumentTransactionAllocation
 from cloudbeds_fiscal_document.models.fiscal_document_transaction_response import FiscalDocumentTransactionResponse
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_for_allocation_paginated import FiscalDocumentTransactionsForAllocationPaginated
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_paginated import FiscalDocumentTransactionsPaginated
@@ -80,5 +82,6 @@ from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.recipient_tax_info import RecipientTaxInfo
 from cloudbeds_fiscal_document.models.recipient_type import RecipientType
 from cloudbeds_fiscal_document.models.rectify_invoice_note_request import RectifyInvoiceNoteRequest
+from cloudbeds_fiscal_document.models.single_allocation import SingleAllocation
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from cloudbeds_fiscal_document.models.transaction_for_allocation_response import TransactionForAllocationResponse

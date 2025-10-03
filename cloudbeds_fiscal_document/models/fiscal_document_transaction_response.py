@@ -20,6 +20,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from cloudbeds_fiscal_document.models.fiscal_document_transaction_allocation import FiscalDocumentTransactionAllocation
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
 from typing_extensions import Self
@@ -32,7 +33,6 @@ class FiscalDocumentTransactionResponse(BaseModel):
     property_id: Optional[StrictStr] = Field(default=None, alias="propertyId")
     source_id: Optional[StrictStr] = Field(default=None, alias="sourceId")
     source_kind: Optional[SourceKind] = Field(default=None, alias="sourceKind")
-    allocated_payment_transactions: Optional[List[FiscalDocumentTransactionResponse]] = Field(default=None, alias="allocatedPaymentTransactions")
     transaction_date: Optional[datetime] = Field(default=None, alias="transactionDate")
     guest_name: Optional[StrictStr] = Field(default=None, alias="guestName")
     description: Optional[StrictStr] = None
@@ -40,7 +40,9 @@ class FiscalDocumentTransactionResponse(BaseModel):
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     folio_id: Optional[StrictStr] = Field(default=None, alias="folioId")
     status: Optional[StrictStr] = Field(default=None, description="Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions")
-    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "allocatedPaymentTransactions", "transactionDate", "guestName", "description", "internalCode", "amount", "folioId", "status"]
+    paid_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="paidAmount")
+    allocations: Optional[List[FiscalDocumentTransactionAllocation]] = None
+    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "folioId", "status", "paidAmount", "allocations"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -91,13 +93,13 @@ class FiscalDocumentTransactionResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in allocated_payment_transactions (list)
+        # override the default output from pydantic by calling `to_dict()` of each item in allocations (list)
         _items = []
-        if self.allocated_payment_transactions:
-            for _item_allocated_payment_transactions in self.allocated_payment_transactions:
-                if _item_allocated_payment_transactions:
-                    _items.append(_item_allocated_payment_transactions.to_dict())
-            _dict['allocatedPaymentTransactions'] = _items
+        if self.allocations:
+            for _item_allocations in self.allocations:
+                if _item_allocations:
+                    _items.append(_item_allocations.to_dict())
+            _dict['allocations'] = _items
         return _dict
 
     @classmethod
@@ -114,17 +116,16 @@ class FiscalDocumentTransactionResponse(BaseModel):
             "propertyId": obj.get("propertyId"),
             "sourceId": obj.get("sourceId"),
             "sourceKind": obj.get("sourceKind"),
-            "allocatedPaymentTransactions": [FiscalDocumentTransactionResponse.from_dict(_item) for _item in obj["allocatedPaymentTransactions"]] if obj.get("allocatedPaymentTransactions") is not None else None,
             "transactionDate": obj.get("transactionDate"),
             "guestName": obj.get("guestName"),
             "description": obj.get("description"),
             "internalCode": obj.get("internalCode"),
             "amount": obj.get("amount"),
             "folioId": obj.get("folioId"),
-            "status": obj.get("status")
+            "status": obj.get("status"),
+            "paidAmount": obj.get("paidAmount"),
+            "allocations": [FiscalDocumentTransactionAllocation.from_dict(_item) for _item in obj["allocations"]] if obj.get("allocations") is not None else None
         })
         return _obj
 
-# TODO: Rewrite to not use raise_errors
-FiscalDocumentTransactionResponse.model_rebuild(raise_errors=False)
 

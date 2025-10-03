@@ -16,6 +16,8 @@ Action that can be performed on a fiscal document
 
 * `ADD_PAYMENT` (value: `'ADD_PAYMENT'`)
 
+* `APPLY_TO_INVOICE` (value: `'APPLY_TO_INVOICE'`)
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 
