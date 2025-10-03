@@ -42,6 +42,7 @@ class ConfigsUpdateRequest(BaseModel):
     include_room_number: StrictBool = Field(alias="includeRoomNumber")
     use_document_number: StrictBool = Field(alias="useDocumentNumber")
     create_invoice_on_allocation: Optional[StrictBool] = Field(default=False, alias="createInvoiceOnAllocation")
+    update_invoice_on_link_document: Optional[StrictBool] = Field(default=False, alias="updateInvoiceOnLinkDocument")
     is_compact: StrictBool = Field(alias="isCompact")
     use_invoice_title_and_numbering: Optional[StrictBool] = Field(default=False, description="Flag to determine if invoice title, sequenceStartNumber, prefix and suffix should be used.", alias="useInvoiceTitleAndNumbering")
     use_invoice_document_settings: Optional[StrictBool] = Field(default=False, description="Flag to determine if invoice document settings should be used.", alias="useInvoiceDocumentSettings")
@@ -51,7 +52,7 @@ class ConfigsUpdateRequest(BaseModel):
     cpf: Optional[StrictStr] = None
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
     logo_id: Optional[StrictInt] = Field(default=None, alias="logoId")
-    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "createInvoiceOnAllocation", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "customText", "logoId"]
+    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "createInvoiceOnAllocation", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "customText", "logoId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -169,6 +170,7 @@ class ConfigsUpdateRequest(BaseModel):
             "includeRoomNumber": obj.get("includeRoomNumber") if obj.get("includeRoomNumber") is not None else False,
             "useDocumentNumber": obj.get("useDocumentNumber"),
             "createInvoiceOnAllocation": obj.get("createInvoiceOnAllocation") if obj.get("createInvoiceOnAllocation") is not None else False,
+            "updateInvoiceOnLinkDocument": obj.get("updateInvoiceOnLinkDocument") if obj.get("updateInvoiceOnLinkDocument") is not None else False,
             "isCompact": obj.get("isCompact") if obj.get("isCompact") is not None else False,
             "useInvoiceTitleAndNumbering": obj.get("useInvoiceTitleAndNumbering") if obj.get("useInvoiceTitleAndNumbering") is not None else False,
             "useInvoiceDocumentSettings": obj.get("useInvoiceDocumentSettings") if obj.get("useInvoiceDocumentSettings") is not None else False,

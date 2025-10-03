@@ -32,6 +32,7 @@ class DocumentAction(str, Enum):
     CREDIT_NOTE = 'CREDIT_NOTE'
     VOID = 'VOID'
     ADD_PAYMENT = 'ADD_PAYMENT'
+    APPLY_TO_INVOICE = 'APPLY_TO_INVOICE'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
