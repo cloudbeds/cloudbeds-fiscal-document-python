@@ -25,6 +25,11 @@ Name | Type | Description | Notes
 **tax_id2** | **str** |  | [optional] 
 **cpf** | **str** |  | [optional] 
 **custom_text** | **Dict[str, str]** |  | [optional] 
+**create_invoice_on_allocation** | **bool** |  | [optional] [default to False]
+**trigger_events** | [**List[DocumentTriggerEvent]**](DocumentTriggerEvent.md) |  | [optional] 
+**update_invoice_on_link_document** | **bool** |  | [optional] [default to False]
+**use_invoice_document_settings** | **bool** |  | [optional] [default to False]
+**use_invoice_title_and_numbering** | **bool** |  | [optional] [default to False]
 
 ## Example
 

@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.9.2"
+__version__ = "1.10.0"
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi
@@ -64,14 +64,17 @@ from cloudbeds_fiscal_document.models.fiscal_document_transactions_summary impor
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_summary_taxes_inner import FiscalDocumentTransactionsSummaryTaxesInner
 from cloudbeds_fiscal_document.models.get_credit_note_preview_request import GetCreditNotePreviewRequest
 from cloudbeds_fiscal_document.models.get_invoice_preview_request import GetInvoicePreviewRequest
+from cloudbeds_fiscal_document.models.get_logo_response import GetLogoResponse
 from cloudbeds_fiscal_document.models.get_rectify_invoice_note_preview_request import GetRectifyInvoiceNotePreviewRequest
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr
 from cloudbeds_fiscal_document.models.latest_linked_document import LatestLinkedDocument
 from cloudbeds_fiscal_document.models.linked_document import LinkedDocument
+from cloudbeds_fiscal_document.models.preview_request import PreviewRequest
 from cloudbeds_fiscal_document.models.pro_forma_invoice_preview_request import ProFormaInvoicePreviewRequest
 from cloudbeds_fiscal_document.models.pro_forma_invoice_request import ProFormaInvoiceRequest
 from cloudbeds_fiscal_document.models.pro_forma_status_update_request import ProFormaStatusUpdateRequest
+from cloudbeds_fiscal_document.models.property_configs_response import PropertyConfigsResponse
 from cloudbeds_fiscal_document.models.receipt_transaction_allocation import ReceiptTransactionAllocation
 from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress
 from cloudbeds_fiscal_document.models.recipient_company import RecipientCompany

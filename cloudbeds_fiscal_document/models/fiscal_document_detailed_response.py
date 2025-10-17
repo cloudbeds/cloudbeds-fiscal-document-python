@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import date, datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.action import Action
 from cloudbeds_fiscal_document.models.creation_method import CreationMethod
@@ -66,7 +66,8 @@ class FiscalDocumentDetailedResponse(BaseModel):
     linked_documents: Optional[List[LinkedDocument]] = Field(default=None, description="List of documents linked to this fiscal document (both parent and child relationships)", alias="linkedDocuments")
     actions: Optional[List[Action]] = Field(default=None, description="Returns the list of actions available for the transaction")
     source_identifier: Optional[StrictStr] = Field(default=None, description="Reservation Identifier or a group code", alias="sourceIdentifier")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "method", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier"]
+    simplified: Optional[StrictBool] = Field(default=None, description="Applies to invoices only.")
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "method", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier", "simplified"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -175,7 +176,8 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "latestLinkedDocument": LatestLinkedDocument.from_dict(obj["latestLinkedDocument"]) if obj.get("latestLinkedDocument") is not None else None,
             "linkedDocuments": [LinkedDocument.from_dict(_item) for _item in obj["linkedDocuments"]] if obj.get("linkedDocuments") is not None else None,
             "actions": [Action.from_dict(_item) for _item in obj["actions"]] if obj.get("actions") is not None else None,
-            "sourceIdentifier": obj.get("sourceIdentifier")
+            "sourceIdentifier": obj.get("sourceIdentifier"),
+            "simplified": obj.get("simplified")
         })
         return _obj
 
