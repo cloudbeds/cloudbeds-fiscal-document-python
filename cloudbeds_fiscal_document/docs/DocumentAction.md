@@ -14,6 +14,8 @@ Action that can be performed on a fiscal document
 
 * `VOID` (value: `'VOID'`)
 
+* `VOID_AND_REFUND` (value: `'VOID_AND_REFUND'`)
+
 * `ADD_PAYMENT` (value: `'ADD_PAYMENT'`)
 
 * `APPLY_TO_INVOICE` (value: `'APPLY_TO_INVOICE'`)

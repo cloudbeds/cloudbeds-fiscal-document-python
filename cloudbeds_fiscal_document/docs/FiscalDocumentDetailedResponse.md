@@ -35,6 +35,7 @@ Name | Type | Description | Notes
 **linked_documents** | [**List[LinkedDocument]**](LinkedDocument.md) | List of documents linked to this fiscal document (both parent and child relationships) | [optional] 
 **actions** | [**List[Action]**](Action.md) | Returns the list of actions available for the transaction | [optional] 
 **source_identifier** | **str** | Reservation Identifier or a group code | [optional] 
+**simplified** | **bool** | Applies to invoices only. | [optional] 
 
 ## Example
 

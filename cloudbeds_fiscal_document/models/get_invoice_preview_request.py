@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
@@ -38,7 +38,8 @@ class GetInvoicePreviewRequest(BaseModel):
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
-    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
+    simplified: Optional[StrictBool] = False
+    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -112,7 +113,8 @@ class GetInvoicePreviewRequest(BaseModel):
             "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
-            "includeTransactionIds": obj.get("includeTransactionIds")
+            "includeTransactionIds": obj.get("includeTransactionIds"),
+            "simplified": obj.get("simplified") if obj.get("simplified") is not None else False
         })
         return _obj
 
