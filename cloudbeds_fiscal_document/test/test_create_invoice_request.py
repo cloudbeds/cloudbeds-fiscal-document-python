@@ -36,22 +36,36 @@ class TestCreateInvoiceRequest(unittest.TestCase):
         if include_optional:
             return CreateInvoiceRequest(
                 transaction_ids = [
-                    56
+                    1
                     ],
-                source_id = 56,
-                sequence_id = 56,
+                source_id = 1,
+                sequence_id = 1,
                 source_kind = 'GROUP_PROFILE',
-                user_id = 56,
-                guest_id = 56
+                user_id = 0,
+                recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
+                    type = 'GUEST', 
+                    id = 1, ),
+                folio_ids = [
+                    1
+                    ],
+                exclude_transaction_ids = [
+                    1
+                    ],
+                include_transaction_ids = [
+                    1
+                    ],
+                simplified = True
             )
         else:
             return CreateInvoiceRequest(
                 transaction_ids = [
-                    56
+                    1
                     ],
-                source_id = 56,
+                source_id = 1,
                 source_kind = 'GROUP_PROFILE',
-                guest_id = 56,
+                recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
+                    type = 'GUEST', 
+                    id = 1, ),
         )
         """
 

@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
 from typing import Optional, Set
 from typing_extensions import Self
@@ -32,7 +33,7 @@ class ConfigsUpdateRequest(BaseModel):
     charge_breakdown: StrictBool = Field(alias="chargeBreakdown")
     use_guest_lang: StrictBool = Field(alias="useGuestLang")
     due_days: Optional[StrictInt] = Field(default=0, alias="dueDays")
-    sequence_start_number: Optional[StrictInt] = Field(default=0, alias="sequenceStartNumber")
+    sequence_start_number: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceStartNumber")
     lang: Optional[StrictStr] = None
     prefix: Optional[StrictStr] = None
     suffix: Optional[StrictStr] = None
@@ -93,6 +94,11 @@ class ConfigsUpdateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if sequence_start_number (nullable) is None
+        # and model_fields_set contains the field
+        if self.sequence_start_number is None and "sequence_start_number" in self.model_fields_set:
+            _dict['sequenceStartNumber'] = None
+
         # set to None if lang (nullable) is None
         # and model_fields_set contains the field
         if self.lang is None and "lang" in self.model_fields_set:
@@ -160,7 +166,7 @@ class ConfigsUpdateRequest(BaseModel):
             "chargeBreakdown": obj.get("chargeBreakdown"),
             "useGuestLang": obj.get("useGuestLang"),
             "dueDays": obj.get("dueDays") if obj.get("dueDays") is not None else 0,
-            "sequenceStartNumber": obj.get("sequenceStartNumber") if obj.get("sequenceStartNumber") is not None else 0,
+            "sequenceStartNumber": obj.get("sequenceStartNumber"),
             "lang": obj.get("lang"),
             "prefix": obj.get("prefix"),
             "suffix": obj.get("suffix"),

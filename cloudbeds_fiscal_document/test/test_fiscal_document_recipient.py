@@ -35,7 +35,7 @@ class TestFiscalDocumentRecipient(unittest.TestCase):
         model = FiscalDocumentRecipient()
         if include_optional:
             return FiscalDocumentRecipient(
-                id = '',
+                id = '0',
                 first_name = '',
                 last_name = '',
                 email = '',
@@ -47,10 +47,32 @@ class TestFiscalDocumentRecipient(unittest.TestCase):
                     state = '', 
                     zip_code = '', 
                     country = '', ),
+                company = cloudbeds_fiscal_document.models.recipient_company.RecipientCompany(
+                    name = '', 
+                    tax_id = '', 
+                    tax_id_type = '', 
+                    address1 = '', 
+                    address2 = '', 
+                    city = '', 
+                    state = '', 
+                    zip_code = '', 
+                    country = '', ),
                 tax = cloudbeds_fiscal_document.models.recipient_tax_info.RecipientTaxInfo(
-                    id = '', ),
+                    id = '', 
+                    company_name = '', ),
+                contact_details = cloudbeds_fiscal_document.models.recipient_contact_details.RecipientContactDetails(
+                    phone = '', 
+                    gender = '', 
+                    cell_phone = '', 
+                    birthday = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ),
+                document = cloudbeds_fiscal_document.models.recipient_document.RecipientDocument(
+                    type = '', 
+                    number = '', 
+                    issuing_country = '', 
+                    issue_date = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                    expiration_date = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ),
                 country_data = {
-                    'key' : None
+                    'key' : null
                     }
             )
         else:

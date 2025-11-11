@@ -35,27 +35,35 @@ class TestConfigsUpdateRequest(unittest.TestCase):
         model = ConfigsUpdateRequest()
         if include_optional:
             return ConfigsUpdateRequest(
+                trigger_events = [
+                    'manual'
+                    ],
                 show_detailed_tax_fee = True,
                 charge_breakdown = True,
                 use_guest_lang = True,
                 due_days = 56,
+                sequence_start_number = 1,
                 lang = '',
                 prefix = '',
                 suffix = '',
                 legal_company_name = '',
-                title = {
-                    'key' : ''
-                    },
+                title = {"en":"Invoice","es":"Factura"},
                 show_legal_company_name = True,
                 include_room_number = True,
                 use_document_number = True,
+                create_invoice_on_allocation = True,
+                update_invoice_on_link_document = True,
                 is_compact = True,
+                use_invoice_title_and_numbering = True,
+                use_invoice_document_settings = True,
+                show_credit_notes_and_receipts = True,
                 tax_id1 = '',
                 tax_id2 = '',
                 cpf = '',
                 custom_text = {
                     'key' : ''
-                    }
+                    },
+                logo_id = 56
             )
         else:
             return ConfigsUpdateRequest(

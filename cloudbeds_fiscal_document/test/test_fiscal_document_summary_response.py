@@ -48,7 +48,8 @@ class TestFiscalDocumentSummaryResponse(unittest.TestCase):
                     url = '', 
                     official_id = '', 
                     external_id = '', 
-                    rectifying_invoice_type = '', ),
+                    rectifying_invoice_type = '', 
+                    cancellation_failed_fallback_status = 'COMPLETED', ),
                 linked_to = ''
             )
         else:

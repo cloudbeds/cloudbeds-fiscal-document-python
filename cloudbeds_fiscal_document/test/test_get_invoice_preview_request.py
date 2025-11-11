@@ -53,7 +53,8 @@ class TestGetInvoicePreviewRequest(unittest.TestCase):
                     ],
                 include_transaction_ids = [
                     1
-                    ]
+                    ],
+                simplified = True
             )
         else:
             return GetInvoicePreviewRequest(

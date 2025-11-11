@@ -14,7 +14,6 @@ Name | Type | Description | Notes
 **external_id** | **str** |  | [optional] 
 **rectifying_invoice_type** | **str** |  | [optional] 
 **cancellation_failed_fallback_status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
-**generate_receipt** | **bool** | Indicates if the receipt was generated/sent to fiscal printer | [optional] 
 
 ## Example
 

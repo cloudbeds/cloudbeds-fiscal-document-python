@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.receipt_transaction_allocation import ReceiptTransactionAllocation
@@ -38,8 +38,7 @@ class CreateReceiptRequest(BaseModel):
     source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
     source_kind: SourceKind = Field(alias="sourceKind")
     recipient: RecipientRequest
-    generate_receipt: Optional[StrictBool] = Field(default=True, description="Whether to generate and print receipt (Italy only).  Defaults to true. When false, receipt will not be sent to fiscal printer. ", alias="generateReceipt")
-    __properties: ClassVar[List[str]] = ["allocations", "transactionId", "paymentId", "sequenceId", "userId", "sourceId", "sourceKind", "recipient", "generateReceipt"]
+    __properties: ClassVar[List[str]] = ["allocations", "transactionId", "paymentId", "sequenceId", "userId", "sourceId", "sourceKind", "recipient"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -129,8 +128,7 @@ class CreateReceiptRequest(BaseModel):
             "userId": obj.get("userId"),
             "sourceId": obj.get("sourceId"),
             "sourceKind": obj.get("sourceKind"),
-            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
-            "generateReceipt": obj.get("generateReceipt") if obj.get("generateReceipt") is not None else True
+            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None
         })
         return _obj
 

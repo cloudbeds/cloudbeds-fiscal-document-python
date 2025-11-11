@@ -17,7 +17,6 @@ Method | HTTP request | Description
 [**get_allocations_summary**](FiscalDocumentsApi.md#get_allocations_summary) | **GET** /fiscal-document/v1/fiscal-documents/allocations/summary | Get allocations summary
 [**get_credit_note_preview**](FiscalDocumentsApi.md#get_credit_note_preview) | **POST** /fiscal-document/v1/fiscal-documents/credit-note/preview | Get fiscal document preview of the type credit note
 [**get_document_preview**](FiscalDocumentsApi.md#get_document_preview) | **POST** /fiscal-document/v1/fiscal-documents/invoice/preview | Get fiscal document preview of the type invoice
-[**get_fiscal_document_pending_transactions_for_allocation**](FiscalDocumentsApi.md#get_fiscal_document_pending_transactions_for_allocation) | **GET** /fiscal-document/v1/fiscal-documents/allocations/pending-transactions | Get available pending transactions for allocations
 [**get_fiscal_document_recipients_by_id**](FiscalDocumentsApi.md#get_fiscal_document_recipients_by_id) | **GET** /fiscal-document/v1/fiscal-documents/{id}/recipients | Get list of recipients associated to the fiscal document
 [**get_fiscal_document_transactions**](FiscalDocumentsApi.md#get_fiscal_document_transactions) | **GET** /fiscal-document/v1/fiscal-documents/transactions | Get available transactions for fiscal documents
 [**get_fiscal_document_transactions_by_id**](FiscalDocumentsApi.md#get_fiscal_document_transactions_by_id) | **GET** /fiscal-document/v1/fiscal-documents/{id}/transactions | Get list of transactions for a given fiscal document id
@@ -1101,100 +1100,6 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get_fiscal_document_pending_transactions_for_allocation**
-> FiscalDocumentTransactionsForAllocationPaginated get_fiscal_document_pending_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids)
-
-Get available pending transactions for allocations
-
-Retrieves a paginated list of available pending transactions for allocations. Requires PENDING_TRANSACTIONS_ENABLED feature flag to be enabled. 
-
-### Example
-
-* Bearer (JWT) Authentication (bearerAuth):
-
-```python
-import cloudbeds_fiscal_document
-from cloudbeds_fiscal_document.models.fiscal_document_transactions_for_allocation_paginated import FiscalDocumentTransactionsForAllocationPaginated
-from cloudbeds_fiscal_document.models.source_kind import SourceKind
-from cloudbeds_fiscal_document.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to http://localhost:8700
-# See configuration.py for a list of all supported configuration parameters.
-configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-# Configure Bearer authorization (JWT): bearerAuth
-configuration = cloudbeds_fiscal_document.Configuration(
-    access_token = os.environ["BEARER_TOKEN"]
-)
-
-# Enter a context with an instance of the API client
-with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
-    x_property_id = 56 # int | Property id
-    source_id = 56 # int | source ID.
-    source_kind = cloudbeds_fiscal_document.SourceKind() # SourceKind | Filter by source kind.
-    page_token = 'page_token_example' # str | Token for fetching the next page, as per cursor-based pagination. (optional)
-    limit = 20 # int | Number of results to return per page. (optional) (default to 20)
-    sort = 'createdAt:desc' # str | Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode (optional)
-    folio_ids = [56] # List[int] | Filter by folio IDs. (optional)
-    document_ids = [56] # List[int] | document IDs. (optional)
-
-    try:
-        # Get available pending transactions for allocations
-        api_response = api_instance.get_fiscal_document_pending_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids)
-        print("The response of FiscalDocumentsApi->get_fiscal_document_pending_transactions_for_allocation:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling FiscalDocumentsApi->get_fiscal_document_pending_transactions_for_allocation: %s\n" % e)
-```
-
-
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **x_property_id** | **int**| Property id | 
- **source_id** | **int**| source ID. | 
- **source_kind** | [**SourceKind**](.md)| Filter by source kind. | 
- **page_token** | **str**| Token for fetching the next page, as per cursor-based pagination. | [optional] 
- **limit** | **int**| Number of results to return per page. | [optional] [default to 20]
- **sort** | **str**| Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode | [optional] 
- **folio_ids** | [**List[int]**](int.md)| Filter by folio IDs. | [optional] 
- **document_ids** | [**List[int]**](int.md)| document IDs. | [optional] 
-
-### Return type
-
-[**FiscalDocumentTransactionsForAllocationPaginated**](FiscalDocumentTransactionsForAllocationPaginated.md)
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-**400** | Bad request - PENDING_TRANSACTIONS_ENABLED feature flag is not enabled |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **get_fiscal_document_recipients_by_id**
 > List[FiscalDocumentRecipient] get_fiscal_document_recipients_by_id(id, x_property_id)
 
@@ -1280,7 +1185,7 @@ Name | Type | Description  | Notes
 
 Get available transactions for fiscal documents
 
-Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns only posted (paid) transactions - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded - Each transaction includes a status field (PENDING or POSTED) 
+Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded - Each transaction includes a status field (PENDING or POSTED) 
 
 ### Example
 
@@ -1462,7 +1367,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_fiscal_document_transactions_for_allocation**
-> FiscalDocumentTransactionsForAllocationPaginated get_fiscal_document_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids)
+> FiscalDocumentTransactionsForAllocationPaginated get_fiscal_document_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids, statuses=statuses)
 
 Get available transactions for allocations
 
@@ -1476,6 +1381,7 @@ Retrieves a paginated list of available transactions for allocations.
 import cloudbeds_fiscal_document
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_for_allocation_paginated import FiscalDocumentTransactionsForAllocationPaginated
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
+from cloudbeds_fiscal_document.models.transaction_status import TransactionStatus
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
@@ -1507,10 +1413,11 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     sort = 'createdAt:desc' # str | Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode (optional)
     folio_ids = [56] # List[int] | Filter by folio IDs. (optional)
     document_ids = [56] # List[int] | document IDs. (optional)
+    statuses = [cloudbeds_fiscal_document.TransactionStatus()] # List[TransactionStatus] | Filter by status. (optional)
 
     try:
         # Get available transactions for allocations
-        api_response = api_instance.get_fiscal_document_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids)
+        api_response = api_instance.get_fiscal_document_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids, statuses=statuses)
         print("The response of FiscalDocumentsApi->get_fiscal_document_transactions_for_allocation:\n")
         pprint(api_response)
     except Exception as e:
@@ -1532,6 +1439,7 @@ Name | Type | Description  | Notes
  **sort** | **str**| Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode | [optional] 
  **folio_ids** | [**List[int]**](int.md)| Filter by folio IDs. | [optional] 
  **document_ids** | [**List[int]**](int.md)| document IDs. | [optional] 
+ **statuses** | [**List[TransactionStatus]**](TransactionStatus.md)| Filter by status. | [optional] 
 
 ### Return type
 

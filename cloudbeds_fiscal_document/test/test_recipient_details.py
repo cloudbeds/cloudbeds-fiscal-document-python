@@ -35,10 +35,12 @@ class TestRecipientDetails(unittest.TestCase):
         model = RecipientDetails()
         if include_optional:
             return RecipientDetails(
-                id = '',
+                id = '0',
                 first_name = '',
                 last_name = '',
-                email = ''
+                email = '',
+                type = 'COMPANY',
+                company_name = ''
             )
         else:
             return RecipientDetails(

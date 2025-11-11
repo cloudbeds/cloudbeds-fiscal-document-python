@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **internal_code** | **str** |  | [optional] 
 **amount** | **float** |  | [optional] 
 **allocated_amount** | **float** |  | [optional] 
+**status** | [**TransactionStatus**](TransactionStatus.md) |  | [optional] 
 **taxes** | [**List[TransactionForAllocationResponse]**](TransactionForAllocationResponse.md) |  | [optional] 
 
 ## Example

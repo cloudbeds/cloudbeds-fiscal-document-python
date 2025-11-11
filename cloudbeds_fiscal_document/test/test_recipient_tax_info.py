@@ -35,7 +35,8 @@ class TestRecipientTaxInfo(unittest.TestCase):
         model = RecipientTaxInfo()
         if include_optional:
             return RecipientTaxInfo(
-                id = ''
+                id = '',
+                company_name = ''
             )
         else:
             return RecipientTaxInfo(

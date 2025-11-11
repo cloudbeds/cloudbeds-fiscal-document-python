@@ -26,6 +26,13 @@ class TestConfigsApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_delete_logo(self) -> None:
+        """Test case for delete_logo
+
+        Delete logo image for fiscal documents
+        """
+        pass
+
     def test_get_configs(self) -> None:
         """Test case for get_configs
 
@@ -33,10 +40,31 @@ class TestConfigsApi(unittest.TestCase):
         """
         pass
 
+    def test_get_logo(self) -> None:
+        """Test case for get_logo
+
+        Get logo image for fiscal documents
+        """
+        pass
+
+    def test_get_pdf_preview(self) -> None:
+        """Test case for get_pdf_preview
+
+        Get PDF document preview
+        """
+        pass
+
     def test_update_configs(self) -> None:
         """Test case for update_configs
 
         Updates a config of a specific kind
+        """
+        pass
+
+    def test_upload_logo(self) -> None:
+        """Test case for upload_logo
+
+        Upload logo image for fiscal documents
         """
         pass
 

@@ -35,21 +35,28 @@ class TestCreateCreditNoteRequest(unittest.TestCase):
         model = CreateCreditNoteRequest()
         if include_optional:
             return CreateCreditNoteRequest(
-                sequence_id = 56,
-                invoice_id = 56,
+                sequence_id = 1,
+                invoice_id = 1,
                 reason = '',
-                user_id = 56,
+                user_id = 0,
                 method = 'VOID',
                 transaction_ids = [
                     56
                     ],
-                guest_id = 56
+                folio_ids = [
+                    56
+                    ],
+                exclude_transaction_ids = [
+                    56
+                    ],
+                include_transaction_ids = [
+                    56
+                    ]
             )
         else:
             return CreateCreditNoteRequest(
-                invoice_id = 56,
+                invoice_id = 1,
                 method = 'VOID',
-                guest_id = 56,
         )
         """
 

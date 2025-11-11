@@ -26,6 +26,13 @@ class TestFiscalDocumentsApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_allocate_receipt_payment(self) -> None:
+        """Test case for allocate_receipt_payment
+
+        Allocate payment associated with receipt to charge transactions.
+        """
+        pass
+
     def test_create_credit_note(self) -> None:
         """Test case for create_credit_note
 
@@ -37,6 +44,34 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """Test case for create_invoice
 
         Create a fiscal document of the type invoice
+        """
+        pass
+
+    def test_create_pro_forma_invoice(self) -> None:
+        """Test case for create_pro_forma_invoice
+
+        Create a fiscal document of the type pro forma invoice
+        """
+        pass
+
+    def test_create_receipt(self) -> None:
+        """Test case for create_receipt
+
+        Create receipt for a payment.
+        """
+        pass
+
+    def test_create_rectify_invoice(self) -> None:
+        """Test case for create_rectify_invoice
+
+        Create a fiscal document of the type rectify invoice
+        """
+        pass
+
+    def test_create_simple_receipt(self) -> None:
+        """Test case for create_simple_receipt
+
+        Create simple receipts.
         """
         pass
 
@@ -54,6 +89,34 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """
         pass
 
+    def test_get_allocations(self) -> None:
+        """Test case for get_allocations
+
+        Get payment allocation transactions
+        """
+        pass
+
+    def test_get_allocations_summary(self) -> None:
+        """Test case for get_allocations_summary
+
+        Get allocations summary
+        """
+        pass
+
+    def test_get_credit_note_preview(self) -> None:
+        """Test case for get_credit_note_preview
+
+        Get fiscal document preview of the type credit note
+        """
+        pass
+
+    def test_get_document_preview(self) -> None:
+        """Test case for get_document_preview
+
+        Get fiscal document preview of the type invoice
+        """
+        pass
+
     def test_get_fiscal_document_recipients_by_id(self) -> None:
         """Test case for get_fiscal_document_recipients_by_id
 
@@ -64,7 +127,7 @@ class TestFiscalDocumentsApi(unittest.TestCase):
     def test_get_fiscal_document_transactions(self) -> None:
         """Test case for get_fiscal_document_transactions
 
-        Get list of fiscal documents
+        Get available transactions for fiscal documents
         """
         pass
 
@@ -75,6 +138,13 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """
         pass
 
+    def test_get_fiscal_document_transactions_for_allocation(self) -> None:
+        """Test case for get_fiscal_document_transactions_for_allocation
+
+        Get available transactions for allocations
+        """
+        pass
+
     def test_get_fiscal_documents(self) -> None:
         """Test case for get_fiscal_documents
 
@@ -82,10 +152,52 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """
         pass
 
+    def test_get_pro_forma_preview(self) -> None:
+        """Test case for get_pro_forma_preview
+
+        Create a fiscal document of the type pro forma invoice
+        """
+        pass
+
+    def test_get_rectify_invoice_preview(self) -> None:
+        """Test case for get_rectify_invoice_preview
+
+        Get fiscal document preview of the type rectify invoice
+        """
+        pass
+
+    def test_get_selected_transactions_summary(self) -> None:
+        """Test case for get_selected_transactions_summary
+
+        Get totals of selected available transactions for fiscal documents
+        """
+        pass
+
+    def test_get_transactions_summary_by_document_id(self) -> None:
+        """Test case for get_transactions_summary_by_document_id
+
+        Get totals of transactions for a given fiscal document id
+        """
+        pass
+
     def test_put_fiscal_document(self) -> None:
         """Test case for put_fiscal_document
 
         Update a fiscal document by id
+        """
+        pass
+
+    def test_update_pro_forma_invoice_status(self) -> None:
+        """Test case for update_pro_forma_invoice_status
+
+        Update pro forma invoice status
+        """
+        pass
+
+    def test_void_receipt(self) -> None:
+        """Test case for void_receipt
+
+        Void a receipt
         """
         pass
 

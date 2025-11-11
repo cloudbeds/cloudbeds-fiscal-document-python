@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **charge_breakdown** | **bool** |  | 
 **use_guest_lang** | **bool** |  | 
 **due_days** | **int** |  | [optional] [default to 0]
-**sequence_start_number** | **int** |  | [optional] [default to 0]
+**sequence_start_number** | **int** |  | [optional] 
 **lang** | **str** |  | [optional] 
 **prefix** | **str** |  | [optional] 
 **suffix** | **str** |  | [optional] 

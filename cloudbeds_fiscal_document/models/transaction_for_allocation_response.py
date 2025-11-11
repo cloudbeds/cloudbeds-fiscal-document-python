@@ -21,6 +21,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
+from cloudbeds_fiscal_document.models.transaction_status import TransactionStatus
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -37,8 +38,9 @@ class TransactionForAllocationResponse(BaseModel):
     internal_code: Optional[StrictStr] = Field(default=None, alias="internalCode")
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     allocated_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="allocatedAmount")
+    status: Optional[TransactionStatus] = None
     taxes: Optional[List[TransactionForAllocationResponse]] = None
-    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "description", "internalCode", "amount", "allocatedAmount", "taxes"]
+    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "description", "internalCode", "amount", "allocatedAmount", "status", "taxes"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -107,6 +109,7 @@ class TransactionForAllocationResponse(BaseModel):
             "internalCode": obj.get("internalCode"),
             "amount": obj.get("amount"),
             "allocatedAmount": obj.get("allocatedAmount"),
+            "status": obj.get("status"),
             "taxes": [TransactionForAllocationResponse.from_dict(_item) for _item in obj["taxes"]] if obj.get("taxes") is not None else None
         })
         return _obj

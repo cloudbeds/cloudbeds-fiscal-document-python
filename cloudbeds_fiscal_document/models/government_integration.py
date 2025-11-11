@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr
@@ -37,8 +37,7 @@ class GovernmentIntegration(BaseModel):
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
     rectifying_invoice_type: Optional[StrictStr] = Field(default=None, alias="rectifyingInvoiceType")
     cancellation_failed_fallback_status: Optional[FiscalDocumentStatus] = Field(default=None, alias="cancellationFailedFallbackStatus")
-    generate_receipt: Optional[StrictBool] = Field(default=None, description="Indicates if the receipt was generated/sent to fiscal printer", alias="generateReceipt")
-    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "generateReceipt"]
+    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -102,8 +101,7 @@ class GovernmentIntegration(BaseModel):
             "officialId": obj.get("officialId"),
             "externalId": obj.get("externalId"),
             "rectifyingInvoiceType": obj.get("rectifyingInvoiceType"),
-            "cancellationFailedFallbackStatus": obj.get("cancellationFailedFallbackStatus"),
-            "generateReceipt": obj.get("generateReceipt")
+            "cancellationFailedFallbackStatus": obj.get("cancellationFailedFallbackStatus")
         })
         return _obj
 

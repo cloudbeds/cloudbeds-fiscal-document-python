@@ -46,7 +46,13 @@ class TestFiscalDocumentTransactionsPaginated(unittest.TestCase):
                         description = '', 
                         internal_code = '', 
                         amount = 1.337, 
-                        folio_id = '', )
+                        folio_id = '', 
+                        status = 'PENDING', 
+                        paid_amount = 1.337, 
+                        allocations = [
+                            cloudbeds_fiscal_document.models.fiscal_document_transaction_allocation.FiscalDocumentTransactionAllocation(
+                                receipt_number = '', )
+                            ], )
                     ],
                 next_page_token = ''
             )

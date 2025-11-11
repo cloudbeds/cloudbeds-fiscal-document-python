@@ -18,24 +18,20 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class FiscalDocumentKind(str, Enum):
+class TransactionStatus(str, Enum):
     """
-    Kind of fiscal document
+    Status for transactions
     """
 
     """
     allowed enum values
     """
-    INVOICE = 'INVOICE'
-    CREDIT_NOTE = 'CREDIT_NOTE'
-    RECEIPT = 'RECEIPT'
-    RECTIFY_INVOICE = 'RECTIFY_INVOICE'
-    PRO_FORMA_INVOICE = 'PRO_FORMA_INVOICE'
-    REFUND_RECEIPT = 'REFUND_RECEIPT'
+    POSTED = 'POSTED'
+    PENDING = 'PENDING'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of FiscalDocumentKind from a JSON string"""
+        """Create an instance of TransactionStatus from a JSON string"""
         return cls(json.loads(json_str))
 
 

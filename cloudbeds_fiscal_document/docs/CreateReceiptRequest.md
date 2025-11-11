@@ -13,7 +13,6 @@ Name | Type | Description | Notes
 **source_id** | **int** |  | 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **recipient** | [**RecipientRequest**](RecipientRequest.md) |  | 
-**generate_receipt** | **bool** | Whether to generate and print receipt (Italy only).  Defaults to true. When false, receipt will not be sent to fiscal printer.  | [optional] [default to True]
 
 ## Example
 

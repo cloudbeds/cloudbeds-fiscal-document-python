@@ -41,6 +41,15 @@ class TestRectifyInvoiceNoteRequest(unittest.TestCase):
                 method = 'VOID',
                 transaction_ids = [
                     1
+                    ],
+                folio_ids = [
+                    1
+                    ],
+                exclude_transaction_ids = [
+                    1
+                    ],
+                include_transaction_ids = [
+                    1
                     ]
             )
         else:

@@ -69,3 +69,4 @@ from cloudbeds_fiscal_document.models.rectify_invoice_note_request import Rectif
 from cloudbeds_fiscal_document.models.single_allocation import SingleAllocation
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from cloudbeds_fiscal_document.models.transaction_for_allocation_response import TransactionForAllocationResponse
+from cloudbeds_fiscal_document.models.transaction_status import TransactionStatus

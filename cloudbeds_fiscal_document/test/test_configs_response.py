@@ -38,6 +38,7 @@ class TestConfigsResponse(unittest.TestCase):
                 property_id = '',
                 document_kind = 'INVOICE',
                 show_detailed_tax_fee = True,
+                show_credit_notes_and_receipts = True,
                 charge_breakdown = True,
                 use_guest_lang = True,
                 due_days = 56,
@@ -57,7 +58,14 @@ class TestConfigsResponse(unittest.TestCase):
                 cpf = '',
                 custom_text = {
                     'key' : ''
-                    }
+                    },
+                create_invoice_on_allocation = True,
+                trigger_events = [
+                    'manual'
+                    ],
+                update_invoice_on_link_document = True,
+                use_invoice_document_settings = True,
+                use_invoice_title_and_numbering = True
             )
         else:
             return ConfigsResponse(

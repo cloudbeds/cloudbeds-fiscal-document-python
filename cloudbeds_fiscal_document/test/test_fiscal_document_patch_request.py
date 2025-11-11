@@ -36,6 +36,7 @@ class TestFiscalDocumentPatchRequest(unittest.TestCase):
         if include_optional:
             return FiscalDocumentPatchRequest(
                 status = 'COMPLETED',
+                fail_reason = '',
                 government_integration = cloudbeds_fiscal_document.models.government_integration.GovernmentIntegration(
                     number = '', 
                     series = '', 
@@ -46,7 +47,8 @@ class TestFiscalDocumentPatchRequest(unittest.TestCase):
                     url = '', 
                     official_id = '', 
                     external_id = '', 
-                    rectifying_invoice_type = '', )
+                    rectifying_invoice_type = '', 
+                    cancellation_failed_fallback_status = 'COMPLETED', )
             )
         else:
             return FiscalDocumentPatchRequest(

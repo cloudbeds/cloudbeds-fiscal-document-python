@@ -42,25 +42,33 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                         property_id = '', 
                         user_id = '', 
                         user_full_name = '', 
+                        source_name = '', 
                         source_id = '', 
                         source_kind = 'GROUP_PROFILE', 
                         kind = 'INVOICE', 
                         invoice_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
+                        invoice_date_property_timezone = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
                         file_name = '', 
                         amount = 1.337, 
                         balance = 1.337, 
                         due_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
+                        due_date_property_timezone = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
                         recipients = [
                             cloudbeds_fiscal_document.models.recipient_details.RecipientDetails(
-                                id = '', 
+                                id = '0', 
                                 first_name = '', 
                                 last_name = '', 
-                                email = '', )
+                                email = '', 
+                                type = 'COMPANY', 
+                                company_name = '', )
                             ], 
                         status = 'COMPLETED', 
-                        external_source = '', 
+                        origin = '', 
                         external_id = '', 
+                        fail_reason = '', 
+                        method = 'VOID', 
                         created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                        parent_id = '', 
                         updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                         government_integration = cloudbeds_fiscal_document.models.government_integration.GovernmentIntegration(
                             number = '', 
@@ -71,11 +79,25 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                             url = '', 
                             official_id = '', 
                             external_id = '', 
-                            rectifying_invoice_type = '', ), 
+                            rectifying_invoice_type = '', 
+                            cancellation_failed_fallback_status = 'COMPLETED', ), 
+                        latest_linked_document = cloudbeds_fiscal_document.models.latest_linked_document.LatestLinkedDocument(
+                            id = '', 
+                            number = '', 
+                            created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), ), 
+                        linked_documents = [
+                            cloudbeds_fiscal_document.models.linked_document.LinkedDocument(
+                                id = '', 
+                                number = '', 
+                                created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                                is_latest = True, 
+                                relationship_type = 'PARENT', )
+                            ], 
                         actions = [
-                            cloudbeds_fiscal_document.models.action.Action(
-                                type = 'CANCEL', )
-                            ], )
+                            cloudbeds_fiscal_document.models.action.Action()
+                            ], 
+                        source_identifier = '', 
+                        simplified = True, )
                     ],
                 next_page_token = ''
             )
