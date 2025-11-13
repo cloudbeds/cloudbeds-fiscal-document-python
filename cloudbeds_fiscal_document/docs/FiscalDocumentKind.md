@@ -16,6 +16,8 @@ Kind of fiscal document
 
 * `REFUND_RECEIPT` (value: `'REFUND_RECEIPT'`)
 
+* `INVOICE_RECEIPT` (value: `'INVOICE_RECEIPT'`)
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 
