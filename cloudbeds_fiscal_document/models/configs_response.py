@@ -48,12 +48,11 @@ class ConfigsResponse(BaseModel):
     tax_id2: Optional[StrictStr] = Field(default=None, alias="taxId2")
     cpf: Optional[StrictStr] = None
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
-    create_invoice_on_allocation: Optional[StrictBool] = Field(default=False, alias="createInvoiceOnAllocation")
     trigger_events: Optional[List[DocumentTriggerEvent]] = Field(default=None, alias="triggerEvents")
     update_invoice_on_link_document: Optional[StrictBool] = Field(default=False, alias="updateInvoiceOnLinkDocument")
     use_invoice_document_settings: Optional[StrictBool] = Field(default=False, alias="useInvoiceDocumentSettings")
     use_invoice_title_and_numbering: Optional[StrictBool] = Field(default=False, alias="useInvoiceTitleAndNumbering")
-    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "dueDays", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText", "createInvoiceOnAllocation", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering"]
+    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "dueDays", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -126,7 +125,6 @@ class ConfigsResponse(BaseModel):
             "taxId2": obj.get("taxId2"),
             "cpf": obj.get("cpf"),
             "customText": obj.get("customText"),
-            "createInvoiceOnAllocation": obj.get("createInvoiceOnAllocation") if obj.get("createInvoiceOnAllocation") is not None else False,
             "triggerEvents": obj.get("triggerEvents"),
             "updateInvoiceOnLinkDocument": obj.get("updateInvoiceOnLinkDocument") if obj.get("updateInvoiceOnLinkDocument") is not None else False,
             "useInvoiceDocumentSettings": obj.get("useInvoiceDocumentSettings") if obj.get("useInvoiceDocumentSettings") is not None else False,

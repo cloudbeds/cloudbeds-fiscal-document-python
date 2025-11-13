@@ -30,6 +30,7 @@ class DocumentTriggerEvent(str, Enum):
     AT_CHECK_OUT = 'at_check_out'
     ON_RESERVATION_CREATED = 'on_reservation_created'
     ON_PAYMENT_CREATION = 'on_payment_creation'
+    ON_ALLOCATION_CREATION = 'on_allocation_creation'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
