@@ -5653,7 +5653,24 @@ class FiscalDocumentsApi:
             
         if filters is not None:
             
-            _query_params.append(('filters', filters))
+            # Custom form serialization for filters
+            if hasattr(filters, 'to_dict'):
+                filters_dict = filters.to_dict()
+                for key, value in filters_dict.items():
+                    if value is not None:
+                        if isinstance(value, list):
+                            for item in value:
+                                if hasattr(item, 'value'):  # Handle enums
+                                    _query_params.append((key, item.value))
+                                else:
+                                    _query_params.append((key, item))
+                        else:
+                            if hasattr(value, 'value'):  # Handle enums
+                                _query_params.append((key, value.value))
+                            else:
+                                _query_params.append((key, value))
+            else:
+                _query_params.append(('filters', filters))
             
         # process the header parameters
         if x_property_id is not None:
