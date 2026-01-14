@@ -14,10 +14,10 @@
 
 import unittest
 
-from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
+from cloudbeds_fiscal_document.models.manual_recipient_request_address import ManualRecipientRequestAddress
 
-class TestRecipientRequest(unittest.TestCase):
-    """RecipientRequest unit test stubs"""
+class TestManualRecipientRequestAddress(unittest.TestCase):
+    """ManualRecipientRequestAddress unit test stubs"""
 
     def setUp(self):
         pass
@@ -25,29 +25,30 @@ class TestRecipientRequest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> RecipientRequest:
-        """Test RecipientRequest
+    def make_instance(self, include_optional) -> ManualRecipientRequestAddress:
+        """Test ManualRecipientRequestAddress
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `RecipientRequest`
+        # uncomment below to create an instance of `ManualRecipientRequestAddress`
         """
-        model = RecipientRequest()
+        model = ManualRecipientRequestAddress()
         if include_optional:
-            return RecipientRequest(
-                type = 'GUEST',
-                id = 1,
-                tax_document_source = 'GUEST_TAX_ID'
+            return ManualRecipientRequestAddress(
+                country = '',
+                state = '',
+                city = '',
+                address1 = '',
+                address2 = '',
+                zip = ''
             )
         else:
-            return RecipientRequest(
-                type = 'GUEST',
-                id = 1,
+            return ManualRecipientRequestAddress(
         )
         """
 
-    def testRecipientRequest(self):
-        """Test RecipientRequest"""
+    def testManualRecipientRequestAddress(self):
+        """Test ManualRecipientRequestAddress"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

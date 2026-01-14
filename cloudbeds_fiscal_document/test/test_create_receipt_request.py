@@ -43,21 +43,42 @@ class TestCreateReceiptRequest(unittest.TestCase):
                 transaction_id = 56,
                 payment_id = 56,
                 sequence_id = 56,
+                skip_integration = True,
                 user_id = 56,
                 source_id = 1,
                 source_kind = 'GROUP_PROFILE',
                 recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
                     type = 'GUEST', 
-                    id = 1, )
+                    id = 1, 
+                    tax_document_source = 'GUEST_TAX_ID', ),
+                manual_recipient = cloudbeds_fiscal_document.models.manual_recipient_request.ManualRecipientRequest(
+                    type = 'PERSON', 
+                    name = '', 
+                    gender = 'M', 
+                    email = '', 
+                    birthday = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
+                    phone = '', 
+                    cell_phone = '', 
+                    tax_id = '', 
+                    address = cloudbeds_fiscal_document.models.manual_recipient_request_address.ManualRecipientRequest_address(
+                        country = '', 
+                        state = '', 
+                        city = '', 
+                        address1 = '', 
+                        address2 = '', 
+                        zip = '', ), 
+                    document = cloudbeds_fiscal_document.models.manual_recipient_request_document.ManualRecipientRequest_document(
+                        type = 'na', 
+                        number = '', 
+                        issue_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
+                        issuing_country = '', 
+                        expiration_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), ), )
             )
         else:
             return CreateReceiptRequest(
                 user_id = 56,
                 source_id = 1,
                 source_kind = 'GROUP_PROFILE',
-                recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
-                    type = 'GUEST', 
-                    id = 1, ),
         )
         """
 

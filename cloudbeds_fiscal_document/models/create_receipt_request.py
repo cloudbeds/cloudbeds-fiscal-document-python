@@ -17,9 +17,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
 from cloudbeds_fiscal_document.models.receipt_transaction_allocation import ReceiptTransactionAllocation
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
@@ -34,11 +35,13 @@ class CreateReceiptRequest(BaseModel):
     transaction_id: Optional[StrictInt] = Field(default=None, description="Id of the transaction associated to a payment. This parameter is mutually exclusive with `paymentId`. ", alias="transactionId")
     payment_id: Optional[StrictInt] = Field(default=None, description="Id of the payment. This parameter is mutually exclusive with `transactionId`. ", alias="paymentId")
     sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
+    skip_integration: Optional[StrictBool] = Field(default=False, description="At the moment this can only be set to True on Italy to skip the integration, for italy this case is needed to avoid Printing the Receipt", alias="skipIntegration")
     user_id: StrictInt = Field(alias="userId")
     source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
     source_kind: SourceKind = Field(alias="sourceKind")
-    recipient: RecipientRequest
-    __properties: ClassVar[List[str]] = ["allocations", "transactionId", "paymentId", "sequenceId", "userId", "sourceId", "sourceKind", "recipient"]
+    recipient: Optional[RecipientRequest] = None
+    manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
+    __properties: ClassVar[List[str]] = ["allocations", "transactionId", "paymentId", "sequenceId", "skipIntegration", "userId", "sourceId", "sourceKind", "recipient", "manualRecipient"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -89,6 +92,9 @@ class CreateReceiptRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of recipient
         if self.recipient:
             _dict['recipient'] = self.recipient.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of manual_recipient
+        if self.manual_recipient:
+            _dict['manualRecipient'] = self.manual_recipient.to_dict()
         # set to None if allocations (nullable) is None
         # and model_fields_set contains the field
         if self.allocations is None and "allocations" in self.model_fields_set:
@@ -125,10 +131,12 @@ class CreateReceiptRequest(BaseModel):
             "transactionId": obj.get("transactionId"),
             "paymentId": obj.get("paymentId"),
             "sequenceId": obj.get("sequenceId"),
+            "skipIntegration": obj.get("skipIntegration") if obj.get("skipIntegration") is not None else False,
             "userId": obj.get("userId"),
             "sourceId": obj.get("sourceId"),
             "sourceKind": obj.get("sourceKind"),
-            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None
+            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
+            "manualRecipient": ManualRecipientRequest.from_dict(obj["manualRecipient"]) if obj.get("manualRecipient") is not None else None
         })
         return _obj
 

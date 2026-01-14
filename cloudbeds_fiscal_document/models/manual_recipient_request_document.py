@@ -17,37 +17,23 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from datetime import date
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.guest_document_type import GuestDocumentType
 from typing import Optional, Set
 from typing_extensions import Self
 
-class RecipientRequest(BaseModel):
+class ManualRecipientRequestDocument(BaseModel):
     """
-    RecipientRequest
+    ManualRecipientRequestDocument
     """ # noqa: E501
-    type: StrictStr = Field(description="Type of the recipient.")
-    id: Annotated[int, Field(strict=True, ge=1)] = Field(description="ID of the recipient, references guestId, contactId, groupId, etc. depending on type.")
-    tax_document_source: Optional[StrictStr] = Field(default=None, description="Source of the tax document number.", alias="taxDocumentSource")
-    __properties: ClassVar[List[str]] = ["type", "id", "taxDocumentSource"]
-
-    @field_validator('type')
-    def type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['GUEST', 'CONTACT', 'GROUP', 'COMPANY', 'GROUP_PROFILE', 'GROUP_PROFILE_CONTACT']):
-            raise ValueError("must be one of enum values ('GUEST', 'CONTACT', 'GROUP', 'COMPANY', 'GROUP_PROFILE', 'GROUP_PROFILE_CONTACT')")
-        return value
-
-    @field_validator('tax_document_source')
-    def tax_document_source_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['GUEST_TAX_ID', 'GUEST_DOCUMENT_NUMBER']):
-            raise ValueError("must be one of enum values ('GUEST_TAX_ID', 'GUEST_DOCUMENT_NUMBER')")
-        return value
+    type: Optional[GuestDocumentType] = None
+    number: Optional[StrictStr] = Field(default=None, description="Document number")
+    issue_date: Optional[date] = Field(default=None, description="Document issue date", alias="issueDate")
+    issuing_country: Optional[StrictStr] = Field(default=None, description="Country that issued the document", alias="issuingCountry")
+    expiration_date: Optional[date] = Field(default=None, description="Document expiration date", alias="expirationDate")
+    __properties: ClassVar[List[str]] = ["type", "number", "issueDate", "issuingCountry", "expirationDate"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -67,7 +53,7 @@ class RecipientRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of RecipientRequest from a JSON string"""
+        """Create an instance of ManualRecipientRequestDocument from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -88,11 +74,31 @@ class RecipientRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if number (nullable) is None
+        # and model_fields_set contains the field
+        if self.number is None and "number" in self.model_fields_set:
+            _dict['number'] = None
+
+        # set to None if issue_date (nullable) is None
+        # and model_fields_set contains the field
+        if self.issue_date is None and "issue_date" in self.model_fields_set:
+            _dict['issueDate'] = None
+
+        # set to None if issuing_country (nullable) is None
+        # and model_fields_set contains the field
+        if self.issuing_country is None and "issuing_country" in self.model_fields_set:
+            _dict['issuingCountry'] = None
+
+        # set to None if expiration_date (nullable) is None
+        # and model_fields_set contains the field
+        if self.expiration_date is None and "expiration_date" in self.model_fields_set:
+            _dict['expirationDate'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of RecipientRequest from a dict"""
+        """Create an instance of ManualRecipientRequestDocument from a dict"""
         if obj is None:
             return None
 
@@ -101,8 +107,10 @@ class RecipientRequest(BaseModel):
 
         _obj = cls.model_validate({
             "type": obj.get("type"),
-            "id": obj.get("id"),
-            "taxDocumentSource": obj.get("taxDocumentSource")
+            "number": obj.get("number"),
+            "issueDate": obj.get("issueDate"),
+            "issuingCountry": obj.get("issuingCountry"),
+            "expirationDate": obj.get("expirationDate")
         })
         return _obj
 

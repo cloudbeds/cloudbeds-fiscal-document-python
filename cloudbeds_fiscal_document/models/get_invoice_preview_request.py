@@ -17,9 +17,11 @@ import pprint
 import re  # noqa: F401
 import json
 
+from datetime import date
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
@@ -34,12 +36,14 @@ class GetInvoicePreviewRequest(BaseModel):
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
     source_kind: SourceKind = Field(alias="sourceKind")
     user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
-    recipient: RecipientRequest
+    recipient: Optional[RecipientRequest] = None
+    manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
     simplified: Optional[StrictBool] = False
-    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified"]
+    due_date_property_timezone: Optional[date] = Field(default=None, alias="dueDatePropertyTimezone")
+    __properties: ClassVar[List[str]] = ["transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "dueDatePropertyTimezone"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -83,6 +87,9 @@ class GetInvoicePreviewRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of recipient
         if self.recipient:
             _dict['recipient'] = self.recipient.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of manual_recipient
+        if self.manual_recipient:
+            _dict['manualRecipient'] = self.manual_recipient.to_dict()
         # set to None if sequence_id (nullable) is None
         # and model_fields_set contains the field
         if self.sequence_id is None and "sequence_id" in self.model_fields_set:
@@ -111,10 +118,12 @@ class GetInvoicePreviewRequest(BaseModel):
             "sourceKind": obj.get("sourceKind"),
             "userId": obj.get("userId"),
             "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
+            "manualRecipient": ManualRecipientRequest.from_dict(obj["manualRecipient"]) if obj.get("manualRecipient") is not None else None,
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
             "includeTransactionIds": obj.get("includeTransactionIds"),
-            "simplified": obj.get("simplified") if obj.get("simplified") is not None else False
+            "simplified": obj.get("simplified") if obj.get("simplified") is not None else False,
+            "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone")
         })
         return _obj
 

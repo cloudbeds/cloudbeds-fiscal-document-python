@@ -10,11 +10,13 @@ Name | Type | Description | Notes
 **sequence_id** | **int** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **user_id** | **int** |  | [optional] 
-**recipient** | [**RecipientRequest**](RecipientRequest.md) |  | 
+**recipient** | [**RecipientRequest**](RecipientRequest.md) |  | [optional] 
+**manual_recipient** | [**ManualRecipientRequest**](ManualRecipientRequest.md) |  | [optional] 
 **folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
 **exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs | [optional] 
 **include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
 **simplified** | **bool** |  | [optional] [default to False]
+**due_date_property_timezone** | **date** |  | [optional] 
 
 ## Example
 

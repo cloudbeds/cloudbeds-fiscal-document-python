@@ -43,10 +43,12 @@ class TestPropertyConfigsResponse(unittest.TestCase):
                         show_credit_notes_and_receipts = True, 
                         charge_breakdown = True, 
                         use_guest_lang = True, 
+                        allow_pending_transactions = True, 
                         due_days = 56, 
                         lang = '', 
                         prefix = '', 
                         suffix = '', 
+                        separator = '', 
                         legal_company_name = '', 
                         title = {
                             'key' : ''
@@ -61,7 +63,6 @@ class TestPropertyConfigsResponse(unittest.TestCase):
                         custom_text = {
                             'key' : ''
                             }, 
-                        create_invoice_on_allocation = True, 
                         trigger_events = [
                             'manual'
                             ], 

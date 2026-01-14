@@ -47,7 +47,8 @@ class TestProFormaInvoicePreviewRequest(unittest.TestCase):
                 user_id = 0,
                 recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
                     type = 'GUEST', 
-                    id = 1, ),
+                    id = 1, 
+                    tax_document_source = 'GUEST_TAX_ID', ),
                 invoice_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(),
                 folio_ids = [
                     1
@@ -68,7 +69,8 @@ class TestProFormaInvoicePreviewRequest(unittest.TestCase):
                 source_kind = 'GROUP_PROFILE',
                 recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
                     type = 'GUEST', 
-                    id = 1, ),
+                    id = 1, 
+                    tax_document_source = 'GUEST_TAX_ID', ),
         )
         """
 

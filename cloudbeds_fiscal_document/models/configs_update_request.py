@@ -31,11 +31,13 @@ class ConfigsUpdateRequest(BaseModel):
     trigger_events: Optional[List[DocumentTriggerEvent]] = Field(default=None, alias="triggerEvents")
     show_detailed_tax_fee: StrictBool = Field(alias="showDetailedTaxFee")
     charge_breakdown: StrictBool = Field(alias="chargeBreakdown")
+    allow_pending_transactions: Optional[StrictBool] = Field(default=False, alias="allowPendingTransactions")
     use_guest_lang: StrictBool = Field(alias="useGuestLang")
     due_days: Optional[StrictInt] = Field(default=0, alias="dueDays")
     sequence_start_number: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceStartNumber")
     lang: Optional[StrictStr] = None
     prefix: Optional[StrictStr] = None
+    separator: Optional[StrictStr] = None
     suffix: Optional[StrictStr] = None
     legal_company_name: Optional[StrictStr] = Field(default=None, alias="legalCompanyName")
     title: Optional[Dict[str, StrictStr]] = None
@@ -52,7 +54,7 @@ class ConfigsUpdateRequest(BaseModel):
     cpf: Optional[StrictStr] = None
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
     logo_id: Optional[StrictInt] = Field(default=None, alias="logoId")
-    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "customText", "logoId"]
+    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "allowPendingTransactions", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "separator", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "customText", "logoId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -107,6 +109,11 @@ class ConfigsUpdateRequest(BaseModel):
         # and model_fields_set contains the field
         if self.prefix is None and "prefix" in self.model_fields_set:
             _dict['prefix'] = None
+
+        # set to None if separator (nullable) is None
+        # and model_fields_set contains the field
+        if self.separator is None and "separator" in self.model_fields_set:
+            _dict['separator'] = None
 
         # set to None if suffix (nullable) is None
         # and model_fields_set contains the field
@@ -163,11 +170,13 @@ class ConfigsUpdateRequest(BaseModel):
             "triggerEvents": obj.get("triggerEvents"),
             "showDetailedTaxFee": obj.get("showDetailedTaxFee"),
             "chargeBreakdown": obj.get("chargeBreakdown"),
+            "allowPendingTransactions": obj.get("allowPendingTransactions") if obj.get("allowPendingTransactions") is not None else False,
             "useGuestLang": obj.get("useGuestLang"),
             "dueDays": obj.get("dueDays") if obj.get("dueDays") is not None else 0,
             "sequenceStartNumber": obj.get("sequenceStartNumber"),
             "lang": obj.get("lang"),
             "prefix": obj.get("prefix"),
+            "separator": obj.get("separator"),
             "suffix": obj.get("suffix"),
             "legalCompanyName": obj.get("legalCompanyName"),
             "title": obj.get("title"),

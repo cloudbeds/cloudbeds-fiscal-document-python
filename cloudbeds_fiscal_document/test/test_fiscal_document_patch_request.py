@@ -48,7 +48,8 @@ class TestFiscalDocumentPatchRequest(unittest.TestCase):
                     official_id = '', 
                     external_id = '', 
                     rectifying_invoice_type = '', 
-                    cancellation_failed_fallback_status = 'COMPLETED', )
+                    cancellation_failed_fallback_status = 'COMPLETED', 
+                    pdf_file_base64 = 'YQ==', )
             )
         else:
             return FiscalDocumentPatchRequest(

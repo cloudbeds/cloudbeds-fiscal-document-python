@@ -1,13 +1,14 @@
-# RecipientType
+# GuestGender
 
+Gender of the guest
 
 ## Enum
 
-* `COMPANY` (value: `'COMPANY'`)
+* `M` (value: `'M'`)
 
-* `PERSON` (value: `'PERSON'`)
+* `F` (value: `'F'`)
 
-* `MANUAL` (value: `'MANUAL'`)
+* `N_SLASH_A` (value: `'N/A'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

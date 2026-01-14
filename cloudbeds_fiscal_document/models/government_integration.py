@@ -17,8 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictBytes, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr
 from typing import Optional, Set
@@ -37,7 +37,8 @@ class GovernmentIntegration(BaseModel):
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
     rectifying_invoice_type: Optional[StrictStr] = Field(default=None, alias="rectifyingInvoiceType")
     cancellation_failed_fallback_status: Optional[FiscalDocumentStatus] = Field(default=None, alias="cancellationFailedFallbackStatus")
-    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus"]
+    pdf_file_base64: Optional[Union[StrictBytes, StrictStr]] = Field(default=None, description="Base64-encoded PDF file content. Only allowed when status is COMPLETED_INTEGRATION.", alias="pdfFileBase64")
+    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -101,7 +102,8 @@ class GovernmentIntegration(BaseModel):
             "officialId": obj.get("officialId"),
             "externalId": obj.get("externalId"),
             "rectifyingInvoiceType": obj.get("rectifyingInvoiceType"),
-            "cancellationFailedFallbackStatus": obj.get("cancellationFailedFallbackStatus")
+            "cancellationFailedFallbackStatus": obj.get("cancellationFailedFallbackStatus"),
+            "pdfFileBase64": obj.get("pdfFileBase64")
         })
         return _obj
 

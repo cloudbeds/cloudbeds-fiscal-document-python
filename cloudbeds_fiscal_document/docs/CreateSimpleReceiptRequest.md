@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **source_id** | **int** |  | 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **recipient** | [**RecipientRequest**](RecipientRequest.md) |  | 
+**manual_recipient** | [**ManualRecipientRequest**](ManualRecipientRequest.md) |  | [optional] 
 
 ## Example
 

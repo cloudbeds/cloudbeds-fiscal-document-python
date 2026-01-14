@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | **str** | Type of the recipient. | 
 **id** | **int** | ID of the recipient, references guestId, contactId, groupId, etc. depending on type. | 
+**tax_document_source** | **str** | Source of the tax document number. | [optional] 
 
 ## Example
 

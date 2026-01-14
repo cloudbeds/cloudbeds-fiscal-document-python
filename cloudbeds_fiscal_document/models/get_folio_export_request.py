@@ -17,27 +17,25 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from datetime import date
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
-from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
-from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
 from typing_extensions import Self
 
-class CreateSimpleReceiptRequest(BaseModel):
+class GetFolioExportRequest(BaseModel):
     """
-    CreateSimpleReceiptRequest
+    GetFolioExportRequest
     """ # noqa: E501
-    transaction_ids: List[Annotated[int, Field(strict=True)]] = Field(description="Ids of the transactions associated to payments", alias="transactionIds")
-    sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
-    user_id: StrictInt = Field(alias="userId")
-    source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
+    folio_ids: List[StrictInt] = Field(description="Include transactions from the specified folio IDs", alias="folioIds")
     source_kind: SourceKind = Field(alias="sourceKind")
-    recipient: RecipientRequest
-    manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
-    __properties: ClassVar[List[str]] = ["transactionIds", "sequenceId", "userId", "sourceId", "sourceKind", "recipient", "manualRecipient"]
+    source_id: StrictInt = Field(description="source ID of folio", alias="sourceId")
+    credit_debit_view: Optional[StrictBool] = Field(default=None, description="Should transactions be separated into debit/credits", alias="creditDebitView")
+    revenue_compact: Optional[StrictBool] = Field(default=None, description="Compact revenue transactions, valid only for sourceKind = RESERVATION", alias="revenueCompact")
+    date_from: Optional[date] = Field(default=None, description="Minimum date, only for sourceKind = HOUSE_ACCOUNT", alias="dateFrom")
+    date_to: Optional[date] = Field(default=None, description="Maximum date, only for sourceKind = HOUSE_ACCOUNT, optional", alias="dateTo")
+    __properties: ClassVar[List[str]] = ["folioIds", "sourceKind", "sourceId", "creditDebitView", "revenueCompact", "dateFrom", "dateTo"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -57,7 +55,7 @@ class CreateSimpleReceiptRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CreateSimpleReceiptRequest from a JSON string"""
+        """Create an instance of GetFolioExportRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -78,22 +76,21 @@ class CreateSimpleReceiptRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of recipient
-        if self.recipient:
-            _dict['recipient'] = self.recipient.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of manual_recipient
-        if self.manual_recipient:
-            _dict['manualRecipient'] = self.manual_recipient.to_dict()
-        # set to None if sequence_id (nullable) is None
+        # set to None if date_from (nullable) is None
         # and model_fields_set contains the field
-        if self.sequence_id is None and "sequence_id" in self.model_fields_set:
-            _dict['sequenceId'] = None
+        if self.date_from is None and "date_from" in self.model_fields_set:
+            _dict['dateFrom'] = None
+
+        # set to None if date_to (nullable) is None
+        # and model_fields_set contains the field
+        if self.date_to is None and "date_to" in self.model_fields_set:
+            _dict['dateTo'] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CreateSimpleReceiptRequest from a dict"""
+        """Create an instance of GetFolioExportRequest from a dict"""
         if obj is None:
             return None
 
@@ -101,13 +98,13 @@ class CreateSimpleReceiptRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "transactionIds": obj.get("transactionIds"),
-            "sequenceId": obj.get("sequenceId"),
-            "userId": obj.get("userId"),
-            "sourceId": obj.get("sourceId"),
+            "folioIds": obj.get("folioIds"),
             "sourceKind": obj.get("sourceKind"),
-            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
-            "manualRecipient": ManualRecipientRequest.from_dict(obj["manualRecipient"]) if obj.get("manualRecipient") is not None else None
+            "sourceId": obj.get("sourceId"),
+            "creditDebitView": obj.get("creditDebitView"),
+            "revenueCompact": obj.get("revenueCompact"),
+            "dateFrom": obj.get("dateFrom"),
+            "dateTo": obj.get("dateTo")
         })
         return _obj
 

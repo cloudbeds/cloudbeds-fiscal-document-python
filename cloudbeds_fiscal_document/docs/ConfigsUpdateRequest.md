@@ -8,11 +8,13 @@ Name | Type | Description | Notes
 **trigger_events** | [**List[DocumentTriggerEvent]**](DocumentTriggerEvent.md) |  | [optional] 
 **show_detailed_tax_fee** | **bool** |  | 
 **charge_breakdown** | **bool** |  | 
+**allow_pending_transactions** | **bool** |  | [optional] [default to False]
 **use_guest_lang** | **bool** |  | 
 **due_days** | **int** |  | [optional] [default to 0]
 **sequence_start_number** | **int** |  | [optional] 
 **lang** | **str** |  | [optional] 
 **prefix** | **str** |  | [optional] 
+**separator** | **str** |  | [optional] 
 **suffix** | **str** |  | [optional] 
 **legal_company_name** | **str** |  | [optional] 
 **title** | **Dict[str, str]** |  | [optional] 

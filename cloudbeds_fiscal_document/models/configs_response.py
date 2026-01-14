@@ -34,10 +34,12 @@ class ConfigsResponse(BaseModel):
     show_credit_notes_and_receipts: Optional[StrictBool] = Field(default=None, alias="showCreditNotesAndReceipts")
     charge_breakdown: Optional[StrictBool] = Field(default=None, alias="chargeBreakdown")
     use_guest_lang: Optional[StrictBool] = Field(default=None, alias="useGuestLang")
+    allow_pending_transactions: Optional[StrictBool] = Field(default=None, alias="allowPendingTransactions")
     due_days: Optional[StrictInt] = Field(default=None, alias="dueDays")
     lang: Optional[StrictStr] = None
     prefix: Optional[StrictStr] = None
     suffix: Optional[StrictStr] = None
+    separator: Optional[StrictStr] = None
     legal_company_name: Optional[StrictStr] = Field(default=None, alias="legalCompanyName")
     title: Optional[Dict[str, StrictStr]] = None
     show_legal_company_name: Optional[StrictBool] = Field(default=None, alias="showLegalCompanyName")
@@ -52,7 +54,7 @@ class ConfigsResponse(BaseModel):
     update_invoice_on_link_document: Optional[StrictBool] = Field(default=False, alias="updateInvoiceOnLinkDocument")
     use_invoice_document_settings: Optional[StrictBool] = Field(default=False, alias="useInvoiceDocumentSettings")
     use_invoice_title_and_numbering: Optional[StrictBool] = Field(default=False, alias="useInvoiceTitleAndNumbering")
-    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "dueDays", "lang", "prefix", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering"]
+    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "allowPendingTransactions", "dueDays", "lang", "prefix", "suffix", "separator", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -111,10 +113,12 @@ class ConfigsResponse(BaseModel):
             "showCreditNotesAndReceipts": obj.get("showCreditNotesAndReceipts"),
             "chargeBreakdown": obj.get("chargeBreakdown"),
             "useGuestLang": obj.get("useGuestLang"),
+            "allowPendingTransactions": obj.get("allowPendingTransactions"),
             "dueDays": obj.get("dueDays"),
             "lang": obj.get("lang"),
             "prefix": obj.get("prefix"),
             "suffix": obj.get("suffix"),
+            "separator": obj.get("separator"),
             "legalCompanyName": obj.get("legalCompanyName"),
             "title": obj.get("title"),
             "showLegalCompanyName": obj.get("showLegalCompanyName"),
