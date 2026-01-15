@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBytes, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictBytes, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr
@@ -38,7 +38,8 @@ class GovernmentIntegration(BaseModel):
     rectifying_invoice_type: Optional[StrictStr] = Field(default=None, alias="rectifyingInvoiceType")
     cancellation_failed_fallback_status: Optional[FiscalDocumentStatus] = Field(default=None, alias="cancellationFailedFallbackStatus")
     pdf_file_base64: Optional[Union[StrictBytes, StrictStr]] = Field(default=None, description="Base64-encoded PDF file content. Only allowed when status is COMPLETED_INTEGRATION.", alias="pdfFileBase64")
-    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64"]
+    handwritten: Optional[StrictBool] = Field(default=None, description="Indicates this is a handwritten receipt created during POS unavailability.")
+    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64", "handwritten"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -103,7 +104,8 @@ class GovernmentIntegration(BaseModel):
             "externalId": obj.get("externalId"),
             "rectifyingInvoiceType": obj.get("rectifyingInvoiceType"),
             "cancellationFailedFallbackStatus": obj.get("cancellationFailedFallbackStatus"),
-            "pdfFileBase64": obj.get("pdfFileBase64")
+            "pdfFileBase64": obj.get("pdfFileBase64"),
+            "handwritten": obj.get("handwritten")
         })
         return _obj
 

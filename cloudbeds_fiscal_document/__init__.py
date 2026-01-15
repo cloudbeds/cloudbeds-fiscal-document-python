@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.13.0"
+__version__ = "1.14.0"
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi

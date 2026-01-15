@@ -36,12 +36,13 @@ class CreateReceiptRequest(BaseModel):
     payment_id: Optional[StrictInt] = Field(default=None, description="Id of the payment. This parameter is mutually exclusive with `transactionId`. ", alias="paymentId")
     sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
     skip_integration: Optional[StrictBool] = Field(default=False, description="At the moment this can only be set to True on Italy to skip the integration, for italy this case is needed to avoid Printing the Receipt", alias="skipIntegration")
+    handwritten: Optional[StrictBool] = Field(default=False, description="Indicates this is a handwritten receipt created during POS unavailability. Only allowed for properties with Fiskaltrust integration enabled.")
     user_id: StrictInt = Field(alias="userId")
     source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
     source_kind: SourceKind = Field(alias="sourceKind")
     recipient: Optional[RecipientRequest] = None
     manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
-    __properties: ClassVar[List[str]] = ["allocations", "transactionId", "paymentId", "sequenceId", "skipIntegration", "userId", "sourceId", "sourceKind", "recipient", "manualRecipient"]
+    __properties: ClassVar[List[str]] = ["allocations", "transactionId", "paymentId", "sequenceId", "skipIntegration", "handwritten", "userId", "sourceId", "sourceKind", "recipient", "manualRecipient"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -132,6 +133,7 @@ class CreateReceiptRequest(BaseModel):
             "paymentId": obj.get("paymentId"),
             "sequenceId": obj.get("sequenceId"),
             "skipIntegration": obj.get("skipIntegration") if obj.get("skipIntegration") is not None else False,
+            "handwritten": obj.get("handwritten") if obj.get("handwritten") is not None else False,
             "userId": obj.get("userId"),
             "sourceId": obj.get("sourceId"),
             "sourceKind": obj.get("sourceKind"),

@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **rectifying_invoice_type** | **str** |  | [optional] 
 **cancellation_failed_fallback_status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
 **pdf_file_base64** | **bytearray** | Base64-encoded PDF file content. Only allowed when status is COMPLETED_INTEGRATION. | [optional] 
+**handwritten** | **bool** | Indicates this is a handwritten receipt created during POS unavailability. | [optional] 
 
 ## Example
 

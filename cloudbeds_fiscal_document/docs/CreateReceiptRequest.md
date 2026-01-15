@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **payment_id** | **int** | Id of the payment. This parameter is mutually exclusive with &#x60;transactionId&#x60;.  | [optional] 
 **sequence_id** | **int** |  | [optional] 
 **skip_integration** | **bool** | At the moment this can only be set to True on Italy to skip the integration, for italy this case is needed to avoid Printing the Receipt | [optional] [default to False]
+**handwritten** | **bool** | Indicates this is a handwritten receipt created during POS unavailability. Only allowed for properties with Fiskaltrust integration enabled. | [optional] [default to False]
 **user_id** | **int** |  | 
 **source_id** | **int** |  | 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
