@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **cancellation_failed_fallback_status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
 **pdf_file_base64** | **bytearray** | Base64-encoded PDF file content. Only allowed when status is COMPLETED_INTEGRATION. | [optional] 
 **handwritten** | **bool** | Indicates this is a handwritten receipt created during POS unavailability. | [optional] 
+**signatures** | [**List[IntegrationSignature]**](IntegrationSignature.md) | Array of semantic signatures/response data from the government integration. | [optional] 
 
 ## Example
 

@@ -21,6 +21,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictBytes, Stri
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr
+from cloudbeds_fiscal_document.models.integration_signature import IntegrationSignature
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -39,7 +40,8 @@ class GovernmentIntegration(BaseModel):
     cancellation_failed_fallback_status: Optional[FiscalDocumentStatus] = Field(default=None, alias="cancellationFailedFallbackStatus")
     pdf_file_base64: Optional[Union[StrictBytes, StrictStr]] = Field(default=None, description="Base64-encoded PDF file content. Only allowed when status is COMPLETED_INTEGRATION.", alias="pdfFileBase64")
     handwritten: Optional[StrictBool] = Field(default=None, description="Indicates this is a handwritten receipt created during POS unavailability.")
-    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64", "handwritten"]
+    signatures: Optional[List[IntegrationSignature]] = Field(default=None, description="Array of semantic signatures/response data from the government integration.")
+    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64", "handwritten", "signatures"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -83,6 +85,13 @@ class GovernmentIntegration(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of qr
         if self.qr:
             _dict['qr'] = self.qr.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each item in signatures (list)
+        _items = []
+        if self.signatures:
+            for _item_signatures in self.signatures:
+                if _item_signatures:
+                    _items.append(_item_signatures.to_dict())
+            _dict['signatures'] = _items
         return _dict
 
     @classmethod
@@ -105,7 +114,8 @@ class GovernmentIntegration(BaseModel):
             "rectifyingInvoiceType": obj.get("rectifyingInvoiceType"),
             "cancellationFailedFallbackStatus": obj.get("cancellationFailedFallbackStatus"),
             "pdfFileBase64": obj.get("pdfFileBase64"),
-            "handwritten": obj.get("handwritten")
+            "handwritten": obj.get("handwritten"),
+            "signatures": [IntegrationSignature.from_dict(_item) for _item in obj["signatures"]] if obj.get("signatures") is not None else None
         })
         return _obj
 

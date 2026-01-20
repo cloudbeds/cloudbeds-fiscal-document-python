@@ -50,6 +50,7 @@ cloudbeds_fiscal_document/docs/GovernmentIntegration.md
 cloudbeds_fiscal_document/docs/GovernmentIntegrationQr.md
 cloudbeds_fiscal_document/docs/GuestDocumentType.md
 cloudbeds_fiscal_document/docs/GuestGender.md
+cloudbeds_fiscal_document/docs/IntegrationSignature.md
 cloudbeds_fiscal_document/docs/LatestLinkedDocument.md
 cloudbeds_fiscal_document/docs/LinkedDocument.md
 cloudbeds_fiscal_document/docs/ManualRecipientRequest.md
@@ -114,6 +115,7 @@ cloudbeds_fiscal_document/models/government_integration.py
 cloudbeds_fiscal_document/models/government_integration_qr.py
 cloudbeds_fiscal_document/models/guest_document_type.py
 cloudbeds_fiscal_document/models/guest_gender.py
+cloudbeds_fiscal_document/models/integration_signature.py
 cloudbeds_fiscal_document/models/latest_linked_document.py
 cloudbeds_fiscal_document/models/linked_document.py
 cloudbeds_fiscal_document/models/manual_recipient_request.py
@@ -140,3 +142,4 @@ cloudbeds_fiscal_document/models/transaction_for_allocation_response.py
 cloudbeds_fiscal_document/models/transaction_status.py
 cloudbeds_fiscal_document/rest.py
 cloudbeds_fiscal_document/test/__init__.py
+cloudbeds_fiscal_document/test/test_integration_signature.py
