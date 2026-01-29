@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **recipient** | [**RecipientRequest**](RecipientRequest.md) |  | 
 **manual_recipient** | [**ManualRecipientRequest**](ManualRecipientRequest.md) |  | [optional] 
+**handwritten** | **bool** | Indicates this is a handwritten receipt created during POS unavailability. Only allowed for properties with Fiskaltrust integration enabled. | [optional] [default to False]
 
 ## Example
 

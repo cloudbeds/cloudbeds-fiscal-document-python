@@ -22,6 +22,7 @@ Method | HTTP request | Description
 [**get_fiscal_document_transactions_by_id**](FiscalDocumentsApi.md#get_fiscal_document_transactions_by_id) | **GET** /fiscal-document/v1/fiscal-documents/{id}/transactions | Get list of transactions for a given fiscal document id
 [**get_fiscal_document_transactions_for_allocation**](FiscalDocumentsApi.md#get_fiscal_document_transactions_for_allocation) | **GET** /fiscal-document/v1/fiscal-documents/allocations/transactions | Get available transactions for allocations
 [**get_fiscal_documents**](FiscalDocumentsApi.md#get_fiscal_documents) | **GET** /fiscal-document/v1/fiscal-documents | Get list of fiscal documents
+[**get_invoice_allocations**](FiscalDocumentsApi.md#get_invoice_allocations) | **GET** /fiscal-document/v1/invoices/{id}/receipts/allocations | Get allocations for an invoice
 [**get_pro_forma_preview**](FiscalDocumentsApi.md#get_pro_forma_preview) | **POST** /fiscal-document/v1/fiscal-documents/pro-forma-invoice/preview | Create a fiscal document of the type pro forma invoice
 [**get_rectify_invoice_preview**](FiscalDocumentsApi.md#get_rectify_invoice_preview) | **POST** /fiscal-document/v1/fiscal-documents/rectify-invoice/preview | Get fiscal document preview of the type rectify invoice
 [**get_selected_transactions_summary**](FiscalDocumentsApi.md#get_selected_transactions_summary) | **GET** /fiscal-document/v1/fiscal-documents/transactions/summary | Get totals of selected available transactions for fiscal documents
@@ -1546,6 +1547,88 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_invoice_allocations**
+> InvoiceAllocationsResponse get_invoice_allocations(x_property_id, id)
+
+Get allocations for an invoice
+
+Retrieves all active allocations for the specified invoice, grouped by transaction ID. Only includes allocations from receipts with active statuses. 
+
+### Example
+
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.invoice_allocations_response import InvoiceAllocationsResponse
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost:8700
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "http://localhost:8700"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    x_property_id = 56 # int | Property id
+    id = 'id_example' # str | Invoice ID
+
+    try:
+        # Get allocations for an invoice
+        api_response = api_instance.get_invoice_allocations(x_property_id, id)
+        print("The response of FiscalDocumentsApi->get_invoice_allocations:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->get_invoice_allocations: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **x_property_id** | **int**| Property id | 
+ **id** | **str**| Invoice ID | 
+
+### Return type
+
+[**InvoiceAllocationsResponse**](InvoiceAllocationsResponse.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**400** | Bad Request - Invalid request (document is not an invoice or invalid ID format) |  -  |
+**404** | Bad Request - Invoice not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

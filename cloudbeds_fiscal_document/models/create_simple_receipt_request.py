@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
@@ -37,7 +37,8 @@ class CreateSimpleReceiptRequest(BaseModel):
     source_kind: SourceKind = Field(alias="sourceKind")
     recipient: RecipientRequest
     manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
-    __properties: ClassVar[List[str]] = ["transactionIds", "sequenceId", "userId", "sourceId", "sourceKind", "recipient", "manualRecipient"]
+    handwritten: Optional[StrictBool] = Field(default=False, description="Indicates this is a handwritten receipt created during POS unavailability. Only allowed for properties with Fiskaltrust integration enabled.")
+    __properties: ClassVar[List[str]] = ["transactionIds", "sequenceId", "userId", "sourceId", "sourceKind", "recipient", "manualRecipient", "handwritten"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -107,7 +108,8 @@ class CreateSimpleReceiptRequest(BaseModel):
             "sourceId": obj.get("sourceId"),
             "sourceKind": obj.get("sourceKind"),
             "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
-            "manualRecipient": ManualRecipientRequest.from_dict(obj["manualRecipient"]) if obj.get("manualRecipient") is not None else None
+            "manualRecipient": ManualRecipientRequest.from_dict(obj["manualRecipient"]) if obj.get("manualRecipient") is not None else None,
+            "handwritten": obj.get("handwritten") if obj.get("handwritten") is not None else False
         })
         return _obj
 
