@@ -6,6 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **transaction_ids** | **List[int]** | List of pending transaction IDs to include in the pro forma invoice (deprecated, use &#x60;includeTransactionIds&#x60; instead) | 
+**transaction_id_to_amount** | **Dict[str, int]** | Map of transaction ID to amount for partial transaction inclusion | [optional] 
 **payment_ids** | **List[int]** | List of payment IDs associated with the pending transactions | [optional] 
 **source_id** | **int** |  | 
 **sequence_id** | **int** |  | [optional] 

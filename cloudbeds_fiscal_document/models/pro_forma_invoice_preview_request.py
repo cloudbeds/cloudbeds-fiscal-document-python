@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import date
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
@@ -31,6 +31,7 @@ class ProFormaInvoicePreviewRequest(BaseModel):
     ProFormaInvoicePreviewRequest
     """ # noqa: E501
     transaction_ids: List[Annotated[int, Field(strict=True, ge=1)]] = Field(description="List of pending transaction IDs to include in the pro forma invoice (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
+    transaction_id_to_amount: Optional[Dict[str, StrictInt]] = Field(default=None, description="Map of transaction ID to amount for partial transaction inclusion", alias="transactionIdToAmount")
     payment_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="List of payment IDs associated with the pending transactions", alias="paymentIds")
     source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
@@ -41,7 +42,7 @@ class ProFormaInvoicePreviewRequest(BaseModel):
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
-    __properties: ClassVar[List[str]] = ["transactionIds", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
+    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -85,6 +86,11 @@ class ProFormaInvoicePreviewRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of recipient
         if self.recipient:
             _dict['recipient'] = self.recipient.to_dict()
+        # set to None if transaction_id_to_amount (nullable) is None
+        # and model_fields_set contains the field
+        if self.transaction_id_to_amount is None and "transaction_id_to_amount" in self.model_fields_set:
+            _dict['transactionIdToAmount'] = None
+
         # set to None if sequence_id (nullable) is None
         # and model_fields_set contains the field
         if self.sequence_id is None and "sequence_id" in self.model_fields_set:
@@ -108,6 +114,7 @@ class ProFormaInvoicePreviewRequest(BaseModel):
 
         _obj = cls.model_validate({
             "transactionIds": obj.get("transactionIds"),
+            "transactionIdToAmount": obj.get("transactionIdToAmount"),
             "paymentIds": obj.get("paymentIds"),
             "sourceId": obj.get("sourceId"),
             "sequenceId": obj.get("sequenceId"),
