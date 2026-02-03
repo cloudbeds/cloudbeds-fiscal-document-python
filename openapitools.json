@@ -5,13 +5,15 @@
   "generatorName": "python",
   "inputSpec": "fiscal-document-openapi.yaml",
   "outputDir": ".",
+  "templateDir": "templates",
   "additionalProperties": {
     "packageName": "cloudbeds_fiscal_document",
     "projectName": "Cloudbeds Fiscal Document",
-    "packageVersion": "1.17.0",
+    "packageVersion": "1.18.0",
     "packageDescription": "OpenAPI client for Cloudbeds Fiscal Document API.",
     "generateSourceCodeOnly": true,
-    "packageUrl": "https://github.com/cloudbeds/cloudbeds-fiscal-document-python"
+    "packageUrl": "https://github.com/cloudbeds/cloudbeds-fiscal-document-python",
+    "enumUnknownDefaultCase": true
   },
   "files": {
     "README_onlypackage.mustache": {
