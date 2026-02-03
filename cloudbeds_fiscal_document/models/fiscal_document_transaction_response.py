@@ -39,11 +39,12 @@ class FiscalDocumentTransactionResponse(BaseModel):
     internal_code: Optional[StrictStr] = Field(default=None, alias="internalCode")
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     available_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="availableAmount")
+    document_fiscalized_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Will be null if filter is not by document id", alias="documentFiscalizedAmount")
     folio_id: Optional[StrictStr] = Field(default=None, alias="folioId")
     status: Optional[StrictStr] = Field(default=None, description="Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions")
     paid_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="paidAmount")
     allocations: Optional[List[FiscalDocumentTransactionAllocation]] = None
-    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "availableAmount", "folioId", "status", "paidAmount", "allocations"]
+    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "availableAmount", "documentFiscalizedAmount", "folioId", "status", "paidAmount", "allocations"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -123,6 +124,7 @@ class FiscalDocumentTransactionResponse(BaseModel):
             "internalCode": obj.get("internalCode"),
             "amount": obj.get("amount"),
             "availableAmount": obj.get("availableAmount"),
+            "documentFiscalizedAmount": obj.get("documentFiscalizedAmount"),
             "folioId": obj.get("folioId"),
             "status": obj.get("status"),
             "paidAmount": obj.get("paidAmount"),

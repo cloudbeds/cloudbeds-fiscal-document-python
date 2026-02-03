@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **internal_code** | **str** |  | [optional] 
 **amount** | **float** |  | [optional] 
 **available_amount** | **float** |  | [optional] 
+**document_fiscalized_amount** | **float** | Will be null if filter is not by document id | [optional] 
 **folio_id** | **str** |  | [optional] 
 **status** | **str** | Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions | [optional] 
 **paid_amount** | **float** |  | [optional] 

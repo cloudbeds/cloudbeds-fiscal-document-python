@@ -18,8 +18,8 @@ import re  # noqa: F401
 import json
 
 from datetime import date
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
@@ -31,7 +31,7 @@ class ProFormaInvoiceRequest(BaseModel):
     ProFormaInvoiceRequest
     """ # noqa: E501
     transaction_ids: List[Annotated[int, Field(strict=True, ge=1)]] = Field(description="List of pending transaction IDs to include in the pro forma invoice (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
-    transaction_id_to_amount: Optional[Dict[str, StrictInt]] = Field(default=None, description="Map of transaction ID to amount for partial transaction inclusion", alias="transactionIdToAmount")
+    transaction_id_to_amount: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(default=None, description="Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion", alias="transactionIdToAmount")
     payment_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="List of payment IDs associated with the pending transactions", alias="paymentIds")
     source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")

@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**transaction_id_to_amount** | **Dict[str, int]** | Map of transaction ID to amount for partial transaction inclusion | [optional] 
+**transaction_id_to_amount** | **Dict[str, float]** | Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion | [optional] 
 **transaction_ids** | **List[int]** | Include transactions with the specified IDs (deprecated, use &#x60;includeTransactionIds&#x60; instead) | 
 **source_id** | **int** |  | 
 **sequence_id** | **int** |  | [optional] 

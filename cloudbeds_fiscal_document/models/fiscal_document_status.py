@@ -44,6 +44,7 @@ class FiscalDocumentStatus(str, Enum):
     REJECTED = 'REJECTED'
     ACCEPTED = 'ACCEPTED'
     PENDING_TRANSACTION = 'PENDING_TRANSACTION'
+    ALLOCATED = 'ALLOCATED'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
