@@ -12,6 +12,8 @@ Action that can be performed on a fiscal document
 
 * `CREDIT_NOTE` (value: `'CREDIT_NOTE'`)
 
+* `VOID_AND_CREDIT_NOTE` (value: `'VOID_AND_CREDIT_NOTE'`)
+
 * `VOID` (value: `'VOID'`)
 
 * `VOID_AND_REFUND` (value: `'VOID_AND_REFUND'`)
