@@ -31,9 +31,10 @@ class ProFormaStatusUpdateRequest(BaseModel):
 
     @field_validator('status')
     def status_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['ACCEPTED', 'REJECTED', 'CANCELED']):
-            raise ValueError("must be one of enum values ('ACCEPTED', 'REJECTED', 'CANCELED')")
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
+        _allowed_values = set(['ACCEPTED', 'REJECTED', 'CANCELED', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
         return value
 
     model_config = ConfigDict(

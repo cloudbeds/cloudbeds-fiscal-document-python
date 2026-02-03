@@ -34,19 +34,21 @@ class RecipientRequest(BaseModel):
 
     @field_validator('type')
     def type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['GUEST', 'CONTACT', 'GROUP', 'COMPANY', 'GROUP_PROFILE', 'GROUP_PROFILE_CONTACT']):
-            raise ValueError("must be one of enum values ('GUEST', 'CONTACT', 'GROUP', 'COMPANY', 'GROUP_PROFILE', 'GROUP_PROFILE_CONTACT')")
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
+        _allowed_values = set(['GUEST', 'CONTACT', 'GROUP', 'COMPANY', 'GROUP_PROFILE', 'GROUP_PROFILE_CONTACT', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
         return value
 
     @field_validator('tax_document_source')
     def tax_document_source_validate_enum(cls, value):
-        """Validates the enum"""
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
         if value is None:
             return value
 
-        if value not in set(['GUEST_TAX_ID', 'GUEST_DOCUMENT_NUMBER']):
-            raise ValueError("must be one of enum values ('GUEST_TAX_ID', 'GUEST_DOCUMENT_NUMBER')")
+        _allowed_values = set(['GUEST_TAX_ID', 'GUEST_DOCUMENT_NUMBER', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
         return value
 
     model_config = ConfigDict(

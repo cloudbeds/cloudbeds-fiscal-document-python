@@ -44,9 +44,10 @@ class ManualRecipientRequest(BaseModel):
 
     @field_validator('type')
     def type_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['PERSON', 'COMPANY']):
-            raise ValueError("must be one of enum values ('PERSON', 'COMPANY')")
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
+        _allowed_values = set(['PERSON', 'COMPANY', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
         return value
 
     model_config = ConfigDict(
