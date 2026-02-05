@@ -25,8 +25,9 @@ Method | HTTP request | Description
 [**get_invoice_allocations**](FiscalDocumentsApi.md#get_invoice_allocations) | **GET** /fiscal-document/v1/invoices/{id}/receipts/allocations | Get allocations for an invoice
 [**get_pro_forma_preview**](FiscalDocumentsApi.md#get_pro_forma_preview) | **POST** /fiscal-document/v1/fiscal-documents/pro-forma-invoice/preview | Create a fiscal document of the type pro forma invoice
 [**get_rectify_invoice_preview**](FiscalDocumentsApi.md#get_rectify_invoice_preview) | **POST** /fiscal-document/v1/fiscal-documents/rectify-invoice/preview | Get fiscal document preview of the type rectify invoice
-[**get_selected_transactions_summary**](FiscalDocumentsApi.md#get_selected_transactions_summary) | **GET** /fiscal-document/v1/fiscal-documents/transactions/summary | Get totals of selected available transactions for fiscal documents
+[**get_selected_transactions_summary**](FiscalDocumentsApi.md#get_selected_transactions_summary) | **GET** /fiscal-document/v1/fiscal-documents/transactions/summary | Get totals of selected available transactions for fiscal documents (deprecated)
 [**get_transactions_summary_by_document_id**](FiscalDocumentsApi.md#get_transactions_summary_by_document_id) | **GET** /fiscal-document/v1/fiscal-documents/{id}/transactions/summary | Get totals of transactions for a given fiscal document id
+[**post_selected_transactions_summary**](FiscalDocumentsApi.md#post_selected_transactions_summary) | **POST** /fiscal-document/v1/fiscal-documents/transactions/summary | Get totals of selected available transactions for fiscal documents
 [**put_fiscal_document**](FiscalDocumentsApi.md#put_fiscal_document) | **PUT** /fiscal-document/v1/fiscal-documents/{id} | Update a fiscal document by id
 [**update_pro_forma_invoice_status**](FiscalDocumentsApi.md#update_pro_forma_invoice_status) | **PUT** /fiscal-document/v1/fiscal-documents/pro-forma-invoice/{id}/status | Update pro forma invoice status
 [**void_receipt**](FiscalDocumentsApi.md#void_receipt) | **POST** /fiscal-document/v1/fiscal-documents/receipts/{receiptId}/void | Void a receipt
@@ -1795,9 +1796,9 @@ Name | Type | Description  | Notes
 # **get_selected_transactions_summary**
 > FiscalDocumentTransactionsSummary get_selected_transactions_summary(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, folio_ids=folio_ids, exclude_transaction_ids=exclude_transaction_ids, include_transaction_ids=include_transaction_ids)
 
-Get totals of selected available transactions for fiscal documents
+Get totals of selected available transactions for fiscal documents (deprecated)
 
-Get totals of selected available transactions for fiscal documents based on the document type. 
+**Deprecated:** Use POST /fiscal-document/v1/fiscal-documents/transactions/summary instead. Get totals of selected available transactions for fiscal documents based on the document type. 
 
 ### Example
 
@@ -1841,7 +1842,7 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     include_transaction_ids = [56] # List[int] | transaction IDs to include. (optional)
 
     try:
-        # Get totals of selected available transactions for fiscal documents
+        # Get totals of selected available transactions for fiscal documents (deprecated)
         api_response = api_instance.get_selected_transactions_summary(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, folio_ids=folio_ids, exclude_transaction_ids=exclude_transaction_ids, include_transaction_ids=include_transaction_ids)
         print("The response of FiscalDocumentsApi->get_selected_transactions_summary:\n")
         pprint(api_response)
@@ -1958,6 +1959,87 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **post_selected_transactions_summary**
+> FiscalDocumentTransactionsSummary post_selected_transactions_summary(x_property_id, transactions_summary_request)
+
+Get totals of selected available transactions for fiscal documents
+
+Get totals of selected available transactions for fiscal documents based on the document type. Supports partial transaction amounts via transactionIdToAmount. 
+
+### Example
+
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.fiscal_document_transactions_summary import FiscalDocumentTransactionsSummary
+from cloudbeds_fiscal_document.models.transactions_summary_request import TransactionsSummaryRequest
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost:8700
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "http://localhost:8700"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    x_property_id = 56 # int | Property id
+    transactions_summary_request = cloudbeds_fiscal_document.TransactionsSummaryRequest() # TransactionsSummaryRequest | 
+
+    try:
+        # Get totals of selected available transactions for fiscal documents
+        api_response = api_instance.post_selected_transactions_summary(x_property_id, transactions_summary_request)
+        print("The response of FiscalDocumentsApi->post_selected_transactions_summary:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->post_selected_transactions_summary: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **x_property_id** | **int**| Property id | 
+ **transactions_summary_request** | [**TransactionsSummaryRequest**](TransactionsSummaryRequest.md)|  | 
+
+### Return type
+
+[**FiscalDocumentTransactionsSummary**](FiscalDocumentTransactionsSummary.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 ### HTTP response details

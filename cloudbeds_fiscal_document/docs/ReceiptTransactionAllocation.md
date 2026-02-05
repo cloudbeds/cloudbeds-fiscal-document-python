@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **transaction_id** | **int** |  | 
 **amount** | **float** |  | 
+**document_id** | **int** |  | [optional] 
 
 ## Example
 

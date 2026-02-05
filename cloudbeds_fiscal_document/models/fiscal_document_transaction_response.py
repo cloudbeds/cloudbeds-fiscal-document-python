@@ -32,6 +32,7 @@ class FiscalDocumentTransactionResponse(BaseModel):
     id: Optional[StrictStr] = None
     property_id: Optional[StrictStr] = Field(default=None, alias="propertyId")
     source_id: Optional[StrictStr] = Field(default=None, alias="sourceId")
+    source_identifier: Optional[StrictStr] = Field(default=None, alias="sourceIdentifier")
     source_kind: Optional[SourceKind] = Field(default=None, alias="sourceKind")
     transaction_date: Optional[datetime] = Field(default=None, alias="transactionDate")
     guest_name: Optional[StrictStr] = Field(default=None, alias="guestName")
@@ -44,7 +45,7 @@ class FiscalDocumentTransactionResponse(BaseModel):
     status: Optional[StrictStr] = Field(default=None, description="Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions")
     paid_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="paidAmount")
     allocations: Optional[List[FiscalDocumentTransactionAllocation]] = None
-    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "availableAmount", "documentFiscalizedAmount", "folioId", "status", "paidAmount", "allocations"]
+    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceIdentifier", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "availableAmount", "documentFiscalizedAmount", "folioId", "status", "paidAmount", "allocations"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -118,6 +119,7 @@ class FiscalDocumentTransactionResponse(BaseModel):
             "id": obj.get("id"),
             "propertyId": obj.get("propertyId"),
             "sourceId": obj.get("sourceId"),
+            "sourceIdentifier": obj.get("sourceIdentifier"),
             "sourceKind": obj.get("sourceKind"),
             "transactionDate": obj.get("transactionDate"),
             "guestName": obj.get("guestName"),

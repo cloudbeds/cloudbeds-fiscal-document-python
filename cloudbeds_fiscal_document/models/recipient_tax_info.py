@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -28,7 +28,19 @@ class RecipientTaxInfo(BaseModel):
     """ # noqa: E501
     id: Optional[StrictStr] = None
     company_name: Optional[StrictStr] = Field(default=None, alias="companyName")
-    __properties: ClassVar[List[str]] = ["id", "companyName"]
+    source: Optional[StrictStr] = Field(default=None, description="Indicates whether the tax identification used is from Tax ID or Document Number.")
+    __properties: ClassVar[List[str]] = ["id", "companyName", "source"]
+
+    @field_validator('source')
+    def source_validate_enum(cls, value):
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
+        if value is None:
+            return value
+
+        _allowed_values = set(['GUEST_TAX_ID', 'GUEST_DOCUMENT_NUMBER', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -82,7 +94,8 @@ class RecipientTaxInfo(BaseModel):
 
         _obj = cls.model_validate({
             "id": obj.get("id"),
-            "companyName": obj.get("companyName")
+            "companyName": obj.get("companyName"),
+            "source": obj.get("source")
         })
         return _obj
 
