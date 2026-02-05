@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** |  | [optional] 
 **company_name** | **str** |  | [optional] 
+**source** | **str** | Indicates whether the tax identification used is from Tax ID or Document Number. | [optional] 
 
 ## Example
 

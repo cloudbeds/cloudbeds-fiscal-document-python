@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
-from typing import Any, ClassVar, Dict, List, Union
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,7 +28,8 @@ class ReceiptTransactionAllocation(BaseModel):
     """ # noqa: E501
     transaction_id: StrictInt = Field(alias="transactionId")
     amount: Union[StrictFloat, StrictInt]
-    __properties: ClassVar[List[str]] = ["transactionId", "amount"]
+    document_id: Optional[StrictInt] = Field(default=None, alias="documentId")
+    __properties: ClassVar[List[str]] = ["transactionId", "amount", "documentId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -82,7 +83,8 @@ class ReceiptTransactionAllocation(BaseModel):
 
         _obj = cls.model_validate({
             "transactionId": obj.get("transactionId"),
-            "amount": obj.get("amount")
+            "amount": obj.get("amount"),
+            "documentId": obj.get("documentId")
         })
         return _obj
 

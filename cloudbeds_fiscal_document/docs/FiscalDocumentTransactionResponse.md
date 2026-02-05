@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **id** | **str** |  | [optional] 
 **property_id** | **str** |  | [optional] 
 **source_id** | **str** |  | [optional] 
+**source_identifier** | **str** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | [optional] 
 **transaction_date** | **datetime** |  | [optional] 
 **guest_name** | **str** |  | [optional] 

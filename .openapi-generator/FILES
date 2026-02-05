@@ -77,6 +77,7 @@ cloudbeds_fiscal_document/docs/SingleAllocation.md
 cloudbeds_fiscal_document/docs/SourceKind.md
 cloudbeds_fiscal_document/docs/TransactionForAllocationResponse.md
 cloudbeds_fiscal_document/docs/TransactionStatus.md
+cloudbeds_fiscal_document/docs/TransactionsSummaryRequest.md
 cloudbeds_fiscal_document/exceptions.py
 cloudbeds_fiscal_document/models/__init__.py
 cloudbeds_fiscal_document/models/action.py
@@ -144,5 +145,7 @@ cloudbeds_fiscal_document/models/single_allocation.py
 cloudbeds_fiscal_document/models/source_kind.py
 cloudbeds_fiscal_document/models/transaction_for_allocation_response.py
 cloudbeds_fiscal_document/models/transaction_status.py
+cloudbeds_fiscal_document/models/transactions_summary_request.py
 cloudbeds_fiscal_document/rest.py
 cloudbeds_fiscal_document/test/__init__.py
+cloudbeds_fiscal_document/test/test_transactions_summary_request.py

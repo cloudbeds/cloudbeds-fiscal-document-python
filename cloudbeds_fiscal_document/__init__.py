@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.18.0"
+__version__ = "1.19.0"
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi
@@ -99,3 +99,4 @@ from cloudbeds_fiscal_document.models.single_allocation import SingleAllocation
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from cloudbeds_fiscal_document.models.transaction_for_allocation_response import TransactionForAllocationResponse
 from cloudbeds_fiscal_document.models.transaction_status import TransactionStatus
+from cloudbeds_fiscal_document.models.transactions_summary_request import TransactionsSummaryRequest
