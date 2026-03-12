@@ -12,7 +12,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 # import models into model package
 from cloudbeds_fiscal_document.models.action import Action
 from cloudbeds_fiscal_document.models.allocate_receipt_payment_request import AllocateReceiptPaymentRequest
@@ -111,3 +110,4 @@ from cloudbeds_fiscal_document.models.transaction_for_allocation_response import
 from cloudbeds_fiscal_document.models.transaction_status import TransactionStatus
 from cloudbeds_fiscal_document.models.transactions_summary_request import TransactionsSummaryRequest
 from cloudbeds_fiscal_document.models.validation_error import ValidationError
+

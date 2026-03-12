@@ -40,7 +40,12 @@ Method | HTTP request | Description
 
 Allocate payment associated with receipt to charge transactions.
 
-Allocate payment associated with receipt to charge transactions. The amounts of all allocations must be equal to the payment amount. The transactions should not be fully allocated already   and the amount allocated should not be more than the remaining balance on the transaction. All transactions not part of an invoice will be added to newly created invoice. 
+Allocate payment associated with receipt to charge transactions.
+The amounts of all allocations must be equal to the payment amount.
+The transactions should not be fully allocated already
+  and the amount allocated should not be more than the remaining balance on the transaction.
+All transactions not part of an invoice will be added to newly created invoice.
+
 
 ### Example
 
@@ -123,7 +128,8 @@ Name | Type | Description  | Notes
 
 Apply receipt to invoice
 
-Apply receipt to invoice. Receipt should not have allocations 
+Apply receipt to invoice. Receipt should not have allocations
+
 
 ### Example
 
@@ -367,7 +373,15 @@ Name | Type | Description  | Notes
 
 Create a fiscal document of the type pro forma invoice
 
-Create a fiscal document of the type pro forma invoice.  **Pro Forma Invoice Characteristics:** - Contains pending transactions that are subject to change - Includes payment information - Transactions are NOT locked (unlike regular invoices) - Can be converted to regular invoices later when transactions are posted - Has its own sequence numbering and settings 
+Create a fiscal document of the type pro forma invoice.
+
+**Pro Forma Invoice Characteristics:**
+- Contains pending transactions that are subject to change
+- Includes payment information
+- Transactions are NOT locked (unlike regular invoices)
+- Can be converted to regular invoices later when transactions are posted
+- Has its own sequence numbering and settings
+
 
 ### Example
 
@@ -448,7 +462,13 @@ Name | Type | Description  | Notes
 
 Create receipt for a payment.
 
-Create a receipt for a payment and optionally specify allocations per transaction. In case of no allocations, a 'Simple receipt' will be created that can later be allocated to charge transactions. The amounts of all allocations must be equal to the payment amount. The transactions should not be fully allocated already   and the amount allocated should not be more than the remaining balance on the transaction. All transactions not part of an invoice will be added to newly created invoice. 
+Create a receipt for a payment and optionally specify allocations per transaction.
+In case of no allocations, a 'Simple receipt' will be created that can later be allocated to charge transactions.
+The amounts of all allocations must be equal to the payment amount.
+The transactions should not be fully allocated already
+  and the amount allocated should not be more than the remaining balance on the transaction.
+All transactions not part of an invoice will be added to newly created invoice.
+
 
 ### Example
 
@@ -531,7 +551,17 @@ Name | Type | Description  | Notes
 
 Create a fiscal document of the type rectify invoice
 
-Create a fiscal document of the type rectify invoice.  **Spanish Fiscal Regulations:** - Only available for properties in Spain - An invoice that has already been rectified cannot be rectified again - To make corrections to a rectified invoice, you must rectify the most recent invoice in the rectification chain  **Validation Rules:** - The target invoice must not have been previously rectified - If the invoice has been rectified, the API will return an error with details about which invoice should be rectified instead 
+Create a fiscal document of the type rectify invoice.
+
+**Spanish Fiscal Regulations:**
+- Only available for properties in Spain
+- An invoice that has already been rectified cannot be rectified again
+- To make corrections to a rectified invoice, you must rectify the most recent invoice in the rectification chain
+
+**Validation Rules:**
+- The target invoice must not have been previously rectified
+- If the invoice has been rectified, the API will return an error with details about which invoice should be rectified instead
+
 
 ### Example
 
@@ -613,7 +643,17 @@ Name | Type | Description  | Notes
 
 Create a settlement invoice for an advance invoice
 
-Create a settlement invoice linked to an existing advance invoice.  A settlement invoice finalizes the billing cycle started by an advance invoice. It references the advance invoice and may include additional transactions that were not part of the original advance.  **Validation Rules:** - The parent document must be an ADVANCE_INVOICE - The parent document must be in an active status - There must not already be an active settlement invoice for this advance 
+Create a settlement invoice linked to an existing advance invoice.
+
+A settlement invoice finalizes the billing cycle started by an advance invoice.
+It references the advance invoice and may include additional transactions
+that were not part of the original advance.
+
+**Validation Rules:**
+- The parent document must be an ADVANCE_INVOICE
+- The parent document must be in an active status
+- There must not already be an active settlement invoice for this advance
+
 
 ### Example
 
@@ -696,7 +736,8 @@ Name | Type | Description  | Notes
 
 Create simple receipts.
 
-Create receipts for list of payments without allocations. 
+Create receipts for list of payments without allocations.
+
 
 ### Example
 
@@ -940,7 +981,8 @@ Name | Type | Description  | Notes
 
 Get payment allocation transactions
 
-Retrieves payment allocations. 
+Retrieves payment allocations.
+
 
 ### Example
 
@@ -1027,7 +1069,8 @@ Name | Type | Description  | Notes
 
 Get allocations summary
 
-Retrieves allocations summary. 
+Retrieves allocations summary.
+
 
 ### Example
 
@@ -1354,7 +1397,13 @@ Name | Type | Description  | Notes
 
 Get available transactions for fiscal documents
 
-Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded - Each transaction includes a status field (PENDING or POSTED) 
+Retrieves a paginated list of available transactions for a source based on the document type.
+- For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled
+- For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled
+- For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments
+- Transactions already included in fiscal documents are excluded
+- Each transaction includes a status field (PENDING or POSTED)
+
 
 ### Example
 
@@ -1540,7 +1589,8 @@ Name | Type | Description  | Notes
 
 Get available transactions for allocations
 
-Retrieves a paginated list of available transactions for allocations. 
+Retrieves a paginated list of available transactions for allocations.
+
 
 ### Example
 
@@ -1725,7 +1775,9 @@ Name | Type | Description  | Notes
 
 Get allocations for an invoice
 
-Retrieves all active allocations for the specified invoice, grouped by transaction ID. Only includes allocations from receipts with active statuses. 
+Retrieves all active allocations for the specified invoice, grouped by transaction ID.
+Only includes allocations from receipts with active statuses.
+
 
 ### Example
 
@@ -1807,7 +1859,15 @@ Name | Type | Description  | Notes
 
 Create a fiscal document of the type pro forma invoice
 
-Create a fiscal document of the type pro forma invoice.  **Pro Forma Invoice Characteristics:** - Contains pending transactions that are subject to change - Includes payment information - Transactions are NOT locked (unlike regular invoices) - Can be converted to regular invoices later when transactions are posted - Has its own sequence numbering and settings 
+Create a fiscal document of the type pro forma invoice.
+
+**Pro Forma Invoice Characteristics:**
+- Contains pending transactions that are subject to change
+- Includes payment information
+- Transactions are NOT locked (unlike regular invoices)
+- Can be converted to regular invoices later when transactions are posted
+- Has its own sequence numbering and settings
+
 
 ### Example
 
@@ -1887,7 +1947,15 @@ Name | Type | Description  | Notes
 
 Get fiscal document preview of the type rectify invoice
 
-Get fiscal document preview of the type rectify invoice. **Spanish Fiscal Regulations:** - Only available for properties in Spain - An invoice that has already been rectified cannot be rectified again - To make corrections to a rectified invoice, you must rectify the most recent invoice in the rectification chain **Validation Rules:** - The target invoice must not have been previously rectified - If the invoice has been rectified, the API will return an error with details about which invoice should be rectified instead 
+Get fiscal document preview of the type rectify invoice.
+**Spanish Fiscal Regulations:**
+- Only available for properties in Spain
+- An invoice that has already been rectified cannot be rectified again
+- To make corrections to a rectified invoice, you must rectify the most recent invoice in the rectification chain
+**Validation Rules:**
+- The target invoice must not have been previously rectified
+- If the invoice has been rectified, the API will return an error with details about which invoice should be rectified instead
+
 
 ### Example
 
@@ -1967,7 +2035,9 @@ Name | Type | Description  | Notes
 
 Get totals of selected available transactions for fiscal documents (deprecated)
 
-**Deprecated:** Use POST /fiscal-document/v1/fiscal-documents/transactions/summary instead. Get totals of selected available transactions for fiscal documents based on the document type. 
+**Deprecated:** Use POST /fiscal-document/v1/fiscal-documents/transactions/summary instead.
+Get totals of selected available transactions for fiscal documents based on the document type.
+
 
 ### Example
 
@@ -2143,7 +2213,9 @@ Name | Type | Description  | Notes
 
 Get totals of selected available transactions for fiscal documents
 
-Get totals of selected available transactions for fiscal documents based on the document type. Supports partial transaction amounts via transactionIdToAmount. 
+Get totals of selected available transactions for fiscal documents based on the document type.
+Supports partial transaction amounts via transactionIdToAmount.
+
 
 ### Example
 
@@ -2224,7 +2296,20 @@ Name | Type | Description  | Notes
 
 Update a fiscal document by id
 
-Update a fiscal document status, government integration details, or failure reason. Used by integration partners to update document lifecycle and government processing status.  **Common Updates:** - Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.) - Set government integration details (series, number, external ID, QR codes) - Record failure reasons for failed integrations  **Invoice Cancellation (Spanish Properties Only):** - Set status to CANCEL_REQUESTED to cancel invoices - Only invoices in OPEN, PAID, PARTIALLY_PAID or CORRECTION_NEEDED status can be canceled - Invoices with rectifying documents cannot be canceled - Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure) 
+Update a fiscal document status, government integration details, or failure reason.
+Used by integration partners to update document lifecycle and government processing status.
+
+**Common Updates:**
+- Update status (PENDING_INTEGRATION, COMPLETED_INTEGRATION, FAILED, etc.)
+- Set government integration details (series, number, external ID, QR codes)
+- Record failure reasons for failed integrations
+
+**Invoice Cancellation (Spanish Properties Only):**
+- Set status to CANCEL_REQUESTED to cancel invoices
+- Only invoices in OPEN, PAID, PARTIALLY_PAID or CORRECTION_NEEDED status can be canceled
+- Invoices with rectifying documents cannot be canceled
+- Integration partners must handle CANCEL_REQUESTED and update to CANCELED (success) or revert to previous status (failure)
+
 
 ### Example
 
@@ -2307,7 +2392,11 @@ Name | Type | Description  | Notes
 
 Update pro forma invoice status
 
-Update the status of a pro forma invoice. Supported status transitions: - OPEN -> ACCEPTED, REJECTED, CANCELED - ACCEPTED -> CANCELED - REJECTED -> CANCELED 
+Update the status of a pro forma invoice. Supported status transitions:
+- OPEN -> ACCEPTED, REJECTED, CANCELED
+- ACCEPTED -> CANCELED
+- REJECTED -> CANCELED
+
 
 ### Example
 
@@ -2392,7 +2481,10 @@ Name | Type | Description  | Notes
 
 Void a receipt
 
-Voids a receipt by updating its status to VOIDED. The receipt must be in OPEN status. For Italy, a refund receipt will be automatically created and linked to the voided receipt. 
+Voids a receipt by updating its status to VOIDED.
+The receipt must be in OPEN status.
+For Italy, a refund receipt will be automatically created and linked to the voided receipt.
+
 
 ### Example
 

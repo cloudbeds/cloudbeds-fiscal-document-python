@@ -12,7 +12,8 @@ Method | HTTP request | Description
 
 Get enabled features for the current user and property
 
-Returns a map of feature flags enabled for the authenticated user in the context of the current property. 
+Returns a map of feature flags enabled for the authenticated user in the context of the current property.
+
 
 ### Example
 
