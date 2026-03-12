@@ -1,0 +1,7 @@
+# Default — INT team reviews all changes
+* @cloudbeds/squad-integrations
+
+# Dependency files — Dependabot-managed, no review required
+uv.lock
+requirements.txt
+pyproject.toml
