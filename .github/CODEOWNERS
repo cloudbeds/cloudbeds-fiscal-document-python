@@ -3,5 +3,4 @@
 
 # Dependency files — Dependabot-managed, no review required
 uv.lock
-requirements.txt
 pyproject.toml
