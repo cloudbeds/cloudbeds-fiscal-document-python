@@ -35,6 +35,7 @@ class DocumentAction(str, Enum):
     VOID_AND_REFUND = 'VOID_AND_REFUND'
     ADD_PAYMENT = 'ADD_PAYMENT'
     APPLY_TO_INVOICE = 'APPLY_TO_INVOICE'
+    GENERATE_SETTLEMENT = 'GENERATE_SETTLEMENT'
     UNKNOWN_DEFAULT_OPEN_API = 'unknown_default_open_api'
 
     @classmethod

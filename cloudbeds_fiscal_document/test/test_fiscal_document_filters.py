@@ -43,8 +43,9 @@ class TestFiscalDocumentFilters(unittest.TestCase):
                     'GROUP_PROFILE'
                     ],
                 number_contains = '',
-                statuses = ["DRAFT","COMPLETED"],
+                statuses = ["OPEN","COMPLETED"],
                 kinds = ["INVOICE","RECEIPT"],
+                origins = ["MFD","FISCAL_DOCUMENT"],
                 created_at_from = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 created_at_to = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
                 invoice_date_from = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(),

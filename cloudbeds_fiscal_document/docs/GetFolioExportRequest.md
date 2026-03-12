@@ -5,13 +5,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**folio_ids** | **List[int]** | Include transactions from the specified folio IDs | 
+**folio_ids** | **List[int]** | Include transactions from the specified folio IDs. If omitted, all transactions for the source are included. | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **source_id** | **int** | source ID of folio | 
 **credit_debit_view** | **bool** | Should transactions be separated into debit/credits | [optional] 
 **revenue_compact** | **bool** | Compact revenue transactions, valid only for sourceKind &#x3D; RESERVATION | [optional] 
-**date_from** | **date** | Minimum date, only for sourceKind &#x3D; HOUSE_ACCOUNT | [optional] 
-**date_to** | **date** | Maximum date, only for sourceKind &#x3D; HOUSE_ACCOUNT, optional | [optional] 
+**date_from** | **date** | Minimum date filter (inclusive). Required for sourceKind &#x3D; HOUSE_ACCOUNT, optional for others. | [optional] 
+**date_to** | **date** | Maximum date filter (inclusive), optional. | [optional] 
+**format** | [**ExportFormat**](ExportFormat.md) |  | [optional] 
+**recipient** | [**RecipientRequest**](RecipientRequest.md) |  | [optional] 
 
 ## Example
 

@@ -38,12 +38,15 @@ class TestCreateReceiptRequest(unittest.TestCase):
                 allocations = [
                     cloudbeds_fiscal_document.models.receipt_transaction_allocation.ReceiptTransactionAllocation(
                         transaction_id = 56, 
-                        amount = 1.337, )
+                        amount = 1.337, 
+                        document_id = 56, )
                     ],
                 transaction_id = 56,
                 payment_id = 56,
+                invoice_id = 56,
                 sequence_id = 56,
                 skip_integration = True,
+                handwritten = True,
                 user_id = 56,
                 source_id = 1,
                 source_kind = 'GROUP_PROFILE',

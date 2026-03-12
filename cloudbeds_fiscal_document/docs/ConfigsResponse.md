@@ -31,6 +31,7 @@ Name | Type | Description | Notes
 **update_invoice_on_link_document** | **bool** |  | [optional] [default to False]
 **use_invoice_document_settings** | **bool** |  | [optional] [default to False]
 **use_invoice_title_and_numbering** | **bool** |  | [optional] [default to False]
+**date_display** | [**DateDisplay**](DateDisplay.md) |  | [optional] [default to DateDisplay.TRANSACTION_DATE]
 
 ## Example
 

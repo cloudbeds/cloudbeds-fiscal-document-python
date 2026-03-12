@@ -45,6 +45,7 @@ class FiscalDocumentStatus(str, Enum):
     ACCEPTED = 'ACCEPTED'
     PENDING_TRANSACTION = 'PENDING_TRANSACTION'
     ALLOCATED = 'ALLOCATED'
+    APPLIED = 'APPLIED'
     UNKNOWN_DEFAULT_OPEN_API = 'unknown_default_open_api'
 
     @classmethod

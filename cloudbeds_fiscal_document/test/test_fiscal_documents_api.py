@@ -33,6 +33,13 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """
         pass
 
+    def test_apply_receipt(self) -> None:
+        """Test case for apply_receipt
+
+        Apply receipt to invoice
+        """
+        pass
+
     def test_create_credit_note(self) -> None:
         """Test case for create_credit_note
 
@@ -65,6 +72,13 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """Test case for create_rectify_invoice
 
         Create a fiscal document of the type rectify invoice
+        """
+        pass
+
+    def test_create_settlement_invoice(self) -> None:
+        """Test case for create_settlement_invoice
+
+        Create a settlement invoice for an advance invoice
         """
         pass
 
@@ -152,6 +166,13 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """
         pass
 
+    def test_get_invoice_allocations(self) -> None:
+        """Test case for get_invoice_allocations
+
+        Get allocations for an invoice
+        """
+        pass
+
     def test_get_pro_forma_preview(self) -> None:
         """Test case for get_pro_forma_preview
 
@@ -169,7 +190,7 @@ class TestFiscalDocumentsApi(unittest.TestCase):
     def test_get_selected_transactions_summary(self) -> None:
         """Test case for get_selected_transactions_summary
 
-        Get totals of selected available transactions for fiscal documents
+        Get totals of selected available transactions for fiscal documents (deprecated)
         """
         pass
 
@@ -177,6 +198,13 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """Test case for get_transactions_summary_by_document_id
 
         Get totals of transactions for a given fiscal document id
+        """
+        pass
+
+    def test_post_selected_transactions_summary(self) -> None:
+        """Test case for post_selected_transactions_summary
+
+        Get totals of selected available transactions for fiscal documents
         """
         pass
 

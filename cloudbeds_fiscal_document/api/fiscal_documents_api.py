@@ -22,9 +22,11 @@ from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.allocate_receipt_payment_request import AllocateReceiptPaymentRequest
 from cloudbeds_fiscal_document.models.allocations_data import AllocationsData
 from cloudbeds_fiscal_document.models.allocations_summary import AllocationsSummary
+from cloudbeds_fiscal_document.models.apply_receipt_request import ApplyReceiptRequest
 from cloudbeds_fiscal_document.models.create_credit_note_request import CreateCreditNoteRequest
 from cloudbeds_fiscal_document.models.create_invoice_request import CreateInvoiceRequest
 from cloudbeds_fiscal_document.models.create_receipt_request import CreateReceiptRequest
+from cloudbeds_fiscal_document.models.create_settlement_invoice_request import CreateSettlementInvoiceRequest
 from cloudbeds_fiscal_document.models.create_simple_receipt_request import CreateSimpleReceiptRequest
 from cloudbeds_fiscal_document.models.fiscal_document_email_request import FiscalDocumentEmailRequest
 from cloudbeds_fiscal_document.models.fiscal_document_filters import FiscalDocumentFilters
@@ -346,6 +348,316 @@ class FiscalDocumentsApi:
         return self.api_client.param_serialize(
             method='POST',
             resource_path='/fiscal-document/v1/fiscal-documents/receipt/allocate-payment',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def apply_receipt(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        receipt_id: Annotated[StrictInt, Field(description="The ID of the receipt")],
+        apply_receipt_request: ApplyReceiptRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Apply receipt to invoice
+
+        Apply receipt to invoice. Receipt should not have allocations 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param receipt_id: The ID of the receipt (required)
+        :type receipt_id: int
+        :param apply_receipt_request: (required)
+        :type apply_receipt_request: ApplyReceiptRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._apply_receipt_serialize(
+            x_property_id=x_property_id,
+            receipt_id=receipt_id,
+            apply_receipt_request=apply_receipt_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ApiError",
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def apply_receipt_with_http_info(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        receipt_id: Annotated[StrictInt, Field(description="The ID of the receipt")],
+        apply_receipt_request: ApplyReceiptRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Apply receipt to invoice
+
+        Apply receipt to invoice. Receipt should not have allocations 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param receipt_id: The ID of the receipt (required)
+        :type receipt_id: int
+        :param apply_receipt_request: (required)
+        :type apply_receipt_request: ApplyReceiptRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._apply_receipt_serialize(
+            x_property_id=x_property_id,
+            receipt_id=receipt_id,
+            apply_receipt_request=apply_receipt_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ApiError",
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def apply_receipt_without_preload_content(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        receipt_id: Annotated[StrictInt, Field(description="The ID of the receipt")],
+        apply_receipt_request: ApplyReceiptRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Apply receipt to invoice
+
+        Apply receipt to invoice. Receipt should not have allocations 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param receipt_id: The ID of the receipt (required)
+        :type receipt_id: int
+        :param apply_receipt_request: (required)
+        :type apply_receipt_request: ApplyReceiptRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._apply_receipt_serialize(
+            x_property_id=x_property_id,
+            receipt_id=receipt_id,
+            apply_receipt_request=apply_receipt_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '204': None,
+            '400': "ApiError",
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _apply_receipt_serialize(
+        self,
+        x_property_id,
+        receipt_id,
+        apply_receipt_request,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if receipt_id is not None:
+            _path_params['receiptId'] = receipt_id
+        # process the query parameters
+        # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-ID'] = x_property_id
+        # process the form parameters
+        # process the body parameter
+        if apply_receipt_request is not None:
+            _body_params = apply_receipt_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/fiscal-document/v1/fiscal-documents/receipts/{receiptId}/apply',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1800,6 +2112,310 @@ class FiscalDocumentsApi:
         return self.api_client.param_serialize(
             method='POST',
             resource_path='/fiscal-document/v1/fiscal-documents/rectify-invoice',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def create_settlement_invoice(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        advance_invoice_id: Annotated[int, Field(strict=True, ge=1, description="The ID of the advance invoice to settle")],
+        create_settlement_invoice_request: CreateSettlementInvoiceRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> FiscalDocumentSummaryResponse:
+        """Create a settlement invoice for an advance invoice
+
+        Create a settlement invoice linked to an existing advance invoice.  A settlement invoice finalizes the billing cycle started by an advance invoice. It references the advance invoice and may include additional transactions that were not part of the original advance.  **Validation Rules:** - The parent document must be an ADVANCE_INVOICE - The parent document must be in an active status - There must not already be an active settlement invoice for this advance 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param advance_invoice_id: The ID of the advance invoice to settle (required)
+        :type advance_invoice_id: int
+        :param create_settlement_invoice_request: (required)
+        :type create_settlement_invoice_request: CreateSettlementInvoiceRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_settlement_invoice_serialize(
+            x_property_id=x_property_id,
+            advance_invoice_id=advance_invoice_id,
+            create_settlement_invoice_request=create_settlement_invoice_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def create_settlement_invoice_with_http_info(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        advance_invoice_id: Annotated[int, Field(strict=True, ge=1, description="The ID of the advance invoice to settle")],
+        create_settlement_invoice_request: CreateSettlementInvoiceRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[FiscalDocumentSummaryResponse]:
+        """Create a settlement invoice for an advance invoice
+
+        Create a settlement invoice linked to an existing advance invoice.  A settlement invoice finalizes the billing cycle started by an advance invoice. It references the advance invoice and may include additional transactions that were not part of the original advance.  **Validation Rules:** - The parent document must be an ADVANCE_INVOICE - The parent document must be in an active status - There must not already be an active settlement invoice for this advance 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param advance_invoice_id: The ID of the advance invoice to settle (required)
+        :type advance_invoice_id: int
+        :param create_settlement_invoice_request: (required)
+        :type create_settlement_invoice_request: CreateSettlementInvoiceRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_settlement_invoice_serialize(
+            x_property_id=x_property_id,
+            advance_invoice_id=advance_invoice_id,
+            create_settlement_invoice_request=create_settlement_invoice_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def create_settlement_invoice_without_preload_content(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        advance_invoice_id: Annotated[int, Field(strict=True, ge=1, description="The ID of the advance invoice to settle")],
+        create_settlement_invoice_request: CreateSettlementInvoiceRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Create a settlement invoice for an advance invoice
+
+        Create a settlement invoice linked to an existing advance invoice.  A settlement invoice finalizes the billing cycle started by an advance invoice. It references the advance invoice and may include additional transactions that were not part of the original advance.  **Validation Rules:** - The parent document must be an ADVANCE_INVOICE - The parent document must be in an active status - There must not already be an active settlement invoice for this advance 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param advance_invoice_id: The ID of the advance invoice to settle (required)
+        :type advance_invoice_id: int
+        :param create_settlement_invoice_request: (required)
+        :type create_settlement_invoice_request: CreateSettlementInvoiceRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._create_settlement_invoice_serialize(
+            x_property_id=x_property_id,
+            advance_invoice_id=advance_invoice_id,
+            create_settlement_invoice_request=create_settlement_invoice_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _create_settlement_invoice_serialize(
+        self,
+        x_property_id,
+        advance_invoice_id,
+        create_settlement_invoice_request,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if advance_invoice_id is not None:
+            _path_params['advance_invoice_id'] = advance_invoice_id
+        # process the query parameters
+        # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-ID'] = x_property_id
+        # process the form parameters
+        # process the body parameter
+        if create_settlement_invoice_request is not None:
+            _body_params = create_settlement_invoice_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/fiscal-document/v1/fiscal-documents/{advance_invoice_id}/settlement',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -4977,7 +5593,8 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
-        document_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="document IDs.")] = None,
+        document_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1, max_length=1)]], Field(description="document IDs.")] = None,
+        document_id: Annotated[Optional[StrictInt], Field(description="document ID.")] = None,
         statuses: Annotated[Optional[List[TransactionStatus]], Field(description="Filter by status.")] = None,
         _request_timeout: Union[
             None,
@@ -5012,6 +5629,8 @@ class FiscalDocumentsApi:
         :type folio_ids: List[int]
         :param document_ids: document IDs.
         :type document_ids: List[int]
+        :param document_id: document ID.
+        :type document_id: int
         :param statuses: Filter by status.
         :type statuses: List[TransactionStatus]
         :param _request_timeout: timeout setting for this request. If one
@@ -5045,6 +5664,7 @@ class FiscalDocumentsApi:
             sort=sort,
             folio_ids=folio_ids,
             document_ids=document_ids,
+            document_id=document_id,
             statuses=statuses,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -5076,7 +5696,8 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
-        document_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="document IDs.")] = None,
+        document_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1, max_length=1)]], Field(description="document IDs.")] = None,
+        document_id: Annotated[Optional[StrictInt], Field(description="document ID.")] = None,
         statuses: Annotated[Optional[List[TransactionStatus]], Field(description="Filter by status.")] = None,
         _request_timeout: Union[
             None,
@@ -5111,6 +5732,8 @@ class FiscalDocumentsApi:
         :type folio_ids: List[int]
         :param document_ids: document IDs.
         :type document_ids: List[int]
+        :param document_id: document ID.
+        :type document_id: int
         :param statuses: Filter by status.
         :type statuses: List[TransactionStatus]
         :param _request_timeout: timeout setting for this request. If one
@@ -5144,6 +5767,7 @@ class FiscalDocumentsApi:
             sort=sort,
             folio_ids=folio_ids,
             document_ids=document_ids,
+            document_id=document_id,
             statuses=statuses,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -5175,7 +5799,8 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
-        document_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="document IDs.")] = None,
+        document_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1, max_length=1)]], Field(description="document IDs.")] = None,
+        document_id: Annotated[Optional[StrictInt], Field(description="document ID.")] = None,
         statuses: Annotated[Optional[List[TransactionStatus]], Field(description="Filter by status.")] = None,
         _request_timeout: Union[
             None,
@@ -5210,6 +5835,8 @@ class FiscalDocumentsApi:
         :type folio_ids: List[int]
         :param document_ids: document IDs.
         :type document_ids: List[int]
+        :param document_id: document ID.
+        :type document_id: int
         :param statuses: Filter by status.
         :type statuses: List[TransactionStatus]
         :param _request_timeout: timeout setting for this request. If one
@@ -5243,6 +5870,7 @@ class FiscalDocumentsApi:
             sort=sort,
             folio_ids=folio_ids,
             document_ids=document_ids,
+            document_id=document_id,
             statuses=statuses,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -5270,6 +5898,7 @@ class FiscalDocumentsApi:
         sort,
         folio_ids,
         document_ids,
+        document_id,
         statuses,
         _request_auth,
         _content_type,
@@ -5323,6 +5952,10 @@ class FiscalDocumentsApi:
         if document_ids is not None:
             
             _query_params.append(('documentIds', document_ids))
+            
+        if document_id is not None:
+            
+            _query_params.append(('documentId', document_id))
             
         if statuses is not None:
             

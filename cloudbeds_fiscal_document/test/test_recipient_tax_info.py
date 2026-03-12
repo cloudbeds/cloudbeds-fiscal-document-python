@@ -36,7 +36,8 @@ class TestRecipientTaxInfo(unittest.TestCase):
         if include_optional:
             return RecipientTaxInfo(
                 id = '',
-                company_name = ''
+                company_name = '',
+                source = 'GUEST_TAX_ID'
             )
         else:
             return RecipientTaxInfo(

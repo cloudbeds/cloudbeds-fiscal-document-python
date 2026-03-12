@@ -59,7 +59,8 @@ class TestFiscalDocumentRecipient(unittest.TestCase):
                     country = '', ),
                 tax = cloudbeds_fiscal_document.models.recipient_tax_info.RecipientTaxInfo(
                     id = '', 
-                    company_name = '', ),
+                    company_name = '', 
+                    source = 'GUEST_TAX_ID', ),
                 contact_details = cloudbeds_fiscal_document.models.recipient_contact_details.RecipientContactDetails(
                     phone = '', 
                     gender = '', 

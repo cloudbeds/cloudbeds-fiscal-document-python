@@ -26,6 +26,13 @@ class TestExportApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_export_folio_pdf(self) -> None:
+        """Test case for export_folio_pdf
+
+        Export folio transactions as PDF
+        """
+        pass
+
     def test_get_folio_pdf(self) -> None:
         """Test case for get_folio_pdf
 

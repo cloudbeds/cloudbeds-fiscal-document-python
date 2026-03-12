@@ -68,7 +68,8 @@ class TestPropertyConfigsResponse(unittest.TestCase):
                             ], 
                         update_invoice_on_link_document = True, 
                         use_invoice_document_settings = True, 
-                        use_invoice_title_and_numbering = True, )
+                        use_invoice_title_and_numbering = True, 
+                        date_display = 'transaction_date', )
                     }
             )
         else:

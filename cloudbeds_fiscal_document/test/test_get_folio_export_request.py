@@ -41,11 +41,15 @@ class TestGetFolioExportRequest(unittest.TestCase):
                 credit_debit_view = True,
                 revenue_compact = True,
                 date_from = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(),
-                date_to = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date()
+                date_to = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(),
+                format = 'PDF',
+                recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
+                    type = 'GUEST', 
+                    id = 1, 
+                    tax_document_source = 'GUEST_TAX_ID', )
             )
         else:
             return GetFolioExportRequest(
-                folio_ids = [3774744,7763263217],
                 source_kind = 'GROUP_PROFILE',
                 source_id = 56,
         )

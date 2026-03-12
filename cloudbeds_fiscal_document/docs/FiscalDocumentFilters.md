@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **number_contains** | **str** | Filter by document number partial match | [optional] 
 **statuses** | [**List[FiscalDocumentStatus]**](FiscalDocumentStatus.md) | List of fiscal document statuses to filter by | [optional] 
 **kinds** | [**List[FiscalDocumentKind]**](FiscalDocumentKind.md) | List of fiscal document kinds to filter by | [optional] 
+**origins** | [**List[Origin]**](Origin.md) | List of fiscal document origins to filter by | [optional] 
 **created_at_from** | **datetime** | Creation date-time range start | [optional] 
 **created_at_to** | **datetime** | Creation date-time range end | [optional] 
 **invoice_date_from** | **date** | Invoice date range start | [optional] 

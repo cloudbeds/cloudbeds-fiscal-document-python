@@ -38,6 +38,9 @@ class TestCreateInvoiceRequest(unittest.TestCase):
                 transaction_ids = [
                     1
                     ],
+                transaction_id_to_amount = {
+                    'key' : 1.337
+                    },
                 source_id = 1,
                 sequence_id = 1,
                 source_kind = 'GROUP_PROFILE',

@@ -38,7 +38,8 @@ class TestAllocateReceiptPaymentRequest(unittest.TestCase):
                 allocations = [
                     cloudbeds_fiscal_document.models.receipt_transaction_allocation.ReceiptTransactionAllocation(
                         transaction_id = 56, 
-                        amount = 1.337, )
+                        amount = 1.337, 
+                        document_id = 56, )
                     ],
                 receipt_id = 56
             )
@@ -47,7 +48,8 @@ class TestAllocateReceiptPaymentRequest(unittest.TestCase):
                 allocations = [
                     cloudbeds_fiscal_document.models.receipt_transaction_allocation.ReceiptTransactionAllocation(
                         transaction_id = 56, 
-                        amount = 1.337, )
+                        amount = 1.337, 
+                        document_id = 56, )
                     ],
                 receipt_id = 56,
         )

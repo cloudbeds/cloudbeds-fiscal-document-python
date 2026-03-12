@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from cloudbeds_fiscal_document.models.date_display import DateDisplay
 from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
 from typing import Optional, Set
@@ -54,7 +55,8 @@ class ConfigsResponse(BaseModel):
     update_invoice_on_link_document: Optional[StrictBool] = Field(default=False, alias="updateInvoiceOnLinkDocument")
     use_invoice_document_settings: Optional[StrictBool] = Field(default=False, alias="useInvoiceDocumentSettings")
     use_invoice_title_and_numbering: Optional[StrictBool] = Field(default=False, alias="useInvoiceTitleAndNumbering")
-    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "allowPendingTransactions", "dueDays", "lang", "prefix", "suffix", "separator", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering"]
+    date_display: Optional[DateDisplay] = Field(default=DateDisplay.TRANSACTION_DATE, alias="dateDisplay")
+    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "allowPendingTransactions", "dueDays", "lang", "prefix", "suffix", "separator", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering", "dateDisplay"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -132,7 +134,8 @@ class ConfigsResponse(BaseModel):
             "triggerEvents": obj.get("triggerEvents"),
             "updateInvoiceOnLinkDocument": obj.get("updateInvoiceOnLinkDocument") if obj.get("updateInvoiceOnLinkDocument") is not None else False,
             "useInvoiceDocumentSettings": obj.get("useInvoiceDocumentSettings") if obj.get("useInvoiceDocumentSettings") is not None else False,
-            "useInvoiceTitleAndNumbering": obj.get("useInvoiceTitleAndNumbering") if obj.get("useInvoiceTitleAndNumbering") is not None else False
+            "useInvoiceTitleAndNumbering": obj.get("useInvoiceTitleAndNumbering") if obj.get("useInvoiceTitleAndNumbering") is not None else False,
+            "dateDisplay": obj.get("dateDisplay") if obj.get("dateDisplay") is not None else DateDisplay.TRANSACTION_DATE
         })
         return _obj
 

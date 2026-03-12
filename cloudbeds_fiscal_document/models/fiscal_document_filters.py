@@ -22,6 +22,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, Stric
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
+from cloudbeds_fiscal_document.models.origin import Origin
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
 from typing_extensions import Self
@@ -38,6 +39,7 @@ class FiscalDocumentFilters(BaseModel):
     number_contains: Optional[StrictStr] = Field(default=None, description="Filter by document number partial match", alias="numberContains")
     statuses: Optional[List[FiscalDocumentStatus]] = Field(default=None, description="List of fiscal document statuses to filter by")
     kinds: Optional[List[FiscalDocumentKind]] = Field(default=None, description="List of fiscal document kinds to filter by")
+    origins: Optional[List[Origin]] = Field(default=None, description="List of fiscal document origins to filter by")
     created_at_from: Optional[datetime] = Field(default=None, description="Creation date-time range start", alias="createdAtFrom")
     created_at_to: Optional[datetime] = Field(default=None, description="Creation date-time range end", alias="createdAtTo")
     invoice_date_from: Optional[date] = Field(default=None, description="Invoice date range start", alias="invoiceDateFrom")
@@ -52,7 +54,7 @@ class FiscalDocumentFilters(BaseModel):
     amount_to: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Maximum document amount", alias="amountTo")
     balance_from: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Minimum document balance", alias="balanceFrom")
     balance_to: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Maximum document balance", alias="balanceTo")
-    __properties: ClassVar[List[str]] = ["ids", "sourceIds", "sourceIdentifiers", "sourceKind", "sourceKinds", "numberContains", "statuses", "kinds", "createdAtFrom", "createdAtTo", "invoiceDateFrom", "invoiceDateTo", "invoiceDatePropertyTimezoneFrom", "invoiceDatePropertyTimezoneTo", "dueDateFrom", "dueDateTo", "dueDatePropertyTimezoneFrom", "dueDatePropertyTimezoneTo", "amountFrom", "amountTo", "balanceFrom", "balanceTo"]
+    __properties: ClassVar[List[str]] = ["ids", "sourceIds", "sourceIdentifiers", "sourceKind", "sourceKinds", "numberContains", "statuses", "kinds", "origins", "createdAtFrom", "createdAtTo", "invoiceDateFrom", "invoiceDateTo", "invoiceDatePropertyTimezoneFrom", "invoiceDatePropertyTimezoneTo", "dueDateFrom", "dueDateTo", "dueDatePropertyTimezoneFrom", "dueDatePropertyTimezoneTo", "amountFrom", "amountTo", "balanceFrom", "balanceTo"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -113,6 +115,7 @@ class FiscalDocumentFilters(BaseModel):
             "numberContains": obj.get("numberContains"),
             "statuses": obj.get("statuses"),
             "kinds": obj.get("kinds"),
+            "origins": obj.get("origins"),
             "createdAtFrom": obj.get("createdAtFrom"),
             "createdAtTo": obj.get("createdAtTo"),
             "invoiceDateFrom": obj.get("invoiceDateFrom"),

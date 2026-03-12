@@ -67,7 +67,8 @@ class TestCreateSimpleReceiptRequest(unittest.TestCase):
                         number = '', 
                         issue_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
                         issuing_country = '', 
-                        expiration_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), ), )
+                        expiration_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), ), ),
+                handwritten = True
             )
         else:
             return CreateSimpleReceiptRequest(

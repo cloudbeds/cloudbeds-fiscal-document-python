@@ -64,7 +64,8 @@ class TestConfigsUpdateRequest(unittest.TestCase):
                 custom_text = {
                     'key' : ''
                     },
-                logo_id = 56
+                logo_id = 56,
+                date_display = 'transaction_date'
             )
         else:
             return ConfigsUpdateRequest(

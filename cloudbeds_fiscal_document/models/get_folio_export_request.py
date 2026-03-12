@@ -20,6 +20,8 @@ import json
 from datetime import date
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
+from cloudbeds_fiscal_document.models.export_format import ExportFormat
+from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
 from typing_extensions import Self
@@ -28,14 +30,16 @@ class GetFolioExportRequest(BaseModel):
     """
     GetFolioExportRequest
     """ # noqa: E501
-    folio_ids: List[StrictInt] = Field(description="Include transactions from the specified folio IDs", alias="folioIds")
+    folio_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions from the specified folio IDs. If omitted, all transactions for the source are included.", alias="folioIds")
     source_kind: SourceKind = Field(alias="sourceKind")
     source_id: StrictInt = Field(description="source ID of folio", alias="sourceId")
     credit_debit_view: Optional[StrictBool] = Field(default=None, description="Should transactions be separated into debit/credits", alias="creditDebitView")
     revenue_compact: Optional[StrictBool] = Field(default=None, description="Compact revenue transactions, valid only for sourceKind = RESERVATION", alias="revenueCompact")
-    date_from: Optional[date] = Field(default=None, description="Minimum date, only for sourceKind = HOUSE_ACCOUNT", alias="dateFrom")
-    date_to: Optional[date] = Field(default=None, description="Maximum date, only for sourceKind = HOUSE_ACCOUNT, optional", alias="dateTo")
-    __properties: ClassVar[List[str]] = ["folioIds", "sourceKind", "sourceId", "creditDebitView", "revenueCompact", "dateFrom", "dateTo"]
+    date_from: Optional[date] = Field(default=None, description="Minimum date filter (inclusive). Required for sourceKind = HOUSE_ACCOUNT, optional for others.", alias="dateFrom")
+    date_to: Optional[date] = Field(default=None, description="Maximum date filter (inclusive), optional.", alias="dateTo")
+    format: Optional[ExportFormat] = None
+    recipient: Optional[RecipientRequest] = None
+    __properties: ClassVar[List[str]] = ["folioIds", "sourceKind", "sourceId", "creditDebitView", "revenueCompact", "dateFrom", "dateTo", "format", "recipient"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -76,6 +80,9 @@ class GetFolioExportRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of recipient
+        if self.recipient:
+            _dict['recipient'] = self.recipient.to_dict()
         # set to None if date_from (nullable) is None
         # and model_fields_set contains the field
         if self.date_from is None and "date_from" in self.model_fields_set:
@@ -104,7 +111,9 @@ class GetFolioExportRequest(BaseModel):
             "creditDebitView": obj.get("creditDebitView"),
             "revenueCompact": obj.get("revenueCompact"),
             "dateFrom": obj.get("dateFrom"),
-            "dateTo": obj.get("dateTo")
+            "dateTo": obj.get("dateTo"),
+            "format": obj.get("format"),
+            "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None
         })
         return _obj
 

@@ -36,7 +36,8 @@ class TestReceiptTransactionAllocation(unittest.TestCase):
         if include_optional:
             return ReceiptTransactionAllocation(
                 transaction_id = 56,
-                amount = 1.337
+                amount = 1.337,
+                document_id = 56
             )
         else:
             return ReceiptTransactionAllocation(

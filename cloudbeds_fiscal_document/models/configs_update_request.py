@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.date_display import DateDisplay
 from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
 from typing import Optional, Set
 from typing_extensions import Self
@@ -54,7 +55,8 @@ class ConfigsUpdateRequest(BaseModel):
     cpf: Optional[StrictStr] = None
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
     logo_id: Optional[StrictInt] = Field(default=None, alias="logoId")
-    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "allowPendingTransactions", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "separator", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "customText", "logoId"]
+    date_display: Optional[DateDisplay] = Field(default=DateDisplay.TRANSACTION_DATE, alias="dateDisplay")
+    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "allowPendingTransactions", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "separator", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "customText", "logoId", "dateDisplay"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -192,7 +194,8 @@ class ConfigsUpdateRequest(BaseModel):
             "taxId2": obj.get("taxId2"),
             "cpf": obj.get("cpf"),
             "customText": obj.get("customText"),
-            "logoId": obj.get("logoId")
+            "logoId": obj.get("logoId"),
+            "dateDisplay": obj.get("dateDisplay") if obj.get("dateDisplay") is not None else DateDisplay.TRANSACTION_DATE
         })
         return _obj
 

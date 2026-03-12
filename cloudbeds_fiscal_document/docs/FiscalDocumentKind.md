@@ -18,6 +18,10 @@ Kind of fiscal document
 
 * `INVOICE_RECEIPT` (value: `'INVOICE_RECEIPT'`)
 
+* `ADVANCE_INVOICE` (value: `'ADVANCE_INVOICE'`)
+
+* `SETTLEMENT_INVOICE` (value: `'SETTLEMENT_INVOICE'`)
+
 * `UNKNOWN_DEFAULT_OPEN_API` (value: `'unknown_default_open_api'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

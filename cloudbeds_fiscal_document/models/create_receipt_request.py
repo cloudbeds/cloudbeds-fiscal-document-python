@@ -34,6 +34,7 @@ class CreateReceiptRequest(BaseModel):
     allocations: Optional[Annotated[List[ReceiptTransactionAllocation], Field(min_length=1)]] = None
     transaction_id: Optional[StrictInt] = Field(default=None, description="Id of the transaction associated to a payment. This parameter is mutually exclusive with `paymentId`. ", alias="transactionId")
     payment_id: Optional[StrictInt] = Field(default=None, description="Id of the payment. This parameter is mutually exclusive with `transactionId`. ", alias="paymentId")
+    invoice_id: Optional[StrictInt] = Field(default=None, description="Id of invoice that receipt should be applied to. Ignored if allocations are presented.", alias="invoiceId")
     sequence_id: Optional[StrictInt] = Field(default=None, alias="sequenceId")
     skip_integration: Optional[StrictBool] = Field(default=False, description="At the moment this can only be set to True on Italy to skip the integration, for italy this case is needed to avoid Printing the Receipt", alias="skipIntegration")
     handwritten: Optional[StrictBool] = Field(default=False, description="Indicates this is a handwritten receipt created during POS unavailability. Only allowed for properties with Fiskaltrust integration enabled.")
@@ -42,7 +43,7 @@ class CreateReceiptRequest(BaseModel):
     source_kind: SourceKind = Field(alias="sourceKind")
     recipient: Optional[RecipientRequest] = None
     manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
-    __properties: ClassVar[List[str]] = ["allocations", "transactionId", "paymentId", "sequenceId", "skipIntegration", "handwritten", "userId", "sourceId", "sourceKind", "recipient", "manualRecipient"]
+    __properties: ClassVar[List[str]] = ["allocations", "transactionId", "paymentId", "invoiceId", "sequenceId", "skipIntegration", "handwritten", "userId", "sourceId", "sourceKind", "recipient", "manualRecipient"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -111,6 +112,11 @@ class CreateReceiptRequest(BaseModel):
         if self.payment_id is None and "payment_id" in self.model_fields_set:
             _dict['paymentId'] = None
 
+        # set to None if invoice_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.invoice_id is None and "invoice_id" in self.model_fields_set:
+            _dict['invoiceId'] = None
+
         # set to None if sequence_id (nullable) is None
         # and model_fields_set contains the field
         if self.sequence_id is None and "sequence_id" in self.model_fields_set:
@@ -131,6 +137,7 @@ class CreateReceiptRequest(BaseModel):
             "allocations": [ReceiptTransactionAllocation.from_dict(_item) for _item in obj["allocations"]] if obj.get("allocations") is not None else None,
             "transactionId": obj.get("transactionId"),
             "paymentId": obj.get("paymentId"),
+            "invoiceId": obj.get("invoiceId"),
             "sequenceId": obj.get("sequenceId"),
             "skipIntegration": obj.get("skipIntegration") if obj.get("skipIntegration") is not None else False,
             "handwritten": obj.get("handwritten") if obj.get("handwritten") is not None else False,

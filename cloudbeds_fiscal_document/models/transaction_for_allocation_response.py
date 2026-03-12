@@ -38,9 +38,10 @@ class TransactionForAllocationResponse(BaseModel):
     internal_code: Optional[StrictStr] = Field(default=None, alias="internalCode")
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     allocated_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="allocatedAmount")
+    available_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="availableAmount")
     status: Optional[TransactionStatus] = None
     taxes: Optional[List[TransactionForAllocationResponse]] = None
-    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "description", "internalCode", "amount", "allocatedAmount", "status", "taxes"]
+    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceKind", "transactionDate", "description", "internalCode", "amount", "allocatedAmount", "availableAmount", "status", "taxes"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -109,6 +110,7 @@ class TransactionForAllocationResponse(BaseModel):
             "internalCode": obj.get("internalCode"),
             "amount": obj.get("amount"),
             "allocatedAmount": obj.get("allocatedAmount"),
+            "availableAmount": obj.get("availableAmount"),
             "status": obj.get("status"),
             "taxes": [TransactionForAllocationResponse.from_dict(_item) for _item in obj["taxes"]] if obj.get("taxes") is not None else None
         })

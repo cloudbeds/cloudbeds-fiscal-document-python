@@ -46,6 +46,7 @@ class TestFiscalDocumentTransactionsForAllocationPaginated(unittest.TestCase):
                         internal_code = '', 
                         amount = 1.337, 
                         allocated_amount = 1.337, 
+                        available_amount = 1.337, 
                         status = 'POSTED', 
                         taxes = [
                             cloudbeds_fiscal_document.models.transaction_for_allocation_response.TransactionForAllocationResponse(
@@ -56,7 +57,8 @@ class TestFiscalDocumentTransactionsForAllocationPaginated(unittest.TestCase):
                                 description = '', 
                                 internal_code = '', 
                                 amount = 1.337, 
-                                allocated_amount = 1.337, )
+                                allocated_amount = 1.337, 
+                                available_amount = 1.337, )
                             ], )
                     ],
                 next_page_token = ''

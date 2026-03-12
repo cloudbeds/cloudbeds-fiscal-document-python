@@ -31,6 +31,7 @@ Name | Type | Description | Notes
 **cpf** | **str** |  | [optional] 
 **custom_text** | **Dict[str, str]** |  | [optional] 
 **logo_id** | **int** |  | [optional] 
+**date_display** | [**DateDisplay**](DateDisplay.md) |  | [optional] [default to DateDisplay.TRANSACTION_DATE]
 
 ## Example
 

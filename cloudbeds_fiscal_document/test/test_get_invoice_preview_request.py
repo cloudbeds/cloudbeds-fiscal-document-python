@@ -35,6 +35,9 @@ class TestGetInvoicePreviewRequest(unittest.TestCase):
         model = GetInvoicePreviewRequest()
         if include_optional:
             return GetInvoicePreviewRequest(
+                transaction_id_to_amount = {
+                    'key' : 1.337
+                    },
                 transaction_ids = [
                     1
                     ],

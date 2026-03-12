@@ -22,6 +22,8 @@ Action that can be performed on a fiscal document
 
 * `APPLY_TO_INVOICE` (value: `'APPLY_TO_INVOICE'`)
 
+* `GENERATE_SETTLEMENT` (value: `'GENERATE_SETTLEMENT'`)
+
 * `UNKNOWN_DEFAULT_OPEN_API` (value: `'unknown_default_open_api'`)
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

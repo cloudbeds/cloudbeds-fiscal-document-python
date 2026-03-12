@@ -49,7 +49,19 @@ class TestFiscalDocumentPatchRequest(unittest.TestCase):
                     external_id = '', 
                     rectifying_invoice_type = '', 
                     cancellation_failed_fallback_status = 'COMPLETED', 
-                    pdf_file_base64 = 'YQ==', )
+                    pdf_file_base64 = 'YQ==', 
+                    handwritten = True, 
+                    signatures = [
+                        cloudbeds_fiscal_document.models.integration_signature.IntegrationSignature(
+                            type = '', 
+                            label = '', 
+                            value = '', 
+                            format = 'TEXT', 
+                            source = '', 
+                            raw_metadata = {
+                                'key' : ''
+                                }, )
+                        ], )
             )
         else:
             return FiscalDocumentPatchRequest(

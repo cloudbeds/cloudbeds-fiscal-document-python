@@ -80,7 +80,19 @@ class TestFiscalDocumentDetailedResponse(unittest.TestCase):
                     external_id = '', 
                     rectifying_invoice_type = '', 
                     cancellation_failed_fallback_status = 'COMPLETED', 
-                    pdf_file_base64 = 'YQ==', ),
+                    pdf_file_base64 = 'YQ==', 
+                    handwritten = True, 
+                    signatures = [
+                        cloudbeds_fiscal_document.models.integration_signature.IntegrationSignature(
+                            type = '', 
+                            label = '', 
+                            value = '', 
+                            format = 'TEXT', 
+                            source = '', 
+                            raw_metadata = {
+                                'key' : ''
+                                }, )
+                        ], ),
                 latest_linked_document = cloudbeds_fiscal_document.models.latest_linked_document.LatestLinkedDocument(
                     id = '', 
                     number = '', 

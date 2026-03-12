@@ -5,11 +5,13 @@ All URIs are relative to *http://localhost:8700*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**allocate_receipt_payment**](FiscalDocumentsApi.md#allocate_receipt_payment) | **POST** /fiscal-document/v1/fiscal-documents/receipt/allocate-payment | Allocate payment associated with receipt to charge transactions.
+[**apply_receipt**](FiscalDocumentsApi.md#apply_receipt) | **POST** /fiscal-document/v1/fiscal-documents/receipts/{receiptId}/apply | Apply receipt to invoice
 [**create_credit_note**](FiscalDocumentsApi.md#create_credit_note) | **POST** /fiscal-document/v1/fiscal-documents/credit-note | Create a fiscal document of the type credit note
 [**create_invoice**](FiscalDocumentsApi.md#create_invoice) | **POST** /fiscal-document/v1/fiscal-documents/invoice | Create a fiscal document of the type invoice
 [**create_pro_forma_invoice**](FiscalDocumentsApi.md#create_pro_forma_invoice) | **POST** /fiscal-document/v1/fiscal-documents/pro-forma-invoice | Create a fiscal document of the type pro forma invoice
 [**create_receipt**](FiscalDocumentsApi.md#create_receipt) | **POST** /fiscal-document/v1/fiscal-documents/receipt | Create receipt for a payment.
 [**create_rectify_invoice**](FiscalDocumentsApi.md#create_rectify_invoice) | **POST** /fiscal-document/v1/fiscal-documents/rectify-invoice | Create a fiscal document of the type rectify invoice
+[**create_settlement_invoice**](FiscalDocumentsApi.md#create_settlement_invoice) | **POST** /fiscal-document/v1/fiscal-documents/{advance_invoice_id}/settlement | Create a settlement invoice for an advance invoice
 [**create_simple_receipt**](FiscalDocumentsApi.md#create_simple_receipt) | **POST** /fiscal-document/v1/fiscal-documents/simple-receipt | Create simple receipts.
 [**download_fiscal_document**](FiscalDocumentsApi.md#download_fiscal_document) | **GET** /fiscal-document/v1/fiscal-documents/{id}/download | Download fiscal document
 [**email_fiscal_document**](FiscalDocumentsApi.md#email_fiscal_document) | **POST** /fiscal-document/v1/fiscal-documents/{id}/email | Email a fiscal document
@@ -113,6 +115,88 @@ Name | Type | Description  | Notes
 **200** | Receipt will be accepted to start the process of document creation according to country rules |  -  |
 **400** | Bad Request |  -  |
 **404** | Payment or payment transaction not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **apply_receipt**
+> apply_receipt(x_property_id, receipt_id, apply_receipt_request)
+
+Apply receipt to invoice
+
+Apply receipt to invoice. Receipt should not have allocations 
+
+### Example
+
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.apply_receipt_request import ApplyReceiptRequest
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost:8700
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "http://localhost:8700"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    x_property_id = 56 # int | Property id
+    receipt_id = 56 # int | The ID of the receipt
+    apply_receipt_request = cloudbeds_fiscal_document.ApplyReceiptRequest() # ApplyReceiptRequest | 
+
+    try:
+        # Apply receipt to invoice
+        api_instance.apply_receipt(x_property_id, receipt_id, apply_receipt_request)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->apply_receipt: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **x_property_id** | **int**| Property id | 
+ **receipt_id** | **int**| The ID of the receipt | 
+ **apply_receipt_request** | [**ApplyReceiptRequest**](ApplyReceiptRequest.md)|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Receipt successfully voided |  -  |
+**400** | Bad Request - Invalid status or document type |  -  |
+**404** | Receipt not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -521,6 +605,89 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | OK |  -  |
 **400** | Bad Request - Validation errors |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_settlement_invoice**
+> FiscalDocumentSummaryResponse create_settlement_invoice(x_property_id, advance_invoice_id, create_settlement_invoice_request)
+
+Create a settlement invoice for an advance invoice
+
+Create a settlement invoice linked to an existing advance invoice.  A settlement invoice finalizes the billing cycle started by an advance invoice. It references the advance invoice and may include additional transactions that were not part of the original advance.  **Validation Rules:** - The parent document must be an ADVANCE_INVOICE - The parent document must be in an active status - There must not already be an active settlement invoice for this advance 
+
+### Example
+
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.create_settlement_invoice_request import CreateSettlementInvoiceRequest
+from cloudbeds_fiscal_document.models.fiscal_document_summary_response import FiscalDocumentSummaryResponse
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost:8700
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "http://localhost:8700"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    x_property_id = 56 # int | Property id
+    advance_invoice_id = 56 # int | The ID of the advance invoice to settle
+    create_settlement_invoice_request = cloudbeds_fiscal_document.CreateSettlementInvoiceRequest() # CreateSettlementInvoiceRequest | 
+
+    try:
+        # Create a settlement invoice for an advance invoice
+        api_response = api_instance.create_settlement_invoice(x_property_id, advance_invoice_id, create_settlement_invoice_request)
+        print("The response of FiscalDocumentsApi->create_settlement_invoice:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->create_settlement_invoice: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **x_property_id** | **int**| Property id | 
+ **advance_invoice_id** | **int**| The ID of the advance invoice to settle | 
+ **create_settlement_invoice_request** | [**CreateSettlementInvoiceRequest**](CreateSettlementInvoiceRequest.md)|  | 
+
+### Return type
+
+[**FiscalDocumentSummaryResponse**](FiscalDocumentSummaryResponse.md)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1369,7 +1536,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_fiscal_document_transactions_for_allocation**
-> FiscalDocumentTransactionsForAllocationPaginated get_fiscal_document_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids, statuses=statuses)
+> FiscalDocumentTransactionsForAllocationPaginated get_fiscal_document_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids, document_id=document_id, statuses=statuses)
 
 Get available transactions for allocations
 
@@ -1415,11 +1582,12 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     sort = 'createdAt:desc' # str | Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode (optional)
     folio_ids = [56] # List[int] | Filter by folio IDs. (optional)
     document_ids = [56] # List[int] | document IDs. (optional)
+    document_id = 56 # int | document ID. (optional)
     statuses = [cloudbeds_fiscal_document.TransactionStatus()] # List[TransactionStatus] | Filter by status. (optional)
 
     try:
         # Get available transactions for allocations
-        api_response = api_instance.get_fiscal_document_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids, statuses=statuses)
+        api_response = api_instance.get_fiscal_document_transactions_for_allocation(x_property_id, source_id, source_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, document_ids=document_ids, document_id=document_id, statuses=statuses)
         print("The response of FiscalDocumentsApi->get_fiscal_document_transactions_for_allocation:\n")
         pprint(api_response)
     except Exception as e:
@@ -1441,6 +1609,7 @@ Name | Type | Description  | Notes
  **sort** | **str**| Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode | [optional] 
  **folio_ids** | [**List[int]**](int.md)| Filter by folio IDs. | [optional] 
  **document_ids** | [**List[int]**](int.md)| document IDs. | [optional] 
+ **document_id** | **int**| document ID. | [optional] 
  **statuses** | [**List[TransactionStatus]**](TransactionStatus.md)| Filter by status. | [optional] 
 
 ### Return type

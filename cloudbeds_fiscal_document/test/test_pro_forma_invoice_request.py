@@ -38,6 +38,9 @@ class TestProFormaInvoiceRequest(unittest.TestCase):
                 transaction_ids = [
                     1
                     ],
+                transaction_id_to_amount = {
+                    'key' : 1.337
+                    },
                 payment_ids = [
                     1
                     ],
