@@ -51,7 +51,7 @@ jobs:
           private-key: ${{ steps.app-private-key.outputs.key }}
 
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ steps.generate-token.outputs.token }}
 
@@ -129,7 +129,7 @@ jobs:
       UV_VERSION: 0.10.9
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.ref_name }}
 
