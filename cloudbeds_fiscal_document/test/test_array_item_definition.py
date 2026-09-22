@@ -42,14 +42,21 @@ class TestArrayItemDefinition(unittest.TestCase):
                         label = 'Legal Name', 
                         type = 'text', 
                         category = 'company', 
+                        section_key = 'customization.invoicing', 
                         required = True, 
+                        required_if = cloudbeds_fiscal_document.models.field_condition.FieldCondition(
+                            field = 'taxId', 
+                            pattern = '^[^123]', ), 
                         primary = True, 
+                        editable = True, 
                         validation = cloudbeds_fiscal_document.models.field_validation.FieldValidation(
                             pattern = '', 
                             min = 56, 
                             max = 56, 
                             checksum = True, 
-                            format = '', ), 
+                            format = '', 
+                            message = '', 
+                            example = '', ), 
                         data = cloudbeds_fiscal_document.models.field_data.FieldData(
                             placeholder = '', 
                             help = '', 
@@ -69,8 +76,10 @@ class TestArrayItemDefinition(unittest.TestCase):
                                     label = 'Legal Name', 
                                     type = 'text', 
                                     category = 'company', 
+                                    section_key = 'customization.invoicing', 
                                     required = True, 
                                     primary = True, 
+                                    editable = True, 
                                     properties = {
                                         'key' : 
                                         }, 
@@ -93,14 +102,21 @@ class TestArrayItemDefinition(unittest.TestCase):
                         label = 'Legal Name', 
                         type = 'text', 
                         category = 'company', 
+                        section_key = 'customization.invoicing', 
                         required = True, 
+                        required_if = cloudbeds_fiscal_document.models.field_condition.FieldCondition(
+                            field = 'taxId', 
+                            pattern = '^[^123]', ), 
                         primary = True, 
+                        editable = True, 
                         validation = cloudbeds_fiscal_document.models.field_validation.FieldValidation(
                             pattern = '', 
                             min = 56, 
                             max = 56, 
                             checksum = True, 
-                            format = '', ), 
+                            format = '', 
+                            message = '', 
+                            example = '', ), 
                         data = cloudbeds_fiscal_document.models.field_data.FieldData(
                             placeholder = '', 
                             help = '', 
@@ -120,8 +136,10 @@ class TestArrayItemDefinition(unittest.TestCase):
                                     label = 'Legal Name', 
                                     type = 'text', 
                                     category = 'company', 
+                                    section_key = 'customization.invoicing', 
                                     required = True, 
                                     primary = True, 
+                                    editable = True, 
                                     properties = {
                                         'key' : 
                                         }, 

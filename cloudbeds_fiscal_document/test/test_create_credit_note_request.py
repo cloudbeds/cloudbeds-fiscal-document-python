@@ -38,6 +38,7 @@ class TestCreateCreditNoteRequest(unittest.TestCase):
                 sequence_id = 1,
                 invoice_id = 1,
                 reason = '',
+                note = '',
                 user_id = 0,
                 method = 'VOID',
                 transaction_ids = [
@@ -51,7 +52,12 @@ class TestCreateCreditNoteRequest(unittest.TestCase):
                     ],
                 include_transaction_ids = [
                     56
-                    ]
+                    ],
+                package_breakdown = True,
+                emails = [
+                    ''
+                    ],
+                subject = '0'
             )
         else:
             return CreateCreditNoteRequest(

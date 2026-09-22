@@ -1,6 +1,6 @@
 # cloudbeds_fiscal_document.FiscalDocumentsApi
 
-All URIs are relative to *http://localhost:8700*
+All URIs are relative to *https://api.cloudbeds.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -17,8 +17,11 @@ Method | HTTP request | Description
 [**email_fiscal_document**](FiscalDocumentsApi.md#email_fiscal_document) | **POST** /fiscal-document/v1/fiscal-documents/{id}/email | Email a fiscal document
 [**get_allocations**](FiscalDocumentsApi.md#get_allocations) | **GET** /fiscal-document/v1/fiscal-documents/allocations | Get payment allocation transactions
 [**get_allocations_summary**](FiscalDocumentsApi.md#get_allocations_summary) | **GET** /fiscal-document/v1/fiscal-documents/allocations/summary | Get allocations summary
+[**get_count_fiscal_documents_with_discrepancies**](FiscalDocumentsApi.md#get_count_fiscal_documents_with_discrepancies) | **GET** /fiscal-document/v1/fiscal-documents/discrepancies/summary | Get count of fiscal documents with discrepancies
 [**get_credit_note_preview**](FiscalDocumentsApi.md#get_credit_note_preview) | **POST** /fiscal-document/v1/fiscal-documents/credit-note/preview | Get fiscal document preview of the type credit note
 [**get_document_preview**](FiscalDocumentsApi.md#get_document_preview) | **POST** /fiscal-document/v1/fiscal-documents/invoice/preview | Get fiscal document preview of the type invoice
+[**get_document_rules**](FiscalDocumentsApi.md#get_document_rules) | **GET** /fiscal-document/v1/fiscal-documents/rules | Get document creation rules for a given document kind
+[**get_fiscal_document_email_subject**](FiscalDocumentsApi.md#get_fiscal_document_email_subject) | **GET** /fiscal-document/v1/fiscal-documents/email-subject | Resolve the email subject for a fiscal document
 [**get_fiscal_document_recipients_by_id**](FiscalDocumentsApi.md#get_fiscal_document_recipients_by_id) | **GET** /fiscal-document/v1/fiscal-documents/{id}/recipients | Get list of recipients associated to the fiscal document
 [**get_fiscal_document_transactions**](FiscalDocumentsApi.md#get_fiscal_document_transactions) | **GET** /fiscal-document/v1/fiscal-documents/transactions | Get available transactions for fiscal documents
 [**get_fiscal_document_transactions_by_id**](FiscalDocumentsApi.md#get_fiscal_document_transactions_by_id) | **GET** /fiscal-document/v1/fiscal-documents/{id}/transactions | Get list of transactions for a given fiscal document id
@@ -32,6 +35,7 @@ Method | HTTP request | Description
 [**post_selected_transactions_summary**](FiscalDocumentsApi.md#post_selected_transactions_summary) | **POST** /fiscal-document/v1/fiscal-documents/transactions/summary | Get totals of selected available transactions for fiscal documents
 [**put_fiscal_document**](FiscalDocumentsApi.md#put_fiscal_document) | **PUT** /fiscal-document/v1/fiscal-documents/{id} | Update a fiscal document by id
 [**update_pro_forma_invoice_status**](FiscalDocumentsApi.md#update_pro_forma_invoice_status) | **PUT** /fiscal-document/v1/fiscal-documents/pro-forma-invoice/{id}/status | Update pro forma invoice status
+[**update_require_attention**](FiscalDocumentsApi.md#update_require_attention) | **PATCH** /fiscal-document/v1/fiscal-documents/{id}/require-attention | Update require attention flag for a fiscal document
 [**void_receipt**](FiscalDocumentsApi.md#void_receipt) | **POST** /fiscal-document/v1/fiscal-documents/receipts/{receiptId}/void | Void a receipt
 
 
@@ -49,6 +53,7 @@ All transactions not part of an invoice will be added to newly created invoice.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -58,16 +63,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_summary_response import Fi
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -106,7 +113,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -141,10 +148,10 @@ from cloudbeds_fiscal_document.models.apply_receipt_request import ApplyReceiptR
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -215,6 +222,7 @@ Create a fiscal document of the type credit note.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -224,16 +232,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_summary_response import Fi
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -272,7 +282,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -284,6 +294,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+**409** | The source&#39;s transactions are being reconciled, or pending transaction discrepancies were found. The credit note was not created — retry the request.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -296,6 +307,7 @@ Create a fiscal document of the type invoice.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -305,16 +317,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_summary_response import Fi
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -353,7 +367,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -385,6 +399,7 @@ Create a fiscal document of the type pro forma invoice.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -394,16 +409,18 @@ from cloudbeds_fiscal_document.models.pro_forma_invoice_request import ProFormaI
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -442,7 +459,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -472,6 +489,7 @@ All transactions not part of an invoice will be added to newly created invoice.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -481,16 +499,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_summary_response import Fi
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -529,7 +549,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -565,6 +585,7 @@ Create a fiscal document of the type rectify invoice.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -574,16 +595,18 @@ from cloudbeds_fiscal_document.models.rectify_invoice_note_request import Rectif
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -622,7 +645,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -657,6 +680,7 @@ that were not part of the original advance.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -666,16 +690,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_summary_response import Fi
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -716,7 +742,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -741,6 +767,7 @@ Create receipts for list of payments without allocations.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -750,16 +777,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_summary_response import Fi
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -798,7 +827,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -816,14 +845,15 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **download_fiscal_document**
-> bytearray download_fiscal_document(id, x_property_id)
+> bytearray download_fiscal_document(id, x_property_id, file_id=file_id)
 
 Download fiscal document
 
-Initiates the download of the fiscal document file
+Initiates the download of the fiscal document file. When fileId is provided, downloads that stored file instead (see files on the list response); an absent or blank fileId downloads the primary file.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -831,16 +861,18 @@ import cloudbeds_fiscal_document
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -853,10 +885,11 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
     id = 'id_example' # str | Unique ID of the fiscal document to download.
     x_property_id = 56 # int | Property id
+    file_id = 'file_id_example' # str |  (optional)
 
     try:
         # Download fiscal document
-        api_response = api_instance.download_fiscal_document(id, x_property_id)
+        api_response = api_instance.download_fiscal_document(id, x_property_id, file_id=file_id)
         print("The response of FiscalDocumentsApi->download_fiscal_document:\n")
         pprint(api_response)
     except Exception as e:
@@ -872,6 +905,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**| Unique ID of the fiscal document to download. | 
  **x_property_id** | **int**| Property id | 
+ **file_id** | **str**|  | [optional] 
 
 ### Return type
 
@@ -879,7 +913,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -891,6 +925,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Successful file download |  * Content-Disposition - Used to indicate if the content should be displayed inline or as an attachment. <br>  |
+**404** | Document or file not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -903,6 +938,7 @@ Initiates the process to send the invoice to a customer
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -911,16 +947,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_email_request import Fisca
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -961,7 +999,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -986,6 +1024,7 @@ Retrieves payment allocations.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -995,16 +1034,18 @@ from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1049,7 +1090,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1083,10 +1124,10 @@ from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -1152,6 +1193,92 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_count_fiscal_documents_with_discrepancies**
+> DiscrepanciesCount get_count_fiscal_documents_with_discrepancies(x_property_id, source_id, source_kind)
+
+Get count of fiscal documents with discrepancies
+
+Returns the count of fiscal documents that have discrepancies, filtered by sourceId and sourceKind.
+
+### Example
+
+* OAuth Authentication (oauth2):
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.discrepancies_count import DiscrepanciesCount
+from cloudbeds_fiscal_document.models.source_kind import SourceKind
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.cloudbeds.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "https://api.cloudbeds.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    x_property_id = 56 # int | Property id
+    source_id = 'source_id_example' # str | Source ID to filter documents by.
+    source_kind = cloudbeds_fiscal_document.SourceKind() # SourceKind | Source kind to filter documents by.
+
+    try:
+        # Get count of fiscal documents with discrepancies
+        api_response = api_instance.get_count_fiscal_documents_with_discrepancies(x_property_id, source_id, source_kind)
+        print("The response of FiscalDocumentsApi->get_count_fiscal_documents_with_discrepancies:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->get_count_fiscal_documents_with_discrepancies: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **x_property_id** | **int**| Property id | 
+ **source_id** | **str**| Source ID to filter documents by. | 
+ **source_kind** | [**SourceKind**](.md)| Source kind to filter documents by. | 
+
+### Return type
+
+[**DiscrepanciesCount**](DiscrepanciesCount.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_credit_note_preview**
 > bytearray get_credit_note_preview(x_property_id, get_credit_note_preview_request)
 
@@ -1161,6 +1288,7 @@ Get fiscal document preview of the type credit note.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1169,16 +1297,18 @@ from cloudbeds_fiscal_document.models.get_credit_note_preview_request import Get
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1217,7 +1347,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1241,6 +1371,7 @@ Get fiscal document preview of the type invoice.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1249,16 +1380,18 @@ from cloudbeds_fiscal_document.models.get_invoice_preview_request import GetInvo
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1297,7 +1430,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1309,6 +1442,207 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Successful file download |  * Content-Disposition - Used to indicate if the content should be displayed inline or as an attachment. <br>  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_document_rules**
+> List[FieldDefinition] get_document_rules(x_property_id, document_kind, accept_language=accept_language)
+
+Get document creation rules for a given document kind
+
+Returns field definitions that the UI must collect when creating a document of the given kind.
+Uses the same FieldDefinition schema as action.fields on document actions.
+
+
+### Example
+
+* OAuth Authentication (oauth2):
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.field_definition import FieldDefinition
+from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.cloudbeds.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "https://api.cloudbeds.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    x_property_id = 56 # int | Property id
+    document_kind = cloudbeds_fiscal_document.FiscalDocumentKind() # FiscalDocumentKind | 
+    accept_language = 'accept_language_example' # str | Desired language of exported PDF (optional)
+
+    try:
+        # Get document creation rules for a given document kind
+        api_response = api_instance.get_document_rules(x_property_id, document_kind, accept_language=accept_language)
+        print("The response of FiscalDocumentsApi->get_document_rules:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->get_document_rules: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **x_property_id** | **int**| Property id | 
+ **document_kind** | [**FiscalDocumentKind**](.md)|  | 
+ **accept_language** | **str**| Desired language of exported PDF | [optional] 
+
+### Return type
+
+[**List[FieldDefinition]**](FieldDefinition.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | List of field definitions for document creation |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_fiscal_document_email_subject**
+> EmailSubjectResponse get_fiscal_document_email_subject(x_property_id, document_id=document_id, document_kind=document_kind, source_kind=source_kind, source_id=source_id, recipient_type=recipient_type, recipient_id=recipient_id)
+
+Resolve the email subject for a fiscal document
+
+Returns the subject the service would put on the email, so a UI can seed an editable Subject
+field from the same resolution the send uses rather than reimplementing it.
+
+Give `documentId` for a document that exists. The answer is then exactly what a send with no
+subject override produces: a token the service holds no value for resolves to an empty
+string, as it would in the delivered email.
+
+Give `documentKind`, `sourceKind` and `sourceId` instead for a document about to be created.
+A token whose value is only assigned at creation is then returned **verbatim**, for example
+`Grand Hotel - Invoice #[Invoice Number]`. Send the string back, edited or not, on the create
+request and the service fills those tokens in once the values exist.
+
+Supplying the chosen recipient lets the guest's language win when the property has
+"use guest language" enabled; without it the subject falls back to the property's language.
+
+
+### Example
+
+* OAuth Authentication (oauth2):
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.email_subject_recipient_type import EmailSubjectRecipientType
+from cloudbeds_fiscal_document.models.email_subject_response import EmailSubjectResponse
+from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
+from cloudbeds_fiscal_document.models.source_kind import SourceKind
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.cloudbeds.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "https://api.cloudbeds.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    x_property_id = 56 # int | Property id
+    document_id = 'document_id_example' # str | An existing fiscal document. When given, the document parameters below are ignored - everything is derived from the document itself.  (optional)
+    document_kind = cloudbeds_fiscal_document.FiscalDocumentKind() # FiscalDocumentKind | Required when documentId is absent. (optional)
+    source_kind = cloudbeds_fiscal_document.SourceKind() # SourceKind | Required when documentId is absent. (optional)
+    source_id = 56 # int | Required when documentId is absent. (optional)
+    recipient_type = cloudbeds_fiscal_document.EmailSubjectRecipientType() # EmailSubjectRecipientType | The chosen Bill-to recipient. Supply together with recipientId. Optional because a manually entered recipient has no stored record to point at; the subject then resolves in the property's language rather than the guest's.  (optional)
+    recipient_id = 56 # int | The chosen Bill-to recipient. Supply together with recipientType. (optional)
+
+    try:
+        # Resolve the email subject for a fiscal document
+        api_response = api_instance.get_fiscal_document_email_subject(x_property_id, document_id=document_id, document_kind=document_kind, source_kind=source_kind, source_id=source_id, recipient_type=recipient_type, recipient_id=recipient_id)
+        print("The response of FiscalDocumentsApi->get_fiscal_document_email_subject:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->get_fiscal_document_email_subject: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **x_property_id** | **int**| Property id | 
+ **document_id** | **str**| An existing fiscal document. When given, the document parameters below are ignored - everything is derived from the document itself.  | [optional] 
+ **document_kind** | [**FiscalDocumentKind**](.md)| Required when documentId is absent. | [optional] 
+ **source_kind** | [**SourceKind**](.md)| Required when documentId is absent. | [optional] 
+ **source_id** | **int**| Required when documentId is absent. | [optional] 
+ **recipient_type** | [**EmailSubjectRecipientType**](.md)| The chosen Bill-to recipient. Supply together with recipientId. Optional because a manually entered recipient has no stored record to point at; the subject then resolves in the property&#39;s language rather than the guest&#39;s.  | [optional] 
+ **recipient_id** | **int**| The chosen Bill-to recipient. Supply together with recipientType. | [optional] 
+
+### Return type
+
+[**EmailSubjectResponse**](EmailSubjectResponse.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**400** | Bad Request |  -  |
+**403** | Access denied |  -  |
+**404** | Not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1329,10 +1663,10 @@ from cloudbeds_fiscal_document.models.fiscal_document_recipient import FiscalDoc
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -1393,7 +1727,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_fiscal_document_transactions**
-> FiscalDocumentTransactionsPaginated get_fiscal_document_transactions(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids)
+> FiscalDocumentTransactionsPaginated get_fiscal_document_transactions(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, nest_taxes=nest_taxes, show_invoiced=show_invoiced, currency=currency)
 
 Get available transactions for fiscal documents
 
@@ -1401,12 +1735,13 @@ Retrieves a paginated list of available transactions for a source based on the d
 - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled
 - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled
 - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments
-- Transactions already included in fiscal documents are excluded
+- Transactions already included in fiscal documents are excluded unless show_invoiced=true
 - Each transaction includes a status field (PENDING or POSTED)
 
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1417,16 +1752,18 @@ from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1446,10 +1783,13 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     limit = 20 # int | Number of results to return per page. (optional) (default to 20)
     sort = 'createdAt:desc' # str | Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode (optional)
     folio_ids = [56] # List[int] | Filter by folio IDs. (optional)
+    nest_taxes = False # bool | When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not in the response, the tax is omitted entirely rather than returned at the top level. (optional) (default to False)
+    show_invoiced = False # bool | When true, transactions already included in fiscal documents are not filtered out. (optional) (default to False)
+    currency = 'currency_example' # str | Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied. (optional)
 
     try:
         # Get available transactions for fiscal documents
-        api_response = api_instance.get_fiscal_document_transactions(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids)
+        api_response = api_instance.get_fiscal_document_transactions(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, page_token=page_token, limit=limit, sort=sort, folio_ids=folio_ids, nest_taxes=nest_taxes, show_invoiced=show_invoiced, currency=currency)
         print("The response of FiscalDocumentsApi->get_fiscal_document_transactions:\n")
         pprint(api_response)
     except Exception as e:
@@ -1472,6 +1812,9 @@ Name | Type | Description  | Notes
  **limit** | **int**| Number of results to return per page. | [optional] [default to 20]
  **sort** | **str**| Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode | [optional] 
  **folio_ids** | [**List[int]**](int.md)| Filter by folio IDs. | [optional] 
+ **nest_taxes** | **bool**| When true, VAT tax transactions are nested inside their parent transaction&#39;s taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not in the response, the tax is omitted entirely rather than returned at the top level. | [optional] [default to False]
+ **show_invoiced** | **bool**| When true, transactions already included in fiscal documents are not filtered out. | [optional] [default to False]
+ **currency** | **str**| Invoice currency to convert every transaction into. Each transaction&#39;s amount is converted to this currency using the property&#39;s current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied. | [optional] 
 
 ### Return type
 
@@ -1479,7 +1822,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1491,11 +1834,12 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+**409** | The source&#39;s transactions are being reconciled, or pending transaction discrepancies were found. The list is not safe to act on yet — retry the request.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_fiscal_document_transactions_by_id**
-> FiscalDocumentTransactionsPaginated get_fiscal_document_transactions_by_id(id, x_property_id, page_token=page_token, include_linked_document_transactions=include_linked_document_transactions, sort=sort, limit=limit, folio_ids=folio_ids)
+> FiscalDocumentTransactionsPaginated get_fiscal_document_transactions_by_id(id, x_property_id, page_token=page_token, include_linked_document_transactions=include_linked_document_transactions, sort=sort, limit=limit, folio_ids=folio_ids, nest_taxes=nest_taxes, currency=currency)
 
 Get list of transactions for a given fiscal document id
 
@@ -1503,6 +1847,7 @@ Retrieves a paginated list of available transactions for fiscal document id.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1511,16 +1856,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_transactions_paginated imp
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1538,10 +1885,12 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     sort = 'createdAt:desc' # str | Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode (optional)
     limit = 20 # int | Number of results to return per page. (optional) (default to 20)
     folio_ids = [56] # List[int] | Filter by folio IDs. (optional)
+    nest_taxes = False # bool | When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level. (optional) (default to False)
+    currency = 'currency_example' # str | Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied. (optional)
 
     try:
         # Get list of transactions for a given fiscal document id
-        api_response = api_instance.get_fiscal_document_transactions_by_id(id, x_property_id, page_token=page_token, include_linked_document_transactions=include_linked_document_transactions, sort=sort, limit=limit, folio_ids=folio_ids)
+        api_response = api_instance.get_fiscal_document_transactions_by_id(id, x_property_id, page_token=page_token, include_linked_document_transactions=include_linked_document_transactions, sort=sort, limit=limit, folio_ids=folio_ids, nest_taxes=nest_taxes, currency=currency)
         print("The response of FiscalDocumentsApi->get_fiscal_document_transactions_by_id:\n")
         pprint(api_response)
     except Exception as e:
@@ -1562,6 +1911,8 @@ Name | Type | Description  | Notes
  **sort** | **str**| Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode | [optional] 
  **limit** | **int**| Number of results to return per page. | [optional] [default to 20]
  **folio_ids** | [**List[int]**](int.md)| Filter by folio IDs. | [optional] 
+ **nest_taxes** | **bool**| When true, VAT tax transactions are nested inside their parent transaction&#39;s taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level. | [optional] [default to False]
+ **currency** | **str**| Invoice currency to convert every transaction into. Each transaction&#39;s amount is converted to this currency using the property&#39;s current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied. | [optional] 
 
 ### Return type
 
@@ -1569,7 +1920,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1604,10 +1955,10 @@ from cloudbeds_fiscal_document.models.transaction_status import TransactionStatu
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -1692,6 +2043,7 @@ Retrieves a paginated list of fiscal documents filtered by optional criteria.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1701,16 +2053,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_paginated import FiscalDoc
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1755,7 +2109,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1781,6 +2135,7 @@ Only includes allocations from receipts with active statuses.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1789,16 +2144,18 @@ from cloudbeds_fiscal_document.models.invoice_allocations_response import Invoic
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1837,7 +2194,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1871,6 +2228,7 @@ Create a fiscal document of the type pro forma invoice.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1879,16 +2237,18 @@ from cloudbeds_fiscal_document.models.pro_forma_invoice_preview_request import P
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1927,7 +2287,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1959,6 +2319,7 @@ Get fiscal document preview of the type rectify invoice.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1967,16 +2328,18 @@ from cloudbeds_fiscal_document.models.get_rectify_invoice_note_preview_request i
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -2015,7 +2378,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -2031,7 +2394,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_selected_transactions_summary**
-> FiscalDocumentTransactionsSummary get_selected_transactions_summary(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, folio_ids=folio_ids, exclude_transaction_ids=exclude_transaction_ids, include_transaction_ids=include_transaction_ids)
+> FiscalDocumentTransactionsSummary get_selected_transactions_summary(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, folio_ids=folio_ids, exclude_transaction_ids=exclude_transaction_ids, include_transaction_ids=include_transaction_ids, currency=currency)
 
 Get totals of selected available transactions for fiscal documents (deprecated)
 
@@ -2041,6 +2404,7 @@ Get totals of selected available transactions for fiscal documents based on the 
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -2051,16 +2415,18 @@ from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -2079,10 +2445,11 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     folio_ids = [56] # List[int] | Filter by folio IDs. (optional)
     exclude_transaction_ids = [56] # List[int] | transaction IDs to exclude. (optional)
     include_transaction_ids = [56] # List[int] | transaction IDs to include. (optional)
+    currency = 'currency_example' # str | Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. When omitted, totals are returned in the property currency. (optional)
 
     try:
         # Get totals of selected available transactions for fiscal documents (deprecated)
-        api_response = api_instance.get_selected_transactions_summary(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, folio_ids=folio_ids, exclude_transaction_ids=exclude_transaction_ids, include_transaction_ids=include_transaction_ids)
+        api_response = api_instance.get_selected_transactions_summary(x_property_id, source_id, source_kind, for_document_type=for_document_type, document_kind=document_kind, folio_ids=folio_ids, exclude_transaction_ids=exclude_transaction_ids, include_transaction_ids=include_transaction_ids, currency=currency)
         print("The response of FiscalDocumentsApi->get_selected_transactions_summary:\n")
         pprint(api_response)
     except Exception as e:
@@ -2104,6 +2471,7 @@ Name | Type | Description  | Notes
  **folio_ids** | [**List[int]**](int.md)| Filter by folio IDs. | [optional] 
  **exclude_transaction_ids** | [**List[int]**](int.md)| transaction IDs to exclude. | [optional] 
  **include_transaction_ids** | [**List[int]**](int.md)| transaction IDs to include. | [optional] 
+ **currency** | **str**| Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property&#39;s configured exchange rates. When omitted, totals are returned in the property currency. | [optional] 
 
 ### Return type
 
@@ -2111,7 +2479,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -2135,6 +2503,7 @@ Get totals of transactions for a given fiscal document id.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -2143,16 +2512,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_transactions_summary impor
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -2193,7 +2564,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -2205,6 +2576,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+**409** | The document&#39;s transactions are being reconciled. The totals are not safe to act on yet — retry the request.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2228,10 +2600,10 @@ from cloudbeds_fiscal_document.models.transactions_summary_request import Transa
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -2313,6 +2685,7 @@ Used by integration partners to update document lifecycle and government process
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -2322,16 +2695,18 @@ from cloudbeds_fiscal_document.models.fiscal_document_summary_response import Fi
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -2372,7 +2747,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -2400,6 +2775,7 @@ Update the status of a pro forma invoice. Supported status transitions:
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -2409,16 +2785,18 @@ from cloudbeds_fiscal_document.models.pro_forma_status_update_request import Pro
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -2459,7 +2837,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -2476,8 +2854,95 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_require_attention**
+> FiscalDocumentSummaryResponse update_require_attention(id, x_property_id, update_require_attention_request)
+
+Update require attention flag for a fiscal document
+
+Sets the requireAttention flag on a fiscal document.
+
+### Example
+
+* OAuth Authentication (oauth2):
+* Bearer (JWT) Authentication (bearerAuth):
+
+```python
+import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.fiscal_document_summary_response import FiscalDocumentSummaryResponse
+from cloudbeds_fiscal_document.models.update_require_attention_request import UpdateRequireAttentionRequest
+from cloudbeds_fiscal_document.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to https://api.cloudbeds.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = cloudbeds_fiscal_document.Configuration(
+    host = "https://api.cloudbeds.com"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
+
+# Configure Bearer authorization (JWT): bearerAuth
+configuration = cloudbeds_fiscal_document.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
+
+# Enter a context with an instance of the API client
+with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
+    id = 'id_example' # str | Unique ID of the fiscal document to download.
+    x_property_id = 56 # int | Property id
+    update_require_attention_request = cloudbeds_fiscal_document.UpdateRequireAttentionRequest() # UpdateRequireAttentionRequest | 
+
+    try:
+        # Update require attention flag for a fiscal document
+        api_response = api_instance.update_require_attention(id, x_property_id, update_require_attention_request)
+        print("The response of FiscalDocumentsApi->update_require_attention:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling FiscalDocumentsApi->update_require_attention: %s\n" % e)
+```
+
+
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**| Unique ID of the fiscal document to download. | 
+ **x_property_id** | **int**| Property id | 
+ **update_require_attention_request** | [**UpdateRequireAttentionRequest**](UpdateRequireAttentionRequest.md)|  | 
+
+### Return type
+
+[**FiscalDocumentSummaryResponse**](FiscalDocumentSummaryResponse.md)
+
+### Authorization
+
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+**404** | Fiscal document not found |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **void_receipt**
-> void_receipt(x_property_id, receipt_id)
+> void_receipt(x_property_id, receipt_id, void_receipt_request=void_receipt_request)
 
 Void a receipt
 
@@ -2488,23 +2953,27 @@ For Italy, a refund receipt will be automatically created and linked to the void
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
 import cloudbeds_fiscal_document
+from cloudbeds_fiscal_document.models.void_receipt_request import VoidReceiptRequest
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -2517,10 +2986,11 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     api_instance = cloudbeds_fiscal_document.FiscalDocumentsApi(api_client)
     x_property_id = 56 # int | Property id
     receipt_id = 56 # int | The ID of the receipt to void
+    void_receipt_request = cloudbeds_fiscal_document.VoidReceiptRequest() # VoidReceiptRequest |  (optional)
 
     try:
         # Void a receipt
-        api_instance.void_receipt(x_property_id, receipt_id)
+        api_instance.void_receipt(x_property_id, receipt_id, void_receipt_request=void_receipt_request)
     except Exception as e:
         print("Exception when calling FiscalDocumentsApi->void_receipt: %s\n" % e)
 ```
@@ -2534,6 +3004,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **x_property_id** | **int**| Property id | 
  **receipt_id** | **int**| The ID of the receipt to void | 
+ **void_receipt_request** | [**VoidReceiptRequest**](VoidReceiptRequest.md)|  | [optional] 
 
 ### Return type
 
@@ -2541,11 +3012,11 @@ void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 ### HTTP response details

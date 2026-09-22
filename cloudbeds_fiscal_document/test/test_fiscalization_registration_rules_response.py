@@ -44,14 +44,21 @@ class TestFiscalizationRegistrationRulesResponse(unittest.TestCase):
                         label = 'Legal Name', 
                         type = 'text', 
                         category = 'company', 
+                        section_key = 'customization.invoicing', 
                         required = True, 
+                        required_if = cloudbeds_fiscal_document.models.field_condition.FieldCondition(
+                            field = 'taxId', 
+                            pattern = '^[^123]', ), 
                         primary = True, 
+                        editable = True, 
                         validation = cloudbeds_fiscal_document.models.field_validation.FieldValidation(
                             pattern = '', 
                             min = 56, 
                             max = 56, 
                             checksum = True, 
-                            format = '', ), 
+                            format = '', 
+                            message = '', 
+                            example = '', ), 
                         data = cloudbeds_fiscal_document.models.field_data.FieldData(
                             placeholder = '', 
                             help = '', 
@@ -71,8 +78,10 @@ class TestFiscalizationRegistrationRulesResponse(unittest.TestCase):
                                     label = 'Legal Name', 
                                     type = 'text', 
                                     category = 'company', 
+                                    section_key = 'customization.invoicing', 
                                     required = True, 
                                     primary = True, 
+                                    editable = True, 
                                     properties = {
                                         'key' : 
                                         }, 
@@ -85,9 +94,53 @@ class TestFiscalizationRegistrationRulesResponse(unittest.TestCase):
                         default = null, 
                         description = '', )
                     ],
+                sections = [
+                    cloudbeds_fiscal_document.models.rules_section.RulesSection(
+                        key = 'customization.invoicing', 
+                        label = 'Invoice generation', 
+                        description = '', 
+                        immutable_after_registration = True, 
+                        order = 56, )
+                    ],
                 examples = {
                     'key' : ''
-                    }
+                    },
+                requires = cloudbeds_fiscal_document.models.country_requirements.CountryRequirements(
+                    credentials = cloudbeds_fiscal_document.models.requirement.Requirement(
+                        required = True, 
+                        description = '', 
+                        fields = [
+                            cloudbeds_fiscal_document.models.requirement_field.RequirementField(
+                                name = '', 
+                                type = 'text', 
+                                required = True, 
+                                label = '', 
+                                description = '', 
+                                accept = '', )
+                            ], ), 
+                    certificate = cloudbeds_fiscal_document.models.requirement.Requirement(
+                        required = True, 
+                        description = '', ), 
+                    external_authorization = , 
+                    series = , 
+                    tax_mapping = , 
+                    payment_method_mapping = , 
+                    item_mapping = , 
+                    operator_mapping = , 
+                    reports = [
+                        cloudbeds_fiscal_document.models.report_definition.ReportDefinition(
+                            id = 'saft', 
+                            label = 'SAF-T Report', 
+                            description = 'Export SAF-T file for submission to Autoridade Tributária', 
+                            params = [
+                                cloudbeds_fiscal_document.models.report_param.ReportParam(
+                                    name = 'year', 
+                                    type = 'integer', 
+                                    required = True, 
+                                    label = 'Year', 
+                                    description = 'Fiscal year (e.g., 2024)', )
+                                ], )
+                        ], )
             )
         else:
             return FiscalizationRegistrationRulesResponse(
@@ -100,14 +153,21 @@ class TestFiscalizationRegistrationRulesResponse(unittest.TestCase):
                         label = 'Legal Name', 
                         type = 'text', 
                         category = 'company', 
+                        section_key = 'customization.invoicing', 
                         required = True, 
+                        required_if = cloudbeds_fiscal_document.models.field_condition.FieldCondition(
+                            field = 'taxId', 
+                            pattern = '^[^123]', ), 
                         primary = True, 
+                        editable = True, 
                         validation = cloudbeds_fiscal_document.models.field_validation.FieldValidation(
                             pattern = '', 
                             min = 56, 
                             max = 56, 
                             checksum = True, 
-                            format = '', ), 
+                            format = '', 
+                            message = '', 
+                            example = '', ), 
                         data = cloudbeds_fiscal_document.models.field_data.FieldData(
                             placeholder = '', 
                             help = '', 
@@ -127,8 +187,10 @@ class TestFiscalizationRegistrationRulesResponse(unittest.TestCase):
                                     label = 'Legal Name', 
                                     type = 'text', 
                                     category = 'company', 
+                                    section_key = 'customization.invoicing', 
                                     required = True, 
                                     primary = True, 
+                                    editable = True, 
                                     properties = {
                                         'key' : 
                                         }, 

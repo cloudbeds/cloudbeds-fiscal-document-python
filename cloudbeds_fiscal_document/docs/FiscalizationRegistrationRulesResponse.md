@@ -7,7 +7,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **country** | [**CountryInfo**](CountryInfo.md) |  | 
 **fields** | [**List[FieldDefinition]**](FieldDefinition.md) |  | 
+**sections** | [**List[RulesSection]**](RulesSection.md) | Ordered list of UI sections that host the country&#39;s fields. The frontend uses this list to render sub-navigation; each field references a section via its sectionKey. When absent, all fields belong to an implicit \&quot;registration\&quot; section. | [optional] 
 **examples** | **Dict[str, str]** | Example values for common fields | [optional] 
+**requires** | [**CountryRequirements**](CountryRequirements.md) |  | [optional] 
 
 ## Example
 

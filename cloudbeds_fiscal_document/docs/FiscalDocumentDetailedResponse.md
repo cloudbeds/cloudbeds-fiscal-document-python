@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **invoice_date** | **date** |  | [optional] 
 **invoice_date_property_timezone** | **date** |  | [optional] 
 **file_name** | **str** |  | [optional] 
+**files** | [**List[FiscalDocumentFile]**](FiscalDocumentFile.md) | All files available for this document, primary first followed by any additional stored files (e.g. the Portuguese duplicate). Always present as an array, but may be empty for documents whose file has not been generated yet (e.g. REQUESTED or early FAILED status). The primary file entry, when present, has a null id (the download endpoint serves it without a fileId; additional entries are downloaded by passing their id as the fileId query parameter).  | 
 **amount** | **float** |  | [optional] 
 **balance** | **float** |  | [optional] 
 **due_date** | **date** |  | [optional] 
@@ -26,6 +27,7 @@ Name | Type | Description | Notes
 **origin** | **str** |  | [optional] 
 **external_id** | **str** |  | [optional] 
 **fail_reason** | **str** |  | [optional] 
+**reason** | **str** | Correction reason recorded when the document was created (credit notes and rectifying invoices). One of the slugs offered by the credit-note action&#39;s reason field, or free text on the Spanish rectify path. Null when no reason was given. | [optional] 
 **method** | [**CreationMethod**](CreationMethod.md) |  | [optional] 
 **created_at** | **datetime** |  | [optional] 
 **parent_id** | **str** |  | [optional] 
@@ -36,6 +38,12 @@ Name | Type | Description | Notes
 **actions** | [**List[Action]**](Action.md) | Returns the list of actions available for the transaction | [optional] 
 **source_identifier** | **str** | Reservation Identifier or a group code | [optional] 
 **simplified** | **bool** | Applies to invoices only. | [optional] 
+**require_attention** | **bool** | Indicates whether this document requires manual attention. | [optional] 
+**has_discrepancies** | **bool** | Indicates whether this document has pending transaction discrepancies. | [optional] 
+**package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
+**currency** | **str** | Currency the document amount is expressed in. Equals the invoice/document currency, which may differ from the property base currency when a foreign-currency invoice was issued. | [optional] 
+**property_currency** | **str** | The property&#39;s base currency code. | [optional] 
+**property_currency_amount** | **float** | The document amount converted to the property&#39;s base currency using the property&#39;s configured exchange rates. Null when the document currency already equals the property base currency (no conversion needed). | [optional] 
 
 ## Example
 

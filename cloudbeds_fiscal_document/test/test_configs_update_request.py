@@ -51,6 +51,7 @@ class TestConfigsUpdateRequest(unittest.TestCase):
                 legal_company_name = '',
                 title = {"en":"Invoice","es":"Factura"},
                 show_legal_company_name = True,
+                show_property_details = True,
                 include_room_number = True,
                 use_document_number = True,
                 update_invoice_on_link_document = True,
@@ -61,11 +62,19 @@ class TestConfigsUpdateRequest(unittest.TestCase):
                 tax_id1 = '',
                 tax_id2 = '',
                 cpf = '',
+                company_country = '',
+                company_address = '',
+                company_state = '',
+                company_city = '',
+                company_post_code = '',
                 custom_text = {
                     'key' : ''
                     },
                 logo_id = 56,
-                date_display = 'transaction_date'
+                date_display = 'transaction_date',
+                simplified_enabled = True,
+                simplified_threshold = 1.337,
+                simplified_threshold_action = 'NOTICE_ONLY'
             )
         else:
             return ConfigsUpdateRequest(

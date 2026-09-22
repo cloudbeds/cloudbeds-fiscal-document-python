@@ -49,6 +49,13 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                         invoice_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
                         invoice_date_property_timezone = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
                         file_name = '', 
+                        files = [
+                            cloudbeds_fiscal_document.models.fiscal_document_file.FiscalDocumentFile(
+                                id = '', 
+                                category = 'PRIMARY', 
+                                mime_type = '', 
+                                filename = '', )
+                            ], 
                         amount = 1.337, 
                         balance = 1.337, 
                         due_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
@@ -66,6 +73,7 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                         origin = '', 
                         external_id = '', 
                         fail_reason = '', 
+                        reason = '', 
                         method = 'VOID', 
                         created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                         parent_id = '', 
@@ -73,6 +81,7 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                         government_integration = cloudbeds_fiscal_document.models.government_integration.GovernmentIntegration(
                             number = '', 
                             series = '', 
+                            invoice_type = '', 
                             qr = cloudbeds_fiscal_document.models.government_integration_qr.GovernmentIntegration_qr(
                                 url = '', 
                                 string = '', ), 
@@ -92,7 +101,10 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                                     raw_metadata = {
                                         'key' : ''
                                         }, )
-                                ], ), 
+                                ], 
+                            folio_fiscal = '9B3E26F4-1234-4A5B-8C9D-ABCDEF012345', 
+                            sat_qr_code = '', 
+                            connection_id = 56, ), 
                         latest_linked_document = cloudbeds_fiscal_document.models.latest_linked_document.LatestLinkedDocument(
                             id = '', 
                             number = '', 
@@ -106,10 +118,70 @@ class TestFiscalDocumentPaginated(unittest.TestCase):
                                 relationship_type = 'PARENT', )
                             ], 
                         actions = [
-                            cloudbeds_fiscal_document.models.action.Action()
+                            cloudbeds_fiscal_document.models.action.Action(
+                                fields = [
+                                    cloudbeds_fiscal_document.models.field_definition.FieldDefinition(
+                                        path = 'name', 
+                                        label = 'Legal Name', 
+                                        type = 'text', 
+                                        section_key = 'customization.invoicing', 
+                                        required = True, 
+                                        required_if = cloudbeds_fiscal_document.models.field_condition.FieldCondition(
+                                            field = 'taxId', 
+                                            pattern = '^[^123]', ), 
+                                        primary = True, 
+                                        editable = True, 
+                                        validation = cloudbeds_fiscal_document.models.field_validation.FieldValidation(
+                                            pattern = '', 
+                                            min = 56, 
+                                            max = 56, 
+                                            checksum = True, 
+                                            format = '', 
+                                            message = '', 
+                                            example = '', ), 
+                                        data = cloudbeds_fiscal_document.models.field_data.FieldData(
+                                            placeholder = '', 
+                                            help = '', 
+                                            alternatives = [
+                                                ''
+                                                ], ), 
+                                        options = [
+                                            cloudbeds_fiscal_document.models.select_option.SelectOption(
+                                                value = '', 
+                                                label = '', )
+                                            ], 
+                                        item = cloudbeds_fiscal_document.models.array_item_definition.ArrayItemDefinition(
+                                            type = 'object', 
+                                            fields = [
+                                                cloudbeds_fiscal_document.models.field_definition.FieldDefinition(
+                                                    path = 'name', 
+                                                    label = 'Legal Name', 
+                                                    type = 'text', 
+                                                    section_key = 'customization.invoicing', 
+                                                    required = True, 
+                                                    primary = True, 
+                                                    editable = True, 
+                                                    properties = {
+                                                        'key' : 
+                                                        }, 
+                                                    default = null, 
+                                                    description = '', )
+                                                ], ), 
+                                        properties = {
+                                            'key' : 
+                                            }, 
+                                        default = null, 
+                                        description = '', )
+                                    ], )
                             ], 
                         source_identifier = '', 
-                        simplified = True, )
+                        simplified = True, 
+                        require_attention = True, 
+                        has_discrepancies = True, 
+                        package_breakdown = True, 
+                        currency = '', 
+                        property_currency = '', 
+                        property_currency_amount = 1.337, )
                     ],
                 next_page_token = ''
             )

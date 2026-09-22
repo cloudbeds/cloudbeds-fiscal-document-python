@@ -35,7 +35,63 @@ class TestAction(unittest.TestCase):
         model = Action()
         if include_optional:
             return Action(
-                type = 'CANCEL'
+                type = 'CANCEL',
+                fields = [
+                    cloudbeds_fiscal_document.models.field_definition.FieldDefinition(
+                        path = 'name', 
+                        label = 'Legal Name', 
+                        type = 'text', 
+                        category = 'company', 
+                        section_key = 'customization.invoicing', 
+                        required = True, 
+                        required_if = cloudbeds_fiscal_document.models.field_condition.FieldCondition(
+                            field = 'taxId', 
+                            pattern = '^[^123]', ), 
+                        primary = True, 
+                        editable = True, 
+                        validation = cloudbeds_fiscal_document.models.field_validation.FieldValidation(
+                            pattern = '', 
+                            min = 56, 
+                            max = 56, 
+                            checksum = True, 
+                            format = '', 
+                            message = '', 
+                            example = '', ), 
+                        data = cloudbeds_fiscal_document.models.field_data.FieldData(
+                            placeholder = '', 
+                            help = '', 
+                            alternatives = [
+                                ''
+                                ], ), 
+                        options = [
+                            cloudbeds_fiscal_document.models.select_option.SelectOption(
+                                value = '', 
+                                label = '', )
+                            ], 
+                        item = cloudbeds_fiscal_document.models.array_item_definition.ArrayItemDefinition(
+                            type = 'object', 
+                            fields = [
+                                cloudbeds_fiscal_document.models.field_definition.FieldDefinition(
+                                    path = 'name', 
+                                    label = 'Legal Name', 
+                                    type = 'text', 
+                                    category = 'company', 
+                                    section_key = 'customization.invoicing', 
+                                    required = True, 
+                                    primary = True, 
+                                    editable = True, 
+                                    properties = {
+                                        'key' : 
+                                        }, 
+                                    default = null, 
+                                    description = '', )
+                                ], ), 
+                        properties = {
+                            'key' : 
+                            }, 
+                        default = null, 
+                        description = '', )
+                    ]
             )
         else:
             return Action(

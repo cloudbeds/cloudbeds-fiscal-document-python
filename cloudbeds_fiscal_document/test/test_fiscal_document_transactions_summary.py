@@ -43,7 +43,12 @@ class TestFiscalDocumentTransactionsSummary(unittest.TestCase):
                     ],
                 paid = '',
                 refunded = '',
-                total = ''
+                total = '',
+                currency = '',
+                property_currency = '',
+                property_currency_total = '',
+                transaction_count = 56,
+                max_transactions = 56
             )
         else:
             return FiscalDocumentTransactionsSummary(

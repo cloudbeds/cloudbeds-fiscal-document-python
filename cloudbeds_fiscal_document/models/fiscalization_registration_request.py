@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.fiscalization_address import FiscalizationAddress
@@ -30,6 +30,7 @@ class FiscalizationRegistrationRequest(BaseModel):
     """
     Provider-agnostic supplier registration data
     """ # noqa: E501
+    partner_id: Optional[StrictInt] = Field(default=None, description="Optional scope to a specific partner instance on a multi-partner property. Omit on single-partner properties (legacy behavior). ", alias="partnerId")
     country: Annotated[str, Field(strict=True)] = Field(description="ISO 3166-1 alpha-2 country code")
     name: StrictStr = Field(description="Legal name of the company")
     tax_id: Optional[StrictStr] = Field(default=None, description="Primary tax identification number", alias="taxId")
@@ -37,8 +38,8 @@ class FiscalizationRegistrationRequest(BaseModel):
     emails: Optional[Annotated[List[FiscalizationEmail], Field(min_length=1)]] = None
     phones: Optional[List[FiscalizationPhone]] = None
     identities: Optional[Dict[str, StrictStr]] = Field(default=None, description="Additional tax/legal identities (key-value pairs)")
-    extensions: Optional[Dict[str, StrictStr]] = Field(default=None, description="Country-specific tax configuration")
-    __properties: ClassVar[List[str]] = ["country", "name", "taxId", "addresses", "emails", "phones", "identities", "extensions"]
+    extensions: Optional[Dict[str, StrictStr]] = Field(default=None, description="Country-specific tax configuration. Known MX keys: `mx_border_zone` (\"true\"/\"false\") — set to \"true\" for properties in Mexico's northern border zone where IVA is 8% instead of 16%. ")
+    __properties: ClassVar[List[str]] = ["partnerId", "country", "name", "taxId", "addresses", "emails", "phones", "identities", "extensions"]
 
     @field_validator('country')
     def country_validate_regular_expression(cls, value):
@@ -119,6 +120,7 @@ class FiscalizationRegistrationRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "partnerId": obj.get("partnerId"),
             "country": obj.get("country"),
             "name": obj.get("name"),
             "taxId": obj.get("taxId"),

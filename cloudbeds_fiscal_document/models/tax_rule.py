@@ -26,12 +26,14 @@ class TaxRule(BaseModel):
     """
     TaxRule
     """ # noqa: E501
+    value: StrictStr = Field(description="Identifier to store against a mapping and send back on save. Composed by this service so the caller never has to build one: the category/key/rate triple joined by \":\" for a country-defined option, or the partner's own code for a provider-supplied one.")
+    label: StrictStr = Field(description="Display text for the option; same as name for country-defined options.")
     category: StrictStr = Field(description="Tax category code (e.g., VAT, ISR)")
     key: StrictStr = Field(description="Tax key describing the tax situation (e.g., standard, exempt)")
     rate: StrictStr = Field(description="Rate within the category and key (e.g., general, reduced)")
     name: StrictStr = Field(description="Display name (e.g., \"VAT - General Rate (16.0%)\")")
     percent: Optional[StrictStr] = Field(default=None, description="Rate percentage (e.g., \"16.0%\")")
-    __properties: ClassVar[List[str]] = ["category", "key", "rate", "name", "percent"]
+    __properties: ClassVar[List[str]] = ["value", "label", "category", "key", "rate", "name", "percent"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -84,6 +86,8 @@ class TaxRule(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "value": obj.get("value"),
+            "label": obj.get("label"),
             "category": obj.get("category"),
             "key": obj.get("key"),
             "rate": obj.get("rate"),

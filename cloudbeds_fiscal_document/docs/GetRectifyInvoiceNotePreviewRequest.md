@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
 **exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs | [optional] 
 **include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
+**package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
 
 ## Example
 

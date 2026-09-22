@@ -32,6 +32,7 @@ class FiscalizationRegistrationResponse(BaseModel):
     """
     FiscalizationRegistrationResponse
     """ # noqa: E501
+    partner_id: Optional[StrictInt] = Field(default=None, description="Optional scope to a specific partner instance on a multi-partner property. Omit on single-partner properties (legacy behavior). ", alias="partnerId")
     country: Annotated[str, Field(strict=True)] = Field(description="ISO 3166-1 alpha-2 country code")
     name: StrictStr = Field(description="Legal name of the company")
     tax_id: Optional[StrictStr] = Field(default=None, description="Primary tax identification number", alias="taxId")
@@ -39,14 +40,14 @@ class FiscalizationRegistrationResponse(BaseModel):
     emails: Optional[Annotated[List[FiscalizationEmail], Field(min_length=1)]] = None
     phones: Optional[List[FiscalizationPhone]] = None
     identities: Optional[Dict[str, StrictStr]] = Field(default=None, description="Additional tax/legal identities (key-value pairs)")
-    extensions: Optional[Dict[str, StrictStr]] = Field(default=None, description="Country-specific tax configuration")
+    extensions: Optional[Dict[str, StrictStr]] = Field(default=None, description="Country-specific tax configuration. Known MX keys: `mx_border_zone` (\"true\"/\"false\") — set to \"true\" for properties in Mexico's northern border zone where IVA is 8% instead of 16%. ")
     property_id: StrictInt = Field(description="Property ID this registration belongs to", alias="propertyId")
     status: FiscalizationRegistrationStatus
     provider_id: Optional[StrictStr] = Field(default=None, description="Provider-specific ID (e.g., Invopop party ID)", alias="providerId")
     is_default: Optional[StrictBool] = Field(default=None, description="Whether this is the default fiscalization registration", alias="isDefault")
     created_at: Optional[datetime] = Field(default=None, alias="createdAt")
     updated_at: Optional[datetime] = Field(default=None, alias="updatedAt")
-    __properties: ClassVar[List[str]] = ["country", "name", "taxId", "addresses", "emails", "phones", "identities", "extensions", "propertyId", "status", "providerId", "isDefault", "createdAt", "updatedAt"]
+    __properties: ClassVar[List[str]] = ["partnerId", "country", "name", "taxId", "addresses", "emails", "phones", "identities", "extensions", "propertyId", "status", "providerId", "isDefault", "createdAt", "updatedAt"]
 
     @field_validator('country')
     def country_validate_regular_expression(cls, value):
@@ -130,6 +131,7 @@ class FiscalizationRegistrationResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "partnerId": obj.get("partnerId"),
             "country": obj.get("country"),
             "name": obj.get("name"),
             "taxId": obj.get("taxId"),

@@ -26,6 +26,13 @@ class TestConfigsApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
+    def test_crop_logo(self) -> None:
+        """Test case for crop_logo
+
+        Crop logo image for fiscal documents
+        """
+        pass
+
     def test_delete_logo(self) -> None:
         """Test case for delete_logo
 
@@ -54,10 +61,24 @@ class TestConfigsApi(unittest.TestCase):
         """
         pass
 
+    def test_get_property_settings(self) -> None:
+        """Test case for get_property_settings
+
+        Get property-level document settings
+        """
+        pass
+
     def test_update_configs(self) -> None:
         """Test case for update_configs
 
         Updates a config of a specific kind
+        """
+        pass
+
+    def test_update_property_settings(self) -> None:
+        """Test case for update_property_settings
+
+        Update property-level document settings
         """
         pass
 

@@ -35,6 +35,7 @@ class TestFiscalizationRegistrationRequest(unittest.TestCase):
         model = FiscalizationRegistrationRequest()
         if include_optional:
             return FiscalizationRegistrationRequest(
+                partner_id = 56,
                 country = 'IT',
                 name = 'Mario Rossi Albergo',
                 tax_id = '98765432103',
@@ -59,7 +60,7 @@ class TestFiscalizationRegistrationRequest(unittest.TestCase):
                         label = 'Office', )
                     ],
                 identities = {"it-fiscal-code":"98765432103"},
-                extensions = {"it-regime-fiscale":"RF07","it-sdi-format":"FPR12"}
+                extensions = {"it-regime-fiscale":"RF07","it-sdi-format":"FPR12","mx_border_zone":"true"}
             )
         else:
             return FiscalizationRegistrationRequest(

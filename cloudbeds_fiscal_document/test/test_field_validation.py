@@ -39,7 +39,9 @@ class TestFieldValidation(unittest.TestCase):
                 min = 56,
                 max = 56,
                 checksum = True,
-                format = ''
+                format = '',
+                message = '',
+                example = ''
             )
         else:
             return FieldValidation(

@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **max** | **int** | Maximum length | [optional] 
 **checksum** | **bool** | Whether field has checksum validation | [optional] 
 **format** | **str** | Display format mask (e.g., XX.XXX.XXX/XXXX-XX) | [optional] 
+**message** | **str** | Human-readable description of the rule, suitable for FE error messages (e.g. \&quot;NFS-e series must be 1-5 alphanumeric characters\&quot;). | [optional] 
+**example** | **str** | A valid example value that can be shown as a placeholder hint (e.g. \&quot;ABC12\&quot; for NFS-e, \&quot;1\&quot; for NFC-e). | [optional] 
 
 ## Example
 

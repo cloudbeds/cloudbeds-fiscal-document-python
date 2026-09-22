@@ -35,6 +35,7 @@ class FiscalDocumentKind(str, Enum):
     INVOICE_RECEIPT = 'INVOICE_RECEIPT'
     ADVANCE_INVOICE = 'ADVANCE_INVOICE'
     SETTLEMENT_INVOICE = 'SETTLEMENT_INVOICE'
+    TAX_WITHHOLDING = 'TAX_WITHHOLDING'
     UNKNOWN_DEFAULT_OPEN_API = 'unknown_default_open_api'
 
     @classmethod

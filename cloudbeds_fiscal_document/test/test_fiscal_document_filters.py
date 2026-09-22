@@ -59,7 +59,8 @@ class TestFiscalDocumentFilters(unittest.TestCase):
                 amount_from = 1.337,
                 amount_to = 1.337,
                 balance_from = 1.337,
-                balance_to = 1.337
+                balance_to = 1.337,
+                has_discrepancies = True
             )
         else:
             return FiscalDocumentFilters(

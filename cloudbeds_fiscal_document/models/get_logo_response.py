@@ -26,8 +26,9 @@ class GetLogoResponse(BaseModel):
     """
     GetLogoResponse
     """ # noqa: E501
-    logo_url: Optional[StrictStr] = Field(default=None, description="Presigned URL to access the logo file", alias="logoUrl")
-    __properties: ClassVar[List[str]] = ["logoUrl"]
+    logo_url: Optional[StrictStr] = Field(default=None, description="Presigned URL to access the (cropped) logo file", alias="logoUrl")
+    original_logo_url: Optional[StrictStr] = Field(default=None, description="Presigned URL to access the original uncropped logo; only present when a crop has been applied", alias="originalLogoUrl")
+    __properties: ClassVar[List[str]] = ["logoUrl", "originalLogoUrl"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -80,7 +81,8 @@ class GetLogoResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "logoUrl": obj.get("logoUrl")
+            "logoUrl": obj.get("logoUrl"),
+            "originalLogoUrl": obj.get("originalLogoUrl")
         })
         return _obj
 

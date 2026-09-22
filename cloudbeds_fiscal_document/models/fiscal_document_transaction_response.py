@@ -21,6 +21,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.fiscal_document_transaction_allocation import FiscalDocumentTransactionAllocation
+from cloudbeds_fiscal_document.models.invoiced_status import InvoicedStatus
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
 from typing_extensions import Self
@@ -41,11 +42,18 @@ class FiscalDocumentTransactionResponse(BaseModel):
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     available_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="availableAmount")
     document_fiscalized_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Will be null if filter is not by document id", alias="documentFiscalizedAmount")
+    currency: Optional[StrictStr] = Field(default=None, description="Original transaction currency code.")
+    display_currency: Optional[StrictStr] = Field(default=None, description="Currency code used for the display amounts in this response.", alias="displayCurrency")
+    display_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Amount converted to the display currency.", alias="displayAmount")
+    display_available_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Available amount converted to the display currency.", alias="displayAvailableAmount")
+    display_document_fiscalized_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Document fiscalized amount converted to the display currency.", alias="displayDocumentFiscalizedAmount")
     folio_id: Optional[StrictStr] = Field(default=None, alias="folioId")
     status: Optional[StrictStr] = Field(default=None, description="Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions")
     paid_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="paidAmount")
     allocations: Optional[List[FiscalDocumentTransactionAllocation]] = None
-    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceIdentifier", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "availableAmount", "documentFiscalizedAmount", "folioId", "status", "paidAmount", "allocations"]
+    taxes: Optional[List[FiscalDocumentTransactionResponse]] = Field(default=None, description="Child VAT taxes of this transaction. Populated only when nestTaxes=true; taxes not classified as VAT are never nested here and are returned as top-level transactions instead.")
+    invoiced_status: Optional[InvoicedStatus] = Field(default=None, alias="invoicedStatus")
+    __properties: ClassVar[List[str]] = ["id", "propertyId", "sourceId", "sourceIdentifier", "sourceKind", "transactionDate", "guestName", "description", "internalCode", "amount", "availableAmount", "documentFiscalizedAmount", "currency", "displayCurrency", "displayAmount", "displayAvailableAmount", "displayDocumentFiscalizedAmount", "folioId", "status", "paidAmount", "allocations", "taxes", "invoicedStatus"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -104,6 +112,13 @@ class FiscalDocumentTransactionResponse(BaseModel):
                 if _item_allocations:
                     _items.append(_item_allocations.to_dict())
             _dict['allocations'] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in taxes (list)
+        _items = []
+        if self.taxes:
+            for _item_taxes in self.taxes:
+                if _item_taxes:
+                    _items.append(_item_taxes.to_dict())
+            _dict['taxes'] = _items
         return _dict
 
     @classmethod
@@ -128,11 +143,20 @@ class FiscalDocumentTransactionResponse(BaseModel):
             "amount": obj.get("amount"),
             "availableAmount": obj.get("availableAmount"),
             "documentFiscalizedAmount": obj.get("documentFiscalizedAmount"),
+            "currency": obj.get("currency"),
+            "displayCurrency": obj.get("displayCurrency"),
+            "displayAmount": obj.get("displayAmount"),
+            "displayAvailableAmount": obj.get("displayAvailableAmount"),
+            "displayDocumentFiscalizedAmount": obj.get("displayDocumentFiscalizedAmount"),
             "folioId": obj.get("folioId"),
             "status": obj.get("status"),
             "paidAmount": obj.get("paidAmount"),
-            "allocations": [FiscalDocumentTransactionAllocation.from_dict(_item) for _item in obj["allocations"]] if obj.get("allocations") is not None else None
+            "allocations": [FiscalDocumentTransactionAllocation.from_dict(_item) for _item in obj["allocations"]] if obj.get("allocations") is not None else None,
+            "taxes": [FiscalDocumentTransactionResponse.from_dict(_item) for _item in obj["taxes"]] if obj.get("taxes") is not None else None,
+            "invoicedStatus": obj.get("invoicedStatus")
         })
         return _obj
 
+# TODO: Rewrite to not use raise_errors
+FiscalDocumentTransactionResponse.model_rebuild(raise_errors=False)
 

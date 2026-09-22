@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import date
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
@@ -37,14 +37,45 @@ class CreateInvoiceRequest(BaseModel):
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
     source_kind: SourceKind = Field(alias="sourceKind")
     user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
+    currency: Optional[StrictStr] = Field(default=None, description="Invoice currency. Selected transactions are converted into this currency at creation using the property's current exchange rate, which is locked on the issued document, and the converted amounts are fiscalized. Defaults to the property currency when omitted.")
     recipient: Optional[RecipientRequest] = None
     manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
     simplified: Optional[StrictBool] = False
+    invoice_type: Optional[StrictStr] = Field(default=None, description="Argentina RI only — the ARCA invoice class to issue (Factura A/B/T). Determines the ar-arca-doc-type sent to ARCA and the Punto de Venta series used. Ignored for non-RI / non-AR properties (those always issue C). ", alias="invoiceType")
+    package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
     due_date_property_timezone: Optional[date] = Field(default=None, alias="dueDatePropertyTimezone")
-    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "dueDatePropertyTimezone"]
+    note: Optional[Annotated[str, Field(strict=True, max_length=500)]] = None
+    emails: Optional[Annotated[List[StrictStr], Field(max_length=10)]] = Field(default=None, description="Optional list of email addresses to send the document to once it is ready")
+    subject: Optional[Annotated[str, Field(min_length=1, strict=True, max_length=255)]] = Field(default=None, description="Optional per-send override for the email subject. When omitted or blank, the subject is resolved from the property's email template, falling back to the service default. Supports the same [Placeholder] tokens as template subjects.")
+    summary: Optional[StrictBool] = Field(default=False, description="When true, marks this as a CFDI global/summary invoice (MX only)")
+    summary_frequency: Optional[StrictStr] = Field(default=None, description="Reporting frequency for summary invoices (MX only)", alias="summaryFrequency")
+    mx_cfdi_use: Optional[StrictStr] = Field(default=None, description="MX only — SAT c_UsoCFDI code selected in the Create Invoice modal. Overrides the value stored in guest requirements (mx_cfdi_use). A generic RFC (XAXX/XEXX) always forces S01 at issuance time regardless of this value.", alias="mxCfdiUse")
+    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "sourceId", "sequenceId", "sourceKind", "userId", "currency", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "invoiceType", "packageBreakdown", "dueDatePropertyTimezone", "note", "emails", "subject", "summary", "summaryFrequency", "mxCfdiUse"]
+
+    @field_validator('invoice_type')
+    def invoice_type_validate_enum(cls, value):
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
+        if value is None:
+            return value
+
+        _allowed_values = set(['A', 'B', 'T', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
+        return value
+
+    @field_validator('summary_frequency')
+    def summary_frequency_validate_enum(cls, value):
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
+        if value is None:
+            return value
+
+        _allowed_values = set(['DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY', 'BIMONTHLY', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -106,6 +137,51 @@ class CreateInvoiceRequest(BaseModel):
         if self.user_id is None and "user_id" in self.model_fields_set:
             _dict['userId'] = None
 
+        # set to None if currency (nullable) is None
+        # and model_fields_set contains the field
+        if self.currency is None and "currency" in self.model_fields_set:
+            _dict['currency'] = None
+
+        # set to None if invoice_type (nullable) is None
+        # and model_fields_set contains the field
+        if self.invoice_type is None and "invoice_type" in self.model_fields_set:
+            _dict['invoiceType'] = None
+
+        # set to None if package_breakdown (nullable) is None
+        # and model_fields_set contains the field
+        if self.package_breakdown is None and "package_breakdown" in self.model_fields_set:
+            _dict['packageBreakdown'] = None
+
+        # set to None if note (nullable) is None
+        # and model_fields_set contains the field
+        if self.note is None and "note" in self.model_fields_set:
+            _dict['note'] = None
+
+        # set to None if emails (nullable) is None
+        # and model_fields_set contains the field
+        if self.emails is None and "emails" in self.model_fields_set:
+            _dict['emails'] = None
+
+        # set to None if subject (nullable) is None
+        # and model_fields_set contains the field
+        if self.subject is None and "subject" in self.model_fields_set:
+            _dict['subject'] = None
+
+        # set to None if summary (nullable) is None
+        # and model_fields_set contains the field
+        if self.summary is None and "summary" in self.model_fields_set:
+            _dict['summary'] = None
+
+        # set to None if summary_frequency (nullable) is None
+        # and model_fields_set contains the field
+        if self.summary_frequency is None and "summary_frequency" in self.model_fields_set:
+            _dict['summaryFrequency'] = None
+
+        # set to None if mx_cfdi_use (nullable) is None
+        # and model_fields_set contains the field
+        if self.mx_cfdi_use is None and "mx_cfdi_use" in self.model_fields_set:
+            _dict['mxCfdiUse'] = None
+
         return _dict
 
     @classmethod
@@ -124,13 +200,22 @@ class CreateInvoiceRequest(BaseModel):
             "sequenceId": obj.get("sequenceId"),
             "sourceKind": obj.get("sourceKind"),
             "userId": obj.get("userId"),
+            "currency": obj.get("currency"),
             "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
             "manualRecipient": ManualRecipientRequest.from_dict(obj["manualRecipient"]) if obj.get("manualRecipient") is not None else None,
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
             "includeTransactionIds": obj.get("includeTransactionIds"),
             "simplified": obj.get("simplified") if obj.get("simplified") is not None else False,
-            "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone")
+            "invoiceType": obj.get("invoiceType"),
+            "packageBreakdown": obj.get("packageBreakdown"),
+            "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone"),
+            "note": obj.get("note"),
+            "emails": obj.get("emails"),
+            "subject": obj.get("subject"),
+            "summary": obj.get("summary") if obj.get("summary") is not None else False,
+            "summaryFrequency": obj.get("summaryFrequency"),
+            "mxCfdiUse": obj.get("mxCfdiUse")
         })
         return _obj
 

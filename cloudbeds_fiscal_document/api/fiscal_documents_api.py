@@ -27,6 +27,10 @@ from cloudbeds_fiscal_document.models.create_invoice_request import CreateInvoic
 from cloudbeds_fiscal_document.models.create_receipt_request import CreateReceiptRequest
 from cloudbeds_fiscal_document.models.create_settlement_invoice_request import CreateSettlementInvoiceRequest
 from cloudbeds_fiscal_document.models.create_simple_receipt_request import CreateSimpleReceiptRequest
+from cloudbeds_fiscal_document.models.discrepancies_count import DiscrepanciesCount
+from cloudbeds_fiscal_document.models.email_subject_recipient_type import EmailSubjectRecipientType
+from cloudbeds_fiscal_document.models.email_subject_response import EmailSubjectResponse
+from cloudbeds_fiscal_document.models.field_definition import FieldDefinition
 from cloudbeds_fiscal_document.models.fiscal_document_email_request import FiscalDocumentEmailRequest
 from cloudbeds_fiscal_document.models.fiscal_document_filters import FiscalDocumentFilters
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
@@ -48,6 +52,8 @@ from cloudbeds_fiscal_document.models.rectify_invoice_note_request import Rectif
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from cloudbeds_fiscal_document.models.transaction_status import TransactionStatus
 from cloudbeds_fiscal_document.models.transactions_summary_request import TransactionsSummaryRequest
+from cloudbeds_fiscal_document.models.update_require_attention_request import UpdateRequireAttentionRequest
+from cloudbeds_fiscal_document.models.void_receipt_request import VoidReceiptRequest
 
 from cloudbeds_fiscal_document.api_client import ApiClient, RequestSerialized
 from cloudbeds_fiscal_document.api_response import ApiResponse
@@ -341,6 +347,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -731,6 +738,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentSummaryResponse",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -802,6 +810,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentSummaryResponse",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -873,6 +882,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentSummaryResponse",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -940,6 +950,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -1229,6 +1240,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -1518,6 +1530,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -1813,6 +1826,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -2105,6 +2119,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -2409,6 +2424,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -2704,6 +2720,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -2730,6 +2747,7 @@ class FiscalDocumentsApi:
         self,
         id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        file_id: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2745,12 +2763,14 @@ class FiscalDocumentsApi:
     ) -> bytearray:
         """Download fiscal document
 
-        Initiates the download of the fiscal document file
+        Initiates the download of the fiscal document file. When fileId is provided, downloads that stored file instead (see files on the list response); an absent or blank fileId downloads the primary file.
 
         :param id: Unique ID of the fiscal document to download. (required)
         :type id: str
         :param x_property_id: Property id (required)
         :type x_property_id: int
+        :param file_id:
+        :type file_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2776,6 +2796,7 @@ class FiscalDocumentsApi:
         _param = self._download_fiscal_document_serialize(
             id=id,
             x_property_id=x_property_id,
+            file_id=file_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2784,6 +2805,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -2801,6 +2823,7 @@ class FiscalDocumentsApi:
         self,
         id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        file_id: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2816,12 +2839,14 @@ class FiscalDocumentsApi:
     ) -> ApiResponse[bytearray]:
         """Download fiscal document
 
-        Initiates the download of the fiscal document file
+        Initiates the download of the fiscal document file. When fileId is provided, downloads that stored file instead (see files on the list response); an absent or blank fileId downloads the primary file.
 
         :param id: Unique ID of the fiscal document to download. (required)
         :type id: str
         :param x_property_id: Property id (required)
         :type x_property_id: int
+        :param file_id:
+        :type file_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2847,6 +2872,7 @@ class FiscalDocumentsApi:
         _param = self._download_fiscal_document_serialize(
             id=id,
             x_property_id=x_property_id,
+            file_id=file_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2855,6 +2881,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -2872,6 +2899,7 @@ class FiscalDocumentsApi:
         self,
         id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        file_id: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2887,12 +2915,14 @@ class FiscalDocumentsApi:
     ) -> RESTResponseType:
         """Download fiscal document
 
-        Initiates the download of the fiscal document file
+        Initiates the download of the fiscal document file. When fileId is provided, downloads that stored file instead (see files on the list response); an absent or blank fileId downloads the primary file.
 
         :param id: Unique ID of the fiscal document to download. (required)
         :type id: str
         :param x_property_id: Property id (required)
         :type x_property_id: int
+        :param file_id:
+        :type file_id: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2918,6 +2948,7 @@ class FiscalDocumentsApi:
         _param = self._download_fiscal_document_serialize(
             id=id,
             x_property_id=x_property_id,
+            file_id=file_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2926,6 +2957,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -2938,6 +2970,7 @@ class FiscalDocumentsApi:
         self,
         id,
         x_property_id,
+        file_id,
         _request_auth,
         _content_type,
         _headers,
@@ -2962,6 +2995,10 @@ class FiscalDocumentsApi:
         if id is not None:
             _path_params['id'] = id
         # process the query parameters
+        if file_id is not None:
+            
+            _query_params.append(('fileId', file_id))
+            
         # process the header parameters
         if x_property_id is not None:
             _header_params['X-Property-ID'] = x_property_id
@@ -2980,6 +3017,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -3284,6 +3322,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -3616,6 +3655,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -3969,6 +4009,302 @@ class FiscalDocumentsApi:
 
 
     @validate_call
+    def get_count_fiscal_documents_with_discrepancies(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        source_id: Annotated[StrictStr, Field(description="Source ID to filter documents by.")],
+        source_kind: Annotated[SourceKind, Field(description="Source kind to filter documents by.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DiscrepanciesCount:
+        """Get count of fiscal documents with discrepancies
+
+        Returns the count of fiscal documents that have discrepancies, filtered by sourceId and sourceKind.
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param source_id: Source ID to filter documents by. (required)
+        :type source_id: str
+        :param source_kind: Source kind to filter documents by. (required)
+        :type source_kind: SourceKind
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_count_fiscal_documents_with_discrepancies_serialize(
+            x_property_id=x_property_id,
+            source_id=source_id,
+            source_kind=source_kind,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "DiscrepanciesCount",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def get_count_fiscal_documents_with_discrepancies_with_http_info(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        source_id: Annotated[StrictStr, Field(description="Source ID to filter documents by.")],
+        source_kind: Annotated[SourceKind, Field(description="Source kind to filter documents by.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DiscrepanciesCount]:
+        """Get count of fiscal documents with discrepancies
+
+        Returns the count of fiscal documents that have discrepancies, filtered by sourceId and sourceKind.
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param source_id: Source ID to filter documents by. (required)
+        :type source_id: str
+        :param source_kind: Source kind to filter documents by. (required)
+        :type source_kind: SourceKind
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_count_fiscal_documents_with_discrepancies_serialize(
+            x_property_id=x_property_id,
+            source_id=source_id,
+            source_kind=source_kind,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "DiscrepanciesCount",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def get_count_fiscal_documents_with_discrepancies_without_preload_content(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        source_id: Annotated[StrictStr, Field(description="Source ID to filter documents by.")],
+        source_kind: Annotated[SourceKind, Field(description="Source kind to filter documents by.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get count of fiscal documents with discrepancies
+
+        Returns the count of fiscal documents that have discrepancies, filtered by sourceId and sourceKind.
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param source_id: Source ID to filter documents by. (required)
+        :type source_id: str
+        :param source_kind: Source kind to filter documents by. (required)
+        :type source_kind: SourceKind
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_count_fiscal_documents_with_discrepancies_serialize(
+            x_property_id=x_property_id,
+            source_id=source_id,
+            source_kind=source_kind,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "DiscrepanciesCount",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_count_fiscal_documents_with_discrepancies_serialize(
+        self,
+        x_property_id,
+        source_id,
+        source_kind,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if source_id is not None:
+            
+            _query_params.append(('sourceId', source_id))
+            
+        if source_kind is not None:
+            
+            _query_params.append(('sourceKind', source_kind.value))
+            
+        # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-ID'] = x_property_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2', 
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/fiscal-document/v1/fiscal-documents/discrepancies/summary',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
     def get_credit_note_preview(
         self,
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
@@ -4236,6 +4572,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -4525,12 +4862,680 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
         return self.api_client.param_serialize(
             method='POST',
             resource_path='/fiscal-document/v1/fiscal-documents/invoice/preview',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def get_document_rules(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        document_kind: FiscalDocumentKind,
+        accept_language: Annotated[Optional[StrictStr], Field(description="Desired language of exported PDF")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[FieldDefinition]:
+        """Get document creation rules for a given document kind
+
+        Returns field definitions that the UI must collect when creating a document of the given kind. Uses the same FieldDefinition schema as action.fields on document actions. 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param document_kind: (required)
+        :type document_kind: FiscalDocumentKind
+        :param accept_language: Desired language of exported PDF
+        :type accept_language: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_document_rules_serialize(
+            x_property_id=x_property_id,
+            document_kind=document_kind,
+            accept_language=accept_language,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[FieldDefinition]",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def get_document_rules_with_http_info(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        document_kind: FiscalDocumentKind,
+        accept_language: Annotated[Optional[StrictStr], Field(description="Desired language of exported PDF")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[FieldDefinition]]:
+        """Get document creation rules for a given document kind
+
+        Returns field definitions that the UI must collect when creating a document of the given kind. Uses the same FieldDefinition schema as action.fields on document actions. 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param document_kind: (required)
+        :type document_kind: FiscalDocumentKind
+        :param accept_language: Desired language of exported PDF
+        :type accept_language: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_document_rules_serialize(
+            x_property_id=x_property_id,
+            document_kind=document_kind,
+            accept_language=accept_language,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[FieldDefinition]",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def get_document_rules_without_preload_content(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        document_kind: FiscalDocumentKind,
+        accept_language: Annotated[Optional[StrictStr], Field(description="Desired language of exported PDF")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get document creation rules for a given document kind
+
+        Returns field definitions that the UI must collect when creating a document of the given kind. Uses the same FieldDefinition schema as action.fields on document actions. 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param document_kind: (required)
+        :type document_kind: FiscalDocumentKind
+        :param accept_language: Desired language of exported PDF
+        :type accept_language: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_document_rules_serialize(
+            x_property_id=x_property_id,
+            document_kind=document_kind,
+            accept_language=accept_language,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[FieldDefinition]",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_document_rules_serialize(
+        self,
+        x_property_id,
+        document_kind,
+        accept_language,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if document_kind is not None:
+            
+            _query_params.append(('documentKind', document_kind.value))
+            
+        # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-ID'] = x_property_id
+        if accept_language is not None:
+            _header_params['Accept-Language'] = accept_language
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2', 
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/fiscal-document/v1/fiscal-documents/rules',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def get_fiscal_document_email_subject(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        document_id: Annotated[Optional[Annotated[str, Field(min_length=1, strict=True)]], Field(description="An existing fiscal document. When given, the document parameters below are ignored - everything is derived from the document itself. ")] = None,
+        document_kind: Annotated[Optional[FiscalDocumentKind], Field(description="Required when documentId is absent.")] = None,
+        source_kind: Annotated[Optional[SourceKind], Field(description="Required when documentId is absent.")] = None,
+        source_id: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Required when documentId is absent.")] = None,
+        recipient_type: Annotated[Optional[EmailSubjectRecipientType], Field(description="The chosen Bill-to recipient. Supply together with recipientId. Optional because a manually entered recipient has no stored record to point at; the subject then resolves in the property's language rather than the guest's. ")] = None,
+        recipient_id: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="The chosen Bill-to recipient. Supply together with recipientType.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> EmailSubjectResponse:
+        """Resolve the email subject for a fiscal document
+
+        Returns the subject the service would put on the email, so a UI can seed an editable Subject field from the same resolution the send uses rather than reimplementing it.  Give `documentId` for a document that exists. The answer is then exactly what a send with no subject override produces: a token the service holds no value for resolves to an empty string, as it would in the delivered email.  Give `documentKind`, `sourceKind` and `sourceId` instead for a document about to be created. A token whose value is only assigned at creation is then returned **verbatim**, for example `Grand Hotel - Invoice #[Invoice Number]`. Send the string back, edited or not, on the create request and the service fills those tokens in once the values exist.  Supplying the chosen recipient lets the guest's language win when the property has \"use guest language\" enabled; without it the subject falls back to the property's language. 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param document_id: An existing fiscal document. When given, the document parameters below are ignored - everything is derived from the document itself. 
+        :type document_id: str
+        :param document_kind: Required when documentId is absent.
+        :type document_kind: FiscalDocumentKind
+        :param source_kind: Required when documentId is absent.
+        :type source_kind: SourceKind
+        :param source_id: Required when documentId is absent.
+        :type source_id: int
+        :param recipient_type: The chosen Bill-to recipient. Supply together with recipientId. Optional because a manually entered recipient has no stored record to point at; the subject then resolves in the property's language rather than the guest's. 
+        :type recipient_type: EmailSubjectRecipientType
+        :param recipient_id: The chosen Bill-to recipient. Supply together with recipientType.
+        :type recipient_id: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_fiscal_document_email_subject_serialize(
+            x_property_id=x_property_id,
+            document_id=document_id,
+            document_kind=document_kind,
+            source_kind=source_kind,
+            source_id=source_id,
+            recipient_type=recipient_type,
+            recipient_id=recipient_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "EmailSubjectResponse",
+            '400': "ApiError",
+            '403': "ApiError",
+            '404': "ApiError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def get_fiscal_document_email_subject_with_http_info(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        document_id: Annotated[Optional[Annotated[str, Field(min_length=1, strict=True)]], Field(description="An existing fiscal document. When given, the document parameters below are ignored - everything is derived from the document itself. ")] = None,
+        document_kind: Annotated[Optional[FiscalDocumentKind], Field(description="Required when documentId is absent.")] = None,
+        source_kind: Annotated[Optional[SourceKind], Field(description="Required when documentId is absent.")] = None,
+        source_id: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Required when documentId is absent.")] = None,
+        recipient_type: Annotated[Optional[EmailSubjectRecipientType], Field(description="The chosen Bill-to recipient. Supply together with recipientId. Optional because a manually entered recipient has no stored record to point at; the subject then resolves in the property's language rather than the guest's. ")] = None,
+        recipient_id: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="The chosen Bill-to recipient. Supply together with recipientType.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[EmailSubjectResponse]:
+        """Resolve the email subject for a fiscal document
+
+        Returns the subject the service would put on the email, so a UI can seed an editable Subject field from the same resolution the send uses rather than reimplementing it.  Give `documentId` for a document that exists. The answer is then exactly what a send with no subject override produces: a token the service holds no value for resolves to an empty string, as it would in the delivered email.  Give `documentKind`, `sourceKind` and `sourceId` instead for a document about to be created. A token whose value is only assigned at creation is then returned **verbatim**, for example `Grand Hotel - Invoice #[Invoice Number]`. Send the string back, edited or not, on the create request and the service fills those tokens in once the values exist.  Supplying the chosen recipient lets the guest's language win when the property has \"use guest language\" enabled; without it the subject falls back to the property's language. 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param document_id: An existing fiscal document. When given, the document parameters below are ignored - everything is derived from the document itself. 
+        :type document_id: str
+        :param document_kind: Required when documentId is absent.
+        :type document_kind: FiscalDocumentKind
+        :param source_kind: Required when documentId is absent.
+        :type source_kind: SourceKind
+        :param source_id: Required when documentId is absent.
+        :type source_id: int
+        :param recipient_type: The chosen Bill-to recipient. Supply together with recipientId. Optional because a manually entered recipient has no stored record to point at; the subject then resolves in the property's language rather than the guest's. 
+        :type recipient_type: EmailSubjectRecipientType
+        :param recipient_id: The chosen Bill-to recipient. Supply together with recipientType.
+        :type recipient_id: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_fiscal_document_email_subject_serialize(
+            x_property_id=x_property_id,
+            document_id=document_id,
+            document_kind=document_kind,
+            source_kind=source_kind,
+            source_id=source_id,
+            recipient_type=recipient_type,
+            recipient_id=recipient_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "EmailSubjectResponse",
+            '400': "ApiError",
+            '403': "ApiError",
+            '404': "ApiError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def get_fiscal_document_email_subject_without_preload_content(
+        self,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        document_id: Annotated[Optional[Annotated[str, Field(min_length=1, strict=True)]], Field(description="An existing fiscal document. When given, the document parameters below are ignored - everything is derived from the document itself. ")] = None,
+        document_kind: Annotated[Optional[FiscalDocumentKind], Field(description="Required when documentId is absent.")] = None,
+        source_kind: Annotated[Optional[SourceKind], Field(description="Required when documentId is absent.")] = None,
+        source_id: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Required when documentId is absent.")] = None,
+        recipient_type: Annotated[Optional[EmailSubjectRecipientType], Field(description="The chosen Bill-to recipient. Supply together with recipientId. Optional because a manually entered recipient has no stored record to point at; the subject then resolves in the property's language rather than the guest's. ")] = None,
+        recipient_id: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="The chosen Bill-to recipient. Supply together with recipientType.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Resolve the email subject for a fiscal document
+
+        Returns the subject the service would put on the email, so a UI can seed an editable Subject field from the same resolution the send uses rather than reimplementing it.  Give `documentId` for a document that exists. The answer is then exactly what a send with no subject override produces: a token the service holds no value for resolves to an empty string, as it would in the delivered email.  Give `documentKind`, `sourceKind` and `sourceId` instead for a document about to be created. A token whose value is only assigned at creation is then returned **verbatim**, for example `Grand Hotel - Invoice #[Invoice Number]`. Send the string back, edited or not, on the create request and the service fills those tokens in once the values exist.  Supplying the chosen recipient lets the guest's language win when the property has \"use guest language\" enabled; without it the subject falls back to the property's language. 
+
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param document_id: An existing fiscal document. When given, the document parameters below are ignored - everything is derived from the document itself. 
+        :type document_id: str
+        :param document_kind: Required when documentId is absent.
+        :type document_kind: FiscalDocumentKind
+        :param source_kind: Required when documentId is absent.
+        :type source_kind: SourceKind
+        :param source_id: Required when documentId is absent.
+        :type source_id: int
+        :param recipient_type: The chosen Bill-to recipient. Supply together with recipientId. Optional because a manually entered recipient has no stored record to point at; the subject then resolves in the property's language rather than the guest's. 
+        :type recipient_type: EmailSubjectRecipientType
+        :param recipient_id: The chosen Bill-to recipient. Supply together with recipientType.
+        :type recipient_id: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_fiscal_document_email_subject_serialize(
+            x_property_id=x_property_id,
+            document_id=document_id,
+            document_kind=document_kind,
+            source_kind=source_kind,
+            source_id=source_id,
+            recipient_type=recipient_type,
+            recipient_id=recipient_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "EmailSubjectResponse",
+            '400': "ApiError",
+            '403': "ApiError",
+            '404': "ApiError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_fiscal_document_email_subject_serialize(
+        self,
+        x_property_id,
+        document_id,
+        document_kind,
+        source_kind,
+        source_id,
+        recipient_type,
+        recipient_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if document_id is not None:
+            
+            _query_params.append(('documentId', document_id))
+            
+        if document_kind is not None:
+            
+            _query_params.append(('documentKind', document_kind.value))
+            
+        if source_kind is not None:
+            
+            _query_params.append(('sourceKind', source_kind.value))
+            
+        if source_id is not None:
+            
+            _query_params.append(('sourceId', source_id))
+            
+        if recipient_type is not None:
+            
+            _query_params.append(('recipientType', recipient_type.value))
+            
+        if recipient_id is not None:
+            
+            _query_params.append(('recipientId', recipient_id))
+            
+        # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-ID'] = x_property_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2', 
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/fiscal-document/v1/fiscal-documents/email-subject',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -4834,6 +5839,9 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
+        nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not in the response, the tax is omitted entirely rather than returned at the top level.")] = None,
+        show_invoiced: Annotated[Optional[StrictBool], Field(description="When true, transactions already included in fiscal documents are not filtered out.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4849,7 +5857,7 @@ class FiscalDocumentsApi:
     ) -> FiscalDocumentTransactionsPaginated:
         """Get available transactions for fiscal documents
 
-        Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded - Each transaction includes a status field (PENDING or POSTED) 
+        Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded unless show_invoiced=true - Each transaction includes a status field (PENDING or POSTED) 
 
         :param x_property_id: Property id (required)
         :type x_property_id: int
@@ -4869,6 +5877,12 @@ class FiscalDocumentsApi:
         :type sort: str
         :param folio_ids: Filter by folio IDs.
         :type folio_ids: List[int]
+        :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not in the response, the tax is omitted entirely rather than returned at the top level.
+        :type nest_taxes: bool
+        :param show_invoiced: When true, transactions already included in fiscal documents are not filtered out.
+        :type show_invoiced: bool
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -4901,6 +5915,9 @@ class FiscalDocumentsApi:
             limit=limit,
             sort=sort,
             folio_ids=folio_ids,
+            nest_taxes=nest_taxes,
+            show_invoiced=show_invoiced,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -4909,6 +5926,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentTransactionsPaginated",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -4933,6 +5951,9 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
+        nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not in the response, the tax is omitted entirely rather than returned at the top level.")] = None,
+        show_invoiced: Annotated[Optional[StrictBool], Field(description="When true, transactions already included in fiscal documents are not filtered out.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4948,7 +5969,7 @@ class FiscalDocumentsApi:
     ) -> ApiResponse[FiscalDocumentTransactionsPaginated]:
         """Get available transactions for fiscal documents
 
-        Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded - Each transaction includes a status field (PENDING or POSTED) 
+        Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded unless show_invoiced=true - Each transaction includes a status field (PENDING or POSTED) 
 
         :param x_property_id: Property id (required)
         :type x_property_id: int
@@ -4968,6 +5989,12 @@ class FiscalDocumentsApi:
         :type sort: str
         :param folio_ids: Filter by folio IDs.
         :type folio_ids: List[int]
+        :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not in the response, the tax is omitted entirely rather than returned at the top level.
+        :type nest_taxes: bool
+        :param show_invoiced: When true, transactions already included in fiscal documents are not filtered out.
+        :type show_invoiced: bool
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5000,6 +6027,9 @@ class FiscalDocumentsApi:
             limit=limit,
             sort=sort,
             folio_ids=folio_ids,
+            nest_taxes=nest_taxes,
+            show_invoiced=show_invoiced,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5008,6 +6038,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentTransactionsPaginated",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -5032,6 +6063,9 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
+        nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not in the response, the tax is omitted entirely rather than returned at the top level.")] = None,
+        show_invoiced: Annotated[Optional[StrictBool], Field(description="When true, transactions already included in fiscal documents are not filtered out.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5047,7 +6081,7 @@ class FiscalDocumentsApi:
     ) -> RESTResponseType:
         """Get available transactions for fiscal documents
 
-        Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded - Each transaction includes a status field (PENDING or POSTED) 
+        Retrieves a paginated list of available transactions for a source based on the document type. - For INVOICE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For CREDIT_NOTE: Returns posted (paid) transactions, and pending transactions when feature.fiscal-document.pending-transactions is enabled - For PRO_FORMA_INVOICE: Returns both pending transactions and posted (paid) payments - Transactions already included in fiscal documents are excluded unless show_invoiced=true - Each transaction includes a status field (PENDING or POSTED) 
 
         :param x_property_id: Property id (required)
         :type x_property_id: int
@@ -5067,6 +6101,12 @@ class FiscalDocumentsApi:
         :type sort: str
         :param folio_ids: Filter by folio IDs.
         :type folio_ids: List[int]
+        :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not in the response, the tax is omitted entirely rather than returned at the top level.
+        :type nest_taxes: bool
+        :param show_invoiced: When true, transactions already included in fiscal documents are not filtered out.
+        :type show_invoiced: bool
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5099,6 +6139,9 @@ class FiscalDocumentsApi:
             limit=limit,
             sort=sort,
             folio_ids=folio_ids,
+            nest_taxes=nest_taxes,
+            show_invoiced=show_invoiced,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5107,6 +6150,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentTransactionsPaginated",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -5126,6 +6170,9 @@ class FiscalDocumentsApi:
         limit,
         sort,
         folio_ids,
+        nest_taxes,
+        show_invoiced,
+        currency,
         _request_auth,
         _content_type,
         _headers,
@@ -5181,6 +6228,18 @@ class FiscalDocumentsApi:
             
             _query_params.append(('folioIds', folio_ids))
             
+        if nest_taxes is not None:
+            
+            _query_params.append(('nestTaxes', nest_taxes))
+            
+        if show_invoiced is not None:
+            
+            _query_params.append(('showInvoiced', show_invoiced))
+            
+        if currency is not None:
+            
+            _query_params.append(('currency', currency))
+            
         # process the header parameters
         if x_property_id is not None:
             _header_params['X-Property-ID'] = x_property_id
@@ -5199,6 +6258,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -5230,6 +6290,8 @@ class FiscalDocumentsApi:
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
+        nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5261,6 +6323,10 @@ class FiscalDocumentsApi:
         :type limit: int
         :param folio_ids: Filter by folio IDs.
         :type folio_ids: List[int]
+        :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.
+        :type nest_taxes: bool
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5291,6 +6357,8 @@ class FiscalDocumentsApi:
             sort=sort,
             limit=limit,
             folio_ids=folio_ids,
+            nest_taxes=nest_taxes,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5321,6 +6389,8 @@ class FiscalDocumentsApi:
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
+        nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5352,6 +6422,10 @@ class FiscalDocumentsApi:
         :type limit: int
         :param folio_ids: Filter by folio IDs.
         :type folio_ids: List[int]
+        :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.
+        :type nest_taxes: bool
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5382,6 +6456,8 @@ class FiscalDocumentsApi:
             sort=sort,
             limit=limit,
             folio_ids=folio_ids,
+            nest_taxes=nest_taxes,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5412,6 +6488,8 @@ class FiscalDocumentsApi:
         sort: Annotated[Optional[StrictStr], Field(description="Supported fields - createdAt, serviceDate, sourceId, transactionDate, internalCode")] = None,
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
+        nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5443,6 +6521,10 @@ class FiscalDocumentsApi:
         :type limit: int
         :param folio_ids: Filter by folio IDs.
         :type folio_ids: List[int]
+        :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.
+        :type nest_taxes: bool
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5473,6 +6555,8 @@ class FiscalDocumentsApi:
             sort=sort,
             limit=limit,
             folio_ids=folio_ids,
+            nest_taxes=nest_taxes,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5498,6 +6582,8 @@ class FiscalDocumentsApi:
         sort,
         limit,
         folio_ids,
+        nest_taxes,
+        currency,
         _request_auth,
         _content_type,
         _headers,
@@ -5543,6 +6629,14 @@ class FiscalDocumentsApi:
             
             _query_params.append(('folioIds', folio_ids))
             
+        if nest_taxes is not None:
+            
+            _query_params.append(('nestTaxes', nest_taxes))
+            
+        if currency is not None:
+            
+            _query_params.append(('currency', currency))
+            
         # process the header parameters
         if x_property_id is not None:
             _header_params['X-Property-ID'] = x_property_id
@@ -5561,6 +6655,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -6324,6 +7419,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -6606,6 +7702,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -6895,6 +7992,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -7184,6 +8282,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -7216,6 +8315,7 @@ class FiscalDocumentsApi:
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
         exclude_transaction_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="transaction IDs to exclude.")] = None,
         include_transaction_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="transaction IDs to include.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. When omitted, totals are returned in the property currency.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -7249,6 +8349,8 @@ class FiscalDocumentsApi:
         :type exclude_transaction_ids: List[int]
         :param include_transaction_ids: transaction IDs to include.
         :type include_transaction_ids: List[int]
+        :param currency: Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. When omitted, totals are returned in the property currency.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -7281,6 +8383,7 @@ class FiscalDocumentsApi:
             folio_ids=folio_ids,
             exclude_transaction_ids=exclude_transaction_ids,
             include_transaction_ids=include_transaction_ids,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -7312,6 +8415,7 @@ class FiscalDocumentsApi:
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
         exclude_transaction_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="transaction IDs to exclude.")] = None,
         include_transaction_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="transaction IDs to include.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. When omitted, totals are returned in the property currency.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -7345,6 +8449,8 @@ class FiscalDocumentsApi:
         :type exclude_transaction_ids: List[int]
         :param include_transaction_ids: transaction IDs to include.
         :type include_transaction_ids: List[int]
+        :param currency: Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. When omitted, totals are returned in the property currency.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -7377,6 +8483,7 @@ class FiscalDocumentsApi:
             folio_ids=folio_ids,
             exclude_transaction_ids=exclude_transaction_ids,
             include_transaction_ids=include_transaction_ids,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -7408,6 +8515,7 @@ class FiscalDocumentsApi:
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
         exclude_transaction_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="transaction IDs to exclude.")] = None,
         include_transaction_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="transaction IDs to include.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. When omitted, totals are returned in the property currency.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -7441,6 +8549,8 @@ class FiscalDocumentsApi:
         :type exclude_transaction_ids: List[int]
         :param include_transaction_ids: transaction IDs to include.
         :type include_transaction_ids: List[int]
+        :param currency: Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. When omitted, totals are returned in the property currency.
+        :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -7473,6 +8583,7 @@ class FiscalDocumentsApi:
             folio_ids=folio_ids,
             exclude_transaction_ids=exclude_transaction_ids,
             include_transaction_ids=include_transaction_ids,
+            currency=currency,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -7499,6 +8610,7 @@ class FiscalDocumentsApi:
         folio_ids,
         exclude_transaction_ids,
         include_transaction_ids,
+        currency,
         _request_auth,
         _content_type,
         _headers,
@@ -7552,6 +8664,10 @@ class FiscalDocumentsApi:
             
             _query_params.append(('includeTransactionIds', include_transaction_ids))
             
+        if currency is not None:
+            
+            _query_params.append(('currency', currency))
+            
         # process the header parameters
         if x_property_id is not None:
             _header_params['X-Property-ID'] = x_property_id
@@ -7570,6 +8686,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -7654,6 +8771,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentTransactionsSummary",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -7729,6 +8847,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentTransactionsSummary",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -7804,6 +8923,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalDocumentTransactionsSummary",
+            '409': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -7863,6 +8983,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -8456,6 +9577,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -8766,6 +9888,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -8788,10 +9911,319 @@ class FiscalDocumentsApi:
 
 
     @validate_call
+    def update_require_attention(
+        self,
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        update_require_attention_request: UpdateRequireAttentionRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> FiscalDocumentSummaryResponse:
+        """Update require attention flag for a fiscal document
+
+        Sets the requireAttention flag on a fiscal document.
+
+        :param id: Unique ID of the fiscal document to download. (required)
+        :type id: str
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param update_require_attention_request: (required)
+        :type update_require_attention_request: UpdateRequireAttentionRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_require_attention_serialize(
+            id=id,
+            x_property_id=x_property_id,
+            update_require_attention_request=update_require_attention_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def update_require_attention_with_http_info(
+        self,
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        update_require_attention_request: UpdateRequireAttentionRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[FiscalDocumentSummaryResponse]:
+        """Update require attention flag for a fiscal document
+
+        Sets the requireAttention flag on a fiscal document.
+
+        :param id: Unique ID of the fiscal document to download. (required)
+        :type id: str
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param update_require_attention_request: (required)
+        :type update_require_attention_request: UpdateRequireAttentionRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_require_attention_serialize(
+            id=id,
+            x_property_id=x_property_id,
+            update_require_attention_request=update_require_attention_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def update_require_attention_without_preload_content(
+        self,
+        id: Annotated[str, Field(min_length=1, strict=True, description="Unique ID of the fiscal document to download.")],
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        update_require_attention_request: UpdateRequireAttentionRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Update require attention flag for a fiscal document
+
+        Sets the requireAttention flag on a fiscal document.
+
+        :param id: Unique ID of the fiscal document to download. (required)
+        :type id: str
+        :param x_property_id: Property id (required)
+        :type x_property_id: int
+        :param update_require_attention_request: (required)
+        :type update_require_attention_request: UpdateRequireAttentionRequest
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_require_attention_serialize(
+            id=id,
+            x_property_id=x_property_id,
+            update_require_attention_request=update_require_attention_request,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalDocumentSummaryResponse",
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _update_require_attention_serialize(
+        self,
+        id,
+        x_property_id,
+        update_require_attention_request,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if id is not None:
+            _path_params['id'] = id
+        # process the query parameters
+        # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-ID'] = x_property_id
+        # process the form parameters
+        # process the body parameter
+        if update_require_attention_request is not None:
+            _body_params = update_require_attention_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2', 
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='PATCH',
+            resource_path='/fiscal-document/v1/fiscal-documents/{id}/require-attention',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
     def void_receipt(
         self,
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         receipt_id: Annotated[StrictInt, Field(description="The ID of the receipt to void")],
+        void_receipt_request: Optional[VoidReceiptRequest] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -8813,6 +10245,8 @@ class FiscalDocumentsApi:
         :type x_property_id: int
         :param receipt_id: The ID of the receipt to void (required)
         :type receipt_id: int
+        :param void_receipt_request:
+        :type void_receipt_request: VoidReceiptRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -8838,6 +10272,7 @@ class FiscalDocumentsApi:
         _param = self._void_receipt_serialize(
             x_property_id=x_property_id,
             receipt_id=receipt_id,
+            void_receipt_request=void_receipt_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -8865,6 +10300,7 @@ class FiscalDocumentsApi:
         self,
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         receipt_id: Annotated[StrictInt, Field(description="The ID of the receipt to void")],
+        void_receipt_request: Optional[VoidReceiptRequest] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -8886,6 +10322,8 @@ class FiscalDocumentsApi:
         :type x_property_id: int
         :param receipt_id: The ID of the receipt to void (required)
         :type receipt_id: int
+        :param void_receipt_request:
+        :type void_receipt_request: VoidReceiptRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -8911,6 +10349,7 @@ class FiscalDocumentsApi:
         _param = self._void_receipt_serialize(
             x_property_id=x_property_id,
             receipt_id=receipt_id,
+            void_receipt_request=void_receipt_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -8938,6 +10377,7 @@ class FiscalDocumentsApi:
         self,
         x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
         receipt_id: Annotated[StrictInt, Field(description="The ID of the receipt to void")],
+        void_receipt_request: Optional[VoidReceiptRequest] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -8959,6 +10399,8 @@ class FiscalDocumentsApi:
         :type x_property_id: int
         :param receipt_id: The ID of the receipt to void (required)
         :type receipt_id: int
+        :param void_receipt_request:
+        :type void_receipt_request: VoidReceiptRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -8984,6 +10426,7 @@ class FiscalDocumentsApi:
         _param = self._void_receipt_serialize(
             x_property_id=x_property_id,
             receipt_id=receipt_id,
+            void_receipt_request=void_receipt_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -9006,6 +10449,7 @@ class FiscalDocumentsApi:
         self,
         x_property_id,
         receipt_id,
+        void_receipt_request,
         _request_auth,
         _content_type,
         _headers,
@@ -9035,6 +10479,8 @@ class FiscalDocumentsApi:
             _header_params['X-Property-ID'] = x_property_id
         # process the form parameters
         # process the body parameter
+        if void_receipt_request is not None:
+            _body_params = void_receipt_request
 
 
         # set the HTTP header `Accept`
@@ -9045,9 +10491,23 @@ class FiscalDocumentsApi:
                 ]
             )
 
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 

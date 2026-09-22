@@ -11,12 +11,14 @@ Name | Type | Description | Notes
 **sequence_id** | **int** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
 **user_id** | **int** |  | [optional] 
+**currency** | **str** | Invoice currency. Selected transactions are converted into this currency at creation using the property&#39;s current exchange rate, which is locked on the issued document, and the converted amounts are fiscalized. Defaults to the property currency when omitted. | [optional] 
 **recipient** | [**RecipientRequest**](RecipientRequest.md) |  | [optional] 
 **manual_recipient** | [**ManualRecipientRequest**](ManualRecipientRequest.md) |  | [optional] 
 **folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
 **exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs | [optional] 
 **include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
 **simplified** | **bool** |  | [optional] [default to False]
+**package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
 **due_date_property_timezone** | **date** |  | [optional] 
 
 ## Example

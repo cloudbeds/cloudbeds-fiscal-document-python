@@ -15,21 +15,15 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictInt, StrictStr
-from typing import List
+from pydantic import Field, StrictBytes, StrictInt, StrictStr
+from typing import Optional, Tuple, Union
 from typing_extensions import Annotated
-from cloudbeds_fiscal_document.models.fiscalization_consent_request import FiscalizationConsentRequest
-from cloudbeds_fiscal_document.models.fiscalization_consent_response import FiscalizationConsentResponse
-from cloudbeds_fiscal_document.models.fiscalization_country_option import FiscalizationCountryOption
-from cloudbeds_fiscal_document.models.fiscalization_provider_info import FiscalizationProviderInfo
-from cloudbeds_fiscal_document.models.fiscalization_registration_request import FiscalizationRegistrationRequest
-from cloudbeds_fiscal_document.models.fiscalization_registration_response import FiscalizationRegistrationResponse
 from cloudbeds_fiscal_document.models.fiscalization_registration_rules_response import FiscalizationRegistrationRulesResponse
-from cloudbeds_fiscal_document.models.fiscalization_registration_status import FiscalizationRegistrationStatus
-from cloudbeds_fiscal_document.models.fiscalization_tax_request import FiscalizationTaxRequest
-from cloudbeds_fiscal_document.models.fiscalization_tax_response import FiscalizationTaxResponse
+from cloudbeds_fiscal_document.models.fiscalization_series_rules_response import FiscalizationSeriesRulesResponse
 from cloudbeds_fiscal_document.models.fiscalization_tax_rules_response import FiscalizationTaxRulesResponse
-from cloudbeds_fiscal_document.models.fiscalization_validation_result import FiscalizationValidationResult
+from cloudbeds_fiscal_document.models.invoice_type_options_response import InvoiceTypeOptionsResponse
+from cloudbeds_fiscal_document.models.item_extension_rules_response import ItemExtensionRulesResponse
+from cloudbeds_fiscal_document.models.payment_method_rules_response import PaymentMethodRulesResponse
 
 from cloudbeds_fiscal_document.api_client import ApiClient, RequestSerialized
 from cloudbeds_fiscal_document.api_response import ApiResponse
@@ -50,10 +44,13 @@ class FiscalizationApi:
 
 
     @validate_call
-    def create_fiscalization_consent(
+    def get_connection_report(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        fiscalization_consent_request: FiscalizationConsentRequest,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        connection_id: StrictInt,
+        report_id: Annotated[StrictStr, Field(description="Report identifier (e.g., \"saft\")")],
+        year: Annotated[int, Field(strict=True, ge=2020, description="Report year")],
+        period: Annotated[Optional[Annotated[int, Field(le=12, strict=True, ge=0)]], Field(description="Report period (1-12 for monthly, 0 for full year)")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -66,15 +63,21 @@ class FiscalizationApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationConsentResponse:
-        """Record user consent for fiscalization
+    ) -> bytearray:
+        """Generate and download a report for one connection
 
-        Records that the user has consented to sharing data with the fiscalization provider
+        Generates a country-specific report (e.g. SAF-T for Portugal) from the registration behind the given connection. Reports are a per-connection section, so a property holding more than one connection gets a distinct report per connection.
 
-        :param x_property_id: Property ID (required)
+        :param x_property_id: Property id (required)
         :type x_property_id: int
-        :param fiscalization_consent_request: (required)
-        :type fiscalization_consent_request: FiscalizationConsentRequest
+        :param connection_id: (required)
+        :type connection_id: int
+        :param report_id: Report identifier (e.g., \"saft\") (required)
+        :type report_id: str
+        :param year: Report year (required)
+        :type year: int
+        :param period: Report period (1-12 for monthly, 0 for full year)
+        :type period: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -97,9 +100,12 @@ class FiscalizationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._create_fiscalization_consent_serialize(
+        _param = self._get_connection_report_serialize(
             x_property_id=x_property_id,
-            fiscalization_consent_request=fiscalization_consent_request,
+            connection_id=connection_id,
+            report_id=report_id,
+            year=year,
+            period=period,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -107,8 +113,9 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationConsentResponse",
+            '200': "bytearray",
             '400': None,
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -122,10 +129,13 @@ class FiscalizationApi:
 
 
     @validate_call
-    def create_fiscalization_consent_with_http_info(
+    def get_connection_report_with_http_info(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        fiscalization_consent_request: FiscalizationConsentRequest,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        connection_id: StrictInt,
+        report_id: Annotated[StrictStr, Field(description="Report identifier (e.g., \"saft\")")],
+        year: Annotated[int, Field(strict=True, ge=2020, description="Report year")],
+        period: Annotated[Optional[Annotated[int, Field(le=12, strict=True, ge=0)]], Field(description="Report period (1-12 for monthly, 0 for full year)")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -138,15 +148,21 @@ class FiscalizationApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationConsentResponse]:
-        """Record user consent for fiscalization
+    ) -> ApiResponse[bytearray]:
+        """Generate and download a report for one connection
 
-        Records that the user has consented to sharing data with the fiscalization provider
+        Generates a country-specific report (e.g. SAF-T for Portugal) from the registration behind the given connection. Reports are a per-connection section, so a property holding more than one connection gets a distinct report per connection.
 
-        :param x_property_id: Property ID (required)
+        :param x_property_id: Property id (required)
         :type x_property_id: int
-        :param fiscalization_consent_request: (required)
-        :type fiscalization_consent_request: FiscalizationConsentRequest
+        :param connection_id: (required)
+        :type connection_id: int
+        :param report_id: Report identifier (e.g., \"saft\") (required)
+        :type report_id: str
+        :param year: Report year (required)
+        :type year: int
+        :param period: Report period (1-12 for monthly, 0 for full year)
+        :type period: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -169,9 +185,12 @@ class FiscalizationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._create_fiscalization_consent_serialize(
+        _param = self._get_connection_report_serialize(
             x_property_id=x_property_id,
-            fiscalization_consent_request=fiscalization_consent_request,
+            connection_id=connection_id,
+            report_id=report_id,
+            year=year,
+            period=period,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -179,8 +198,9 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationConsentResponse",
+            '200': "bytearray",
             '400': None,
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -194,10 +214,13 @@ class FiscalizationApi:
 
 
     @validate_call
-    def create_fiscalization_consent_without_preload_content(
+    def get_connection_report_without_preload_content(
         self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        fiscalization_consent_request: FiscalizationConsentRequest,
+        x_property_id: Annotated[int, Field(strict=True, ge=1, description="Property id")],
+        connection_id: StrictInt,
+        report_id: Annotated[StrictStr, Field(description="Report identifier (e.g., \"saft\")")],
+        year: Annotated[int, Field(strict=True, ge=2020, description="Report year")],
+        period: Annotated[Optional[Annotated[int, Field(le=12, strict=True, ge=0)]], Field(description="Report period (1-12 for monthly, 0 for full year)")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -211,14 +234,20 @@ class FiscalizationApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Record user consent for fiscalization
+        """Generate and download a report for one connection
 
-        Records that the user has consented to sharing data with the fiscalization provider
+        Generates a country-specific report (e.g. SAF-T for Portugal) from the registration behind the given connection. Reports are a per-connection section, so a property holding more than one connection gets a distinct report per connection.
 
-        :param x_property_id: Property ID (required)
+        :param x_property_id: Property id (required)
         :type x_property_id: int
-        :param fiscalization_consent_request: (required)
-        :type fiscalization_consent_request: FiscalizationConsentRequest
+        :param connection_id: (required)
+        :type connection_id: int
+        :param report_id: Report identifier (e.g., \"saft\") (required)
+        :type report_id: str
+        :param year: Report year (required)
+        :type year: int
+        :param period: Report period (1-12 for monthly, 0 for full year)
+        :type period: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -241,9 +270,12 @@ class FiscalizationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._create_fiscalization_consent_serialize(
+        _param = self._get_connection_report_serialize(
             x_property_id=x_property_id,
-            fiscalization_consent_request=fiscalization_consent_request,
+            connection_id=connection_id,
+            report_id=report_id,
+            year=year,
+            period=period,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -251,8 +283,9 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationConsentResponse",
+            '200': "bytearray",
             '400': None,
+            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -261,10 +294,13 @@ class FiscalizationApi:
         return response_data.response
 
 
-    def _create_fiscalization_consent_serialize(
+    def _get_connection_report_serialize(
         self,
         x_property_id,
-        fiscalization_consent_request,
+        connection_id,
+        report_id,
+        year,
+        period,
         _request_auth,
         _content_type,
         _headers,
@@ -286,575 +322,19 @@ class FiscalizationApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
+        if connection_id is not None:
+            _path_params['connectionId'] = connection_id
+        if report_id is not None:
+            _path_params['reportId'] = report_id
         # process the query parameters
-        # process the header parameters
-        if x_property_id is not None:
-            _header_params['X-Property-ID'] = x_property_id
-        # process the form parameters
-        # process the body parameter
-        if fiscalization_consent_request is not None:
-            _body_params = fiscalization_consent_request
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'bearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/fiscal-document/v1/fiscalization/consent',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def create_fiscalization_registration(
-        self,
-        x_property_id: StrictInt,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationRegistrationResponse:
-        """Create fiscalization registration
-
-        Creates a new fiscalization registration (supplier/party info) for the given property.
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._create_fiscalization_registration_serialize(
-            x_property_id=x_property_id,
-            fiscalization_registration_request=fiscalization_registration_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': "FiscalizationRegistrationResponse",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def create_fiscalization_registration_with_http_info(
-        self,
-        x_property_id: StrictInt,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationRegistrationResponse]:
-        """Create fiscalization registration
-
-        Creates a new fiscalization registration (supplier/party info) for the given property.
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._create_fiscalization_registration_serialize(
-            x_property_id=x_property_id,
-            fiscalization_registration_request=fiscalization_registration_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': "FiscalizationRegistrationResponse",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def create_fiscalization_registration_without_preload_content(
-        self,
-        x_property_id: StrictInt,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Create fiscalization registration
-
-        Creates a new fiscalization registration (supplier/party info) for the given property.
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._create_fiscalization_registration_serialize(
-            x_property_id=x_property_id,
-            fiscalization_registration_request=fiscalization_registration_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '201': "FiscalizationRegistrationResponse",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _create_fiscalization_registration_serialize(
-        self,
-        x_property_id,
-        fiscalization_registration_request,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if x_property_id is not None:
-            _header_params['X-Property-ID'] = x_property_id
-        # process the form parameters
-        # process the body parameter
-        if fiscalization_registration_request is not None:
-            _body_params = fiscalization_registration_request
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'bearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/fiscal-document/v1/fiscalization/registration',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def get_fiscalization_consent(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationConsentResponse:
-        """Get consent status for a property
-
-        Returns whether the property has consented to fiscalization
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_consent_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationConsentResponse",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def get_fiscalization_consent_with_http_info(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationConsentResponse]:
-        """Get consent status for a property
-
-        Returns whether the property has consented to fiscalization
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_consent_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationConsentResponse",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def get_fiscalization_consent_without_preload_content(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get consent status for a property
-
-        Returns whether the property has consented to fiscalization
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_consent_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationConsentResponse",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _get_fiscalization_consent_serialize(
-        self,
-        x_property_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
+        if year is not None:
+            
+            _query_params.append(('year', year))
+            
+        if period is not None:
+            
+            _query_params.append(('period', period))
+            
         # process the header parameters
         if x_property_id is not None:
             _header_params['X-Property-ID'] = x_property_id
@@ -866,19 +346,20 @@ class FiscalizationApi:
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
                 [
-                    'application/json'
+                    'application/xml'
                 ]
             )
 
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/fiscal-document/v1/fiscalization/consent',
+            resource_path='/fiscal-document/v1/fiscalization/connections/{connectionId}/reports/{reportId}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -895,9 +376,9 @@ class FiscalizationApi:
 
 
     @validate_call
-    def get_fiscalization_provider(
+    def get_fiscalization_item_extension_rules(
         self,
-        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, MX)")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -910,12 +391,12 @@ class FiscalizationApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationProviderInfo:
-        """Get fiscalization provider info for a country
+    ) -> ItemExtensionRulesResponse:
+        """(Deprecated) Get item extension mapping rules for a country
 
-        Returns which provider handles fiscal registration for a given country
+        Returns country-specific item categories and GOBL extension fields for per-item mapping
 
-        :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
+        :param country: ISO 3166-1 alpha-2 country code (e.g., BR, MX) (required)
         :type country: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -938,8 +419,9 @@ class FiscalizationApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/items/rules is deprecated.", DeprecationWarning)
 
-        _param = self._get_fiscalization_provider_serialize(
+        _param = self._get_fiscalization_item_extension_rules_serialize(
             country=country,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -948,7 +430,7 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationProviderInfo",
+            '200': "ItemExtensionRulesResponse",
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -963,9 +445,9 @@ class FiscalizationApi:
 
 
     @validate_call
-    def get_fiscalization_provider_with_http_info(
+    def get_fiscalization_item_extension_rules_with_http_info(
         self,
-        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, MX)")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -978,12 +460,12 @@ class FiscalizationApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationProviderInfo]:
-        """Get fiscalization provider info for a country
+    ) -> ApiResponse[ItemExtensionRulesResponse]:
+        """(Deprecated) Get item extension mapping rules for a country
 
-        Returns which provider handles fiscal registration for a given country
+        Returns country-specific item categories and GOBL extension fields for per-item mapping
 
-        :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
+        :param country: ISO 3166-1 alpha-2 country code (e.g., BR, MX) (required)
         :type country: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -1006,8 +488,9 @@ class FiscalizationApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/items/rules is deprecated.", DeprecationWarning)
 
-        _param = self._get_fiscalization_provider_serialize(
+        _param = self._get_fiscalization_item_extension_rules_serialize(
             country=country,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1016,7 +499,7 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationProviderInfo",
+            '200': "ItemExtensionRulesResponse",
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -1031,9 +514,9 @@ class FiscalizationApi:
 
 
     @validate_call
-    def get_fiscalization_provider_without_preload_content(
+    def get_fiscalization_item_extension_rules_without_preload_content(
         self,
-        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, MX)")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1047,11 +530,11 @@ class FiscalizationApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Get fiscalization provider info for a country
+        """(Deprecated) Get item extension mapping rules for a country
 
-        Returns which provider handles fiscal registration for a given country
+        Returns country-specific item categories and GOBL extension fields for per-item mapping
 
-        :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
+        :param country: ISO 3166-1 alpha-2 country code (e.g., BR, MX) (required)
         :type country: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -1074,8 +557,9 @@ class FiscalizationApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/items/rules is deprecated.", DeprecationWarning)
 
-        _param = self._get_fiscalization_provider_serialize(
+        _param = self._get_fiscalization_item_extension_rules_serialize(
             country=country,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1084,7 +568,7 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationProviderInfo",
+            '200': "ItemExtensionRulesResponse",
             '400': None,
         }
         response_data = self.api_client.call_api(
@@ -1094,7 +578,7 @@ class FiscalizationApi:
         return response_data.response
 
 
-    def _get_fiscalization_provider_serialize(
+    def _get_fiscalization_item_extension_rules_serialize(
         self,
         country,
         _request_auth,
@@ -1139,12 +623,13 @@ class FiscalizationApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/fiscal-document/v1/fiscalization/provider',
+            resource_path='/fiscal-document/v1/fiscalization/items/rules',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1161,9 +646,9 @@ class FiscalizationApi:
 
 
     @validate_call
-    def get_fiscalization_registration(
+    def get_fiscalization_payment_method_rules(
         self,
-        x_property_id: StrictInt,
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., PT, IT, MX)")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1176,540 +661,12 @@ class FiscalizationApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationRegistrationResponse:
-        """Get fiscalization registration for a property
+    ) -> PaymentMethodRulesResponse:
+        """(Deprecated) Get fiscalization payment method rules for a country
 
-        Returns the fiscalization registration (supplier/party info) for the given property.
+        Returns country-specific GOBL payment means keys for configuring payment method mappings
 
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationResponse",
-            '404': "ApiError",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def get_fiscalization_registration_with_http_info(
-        self,
-        x_property_id: StrictInt,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationRegistrationResponse]:
-        """Get fiscalization registration for a property
-
-        Returns the fiscalization registration (supplier/party info) for the given property.
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationResponse",
-            '404': "ApiError",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def get_fiscalization_registration_without_preload_content(
-        self,
-        x_property_id: StrictInt,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get fiscalization registration for a property
-
-        Returns the fiscalization registration (supplier/party info) for the given property.
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationResponse",
-            '404': "ApiError",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _get_fiscalization_registration_serialize(
-        self,
-        x_property_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if x_property_id is not None:
-            _header_params['X-Property-ID'] = x_property_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'bearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/fiscal-document/v1/fiscalization/registration',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def get_fiscalization_registration_countries(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[FiscalizationCountryOption]:
-        """Get available countries for property registration
-
-        Returns list of countries available for fiscalization based on property location
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_countries_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[FiscalizationCountryOption]",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def get_fiscalization_registration_countries_with_http_info(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[FiscalizationCountryOption]]:
-        """Get available countries for property registration
-
-        Returns list of countries available for fiscalization based on property location
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_countries_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[FiscalizationCountryOption]",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def get_fiscalization_registration_countries_without_preload_content(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get available countries for property registration
-
-        Returns list of countries available for fiscalization based on property location
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_countries_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[FiscalizationCountryOption]",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _get_fiscalization_registration_countries_serialize(
-        self,
-        x_property_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if x_property_id is not None:
-            _header_params['X-Property-ID'] = x_property_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'bearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/fiscal-document/v1/fiscalization/registration/countries',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def get_fiscalization_registration_rules(
-        self,
-        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationRegistrationRulesResponse:
-        """Get fiscalization registration rules for a country
-
-        Returns country-specific fiscalization rules for building forms
-
-        :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
+        :param country: ISO 3166-1 alpha-2 country code (e.g., PT, IT, MX) (required)
         :type country: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -1732,9 +689,288 @@ class FiscalizationApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/payment-methods/rules is deprecated.", DeprecationWarning)
+
+        _param = self._get_fiscalization_payment_method_rules_serialize(
+            country=country,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "PaymentMethodRulesResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def get_fiscalization_payment_method_rules_with_http_info(
+        self,
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., PT, IT, MX)")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[PaymentMethodRulesResponse]:
+        """(Deprecated) Get fiscalization payment method rules for a country
+
+        Returns country-specific GOBL payment means keys for configuring payment method mappings
+
+        :param country: ISO 3166-1 alpha-2 country code (e.g., PT, IT, MX) (required)
+        :type country: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/payment-methods/rules is deprecated.", DeprecationWarning)
+
+        _param = self._get_fiscalization_payment_method_rules_serialize(
+            country=country,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "PaymentMethodRulesResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def get_fiscalization_payment_method_rules_without_preload_content(
+        self,
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., PT, IT, MX)")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """(Deprecated) Get fiscalization payment method rules for a country
+
+        Returns country-specific GOBL payment means keys for configuring payment method mappings
+
+        :param country: ISO 3166-1 alpha-2 country code (e.g., PT, IT, MX) (required)
+        :type country: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/payment-methods/rules is deprecated.", DeprecationWarning)
+
+        _param = self._get_fiscalization_payment_method_rules_serialize(
+            country=country,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "PaymentMethodRulesResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_fiscalization_payment_method_rules_serialize(
+        self,
+        country,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if country is not None:
+            
+            _query_params.append(('country', country))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2', 
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/fiscal-document/v1/fiscalization/payment-methods/rules',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def get_fiscalization_registration_rules(
+        self,
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        section_key: Annotated[Optional[StrictStr], Field(description="Filter `fields` to the given section. Default `registration`. Pass the key of any section declared in the rules (e.g. `customization.invoicing`) to fetch its fields only.")] = None,
+        channel_code: Annotated[Optional[StrictStr], Field(description="Fiscal channel to scope the rules and requirements to (e.g. `SR` for Italy Smart Receipts / Documento Commerciale). Omit for the default channel (e.g. Italy SDI / FatturaPA); unknown channels fall back to the country's default rules.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> FiscalizationRegistrationRulesResponse:
+        """(Deprecated) Get fiscalization rules for a country
+
+        Returns country-specific fiscalization rules for building forms. The response always includes the full section list; `fields` is filtered by the optional `sectionKey` query param (default `registration`).
+
+        :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
+        :type country: str
+        :param section_key: Filter `fields` to the given section. Default `registration`. Pass the key of any section declared in the rules (e.g. `customization.invoicing`) to fetch its fields only.
+        :type section_key: str
+        :param channel_code: Fiscal channel to scope the rules and requirements to (e.g. `SR` for Italy Smart Receipts / Documento Commerciale). Omit for the default channel (e.g. Italy SDI / FatturaPA); unknown channels fall back to the country's default rules.
+        :type channel_code: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/registration/rules is deprecated.", DeprecationWarning)
 
         _param = self._get_fiscalization_registration_rules_serialize(
             country=country,
+            section_key=section_key,
+            channel_code=channel_code,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1761,6 +997,8 @@ class FiscalizationApi:
     def get_fiscalization_registration_rules_with_http_info(
         self,
         country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        section_key: Annotated[Optional[StrictStr], Field(description="Filter `fields` to the given section. Default `registration`. Pass the key of any section declared in the rules (e.g. `customization.invoicing`) to fetch its fields only.")] = None,
+        channel_code: Annotated[Optional[StrictStr], Field(description="Fiscal channel to scope the rules and requirements to (e.g. `SR` for Italy Smart Receipts / Documento Commerciale). Omit for the default channel (e.g. Italy SDI / FatturaPA); unknown channels fall back to the country's default rules.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1774,12 +1012,16 @@ class FiscalizationApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[FiscalizationRegistrationRulesResponse]:
-        """Get fiscalization registration rules for a country
+        """(Deprecated) Get fiscalization rules for a country
 
-        Returns country-specific fiscalization rules for building forms
+        Returns country-specific fiscalization rules for building forms. The response always includes the full section list; `fields` is filtered by the optional `sectionKey` query param (default `registration`).
 
         :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
         :type country: str
+        :param section_key: Filter `fields` to the given section. Default `registration`. Pass the key of any section declared in the rules (e.g. `customization.invoicing`) to fetch its fields only.
+        :type section_key: str
+        :param channel_code: Fiscal channel to scope the rules and requirements to (e.g. `SR` for Italy Smart Receipts / Documento Commerciale). Omit for the default channel (e.g. Italy SDI / FatturaPA); unknown channels fall back to the country's default rules.
+        :type channel_code: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1801,9 +1043,12 @@ class FiscalizationApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/registration/rules is deprecated.", DeprecationWarning)
 
         _param = self._get_fiscalization_registration_rules_serialize(
             country=country,
+            section_key=section_key,
+            channel_code=channel_code,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1830,6 +1075,8 @@ class FiscalizationApi:
     def get_fiscalization_registration_rules_without_preload_content(
         self,
         country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        section_key: Annotated[Optional[StrictStr], Field(description="Filter `fields` to the given section. Default `registration`. Pass the key of any section declared in the rules (e.g. `customization.invoicing`) to fetch its fields only.")] = None,
+        channel_code: Annotated[Optional[StrictStr], Field(description="Fiscal channel to scope the rules and requirements to (e.g. `SR` for Italy Smart Receipts / Documento Commerciale). Omit for the default channel (e.g. Italy SDI / FatturaPA); unknown channels fall back to the country's default rules.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1843,12 +1090,170 @@ class FiscalizationApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Get fiscalization registration rules for a country
+        """(Deprecated) Get fiscalization rules for a country
 
-        Returns country-specific fiscalization rules for building forms
+        Returns country-specific fiscalization rules for building forms. The response always includes the full section list; `fields` is filtered by the optional `sectionKey` query param (default `registration`).
 
         :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
         :type country: str
+        :param section_key: Filter `fields` to the given section. Default `registration`. Pass the key of any section declared in the rules (e.g. `customization.invoicing`) to fetch its fields only.
+        :type section_key: str
+        :param channel_code: Fiscal channel to scope the rules and requirements to (e.g. `SR` for Italy Smart Receipts / Documento Commerciale). Omit for the default channel (e.g. Italy SDI / FatturaPA); unknown channels fall back to the country's default rules.
+        :type channel_code: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/registration/rules is deprecated.", DeprecationWarning)
+
+        _param = self._get_fiscalization_registration_rules_serialize(
+            country=country,
+            section_key=section_key,
+            channel_code=channel_code,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalizationRegistrationRulesResponse",
+            '400': None,
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_fiscalization_registration_rules_serialize(
+        self,
+        country,
+        section_key,
+        channel_code,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if country is not None:
+            
+            _query_params.append(('country', country))
+            
+        if section_key is not None:
+            
+            _query_params.append(('sectionKey', section_key))
+            
+        if channel_code is not None:
+            
+            _query_params.append(('channelCode', channel_code))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2', 
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/fiscal-document/v1/fiscalization/registration/rules',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def get_fiscalization_report(
+        self,
+        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
+        report_id: Annotated[StrictStr, Field(description="Report identifier (e.g., \"saft\")")],
+        year: Annotated[int, Field(strict=True, ge=2020, description="Report year")],
+        period: Annotated[Optional[Annotated[int, Field(le=12, strict=True, ge=0)]], Field(description="Report period (1-12 for monthly, 0 for full year)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> bytearray:
+        """Generate and download a fiscalization report
+
+        Generates a country-specific report (e.g., SAF-T for Portugal) and returns it for download.
+
+        :param x_property_id: Property ID (required)
+        :type x_property_id: int
+        :param report_id: Report identifier (e.g., \"saft\") (required)
+        :type report_id: str
+        :param year: Report year (required)
+        :type year: int
+        :param period: Report period (1-12 for monthly, 0 for full year)
+        :type period: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1871,8 +1276,11 @@ class FiscalizationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_fiscalization_registration_rules_serialize(
-            country=country,
+        _param = self._get_fiscalization_report_serialize(
+            x_property_id=x_property_id,
+            report_id=report_id,
+            year=year,
+            period=period,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1880,7 +1288,169 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationRulesResponse",
+            '200': "bytearray",
+            '400': None,
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def get_fiscalization_report_with_http_info(
+        self,
+        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
+        report_id: Annotated[StrictStr, Field(description="Report identifier (e.g., \"saft\")")],
+        year: Annotated[int, Field(strict=True, ge=2020, description="Report year")],
+        period: Annotated[Optional[Annotated[int, Field(le=12, strict=True, ge=0)]], Field(description="Report period (1-12 for monthly, 0 for full year)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[bytearray]:
+        """Generate and download a fiscalization report
+
+        Generates a country-specific report (e.g., SAF-T for Portugal) and returns it for download.
+
+        :param x_property_id: Property ID (required)
+        :type x_property_id: int
+        :param report_id: Report identifier (e.g., \"saft\") (required)
+        :type report_id: str
+        :param year: Report year (required)
+        :type year: int
+        :param period: Report period (1-12 for monthly, 0 for full year)
+        :type period: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_fiscalization_report_serialize(
+            x_property_id=x_property_id,
+            report_id=report_id,
+            year=year,
+            period=period,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "bytearray",
+            '400': None,
+            '404': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def get_fiscalization_report_without_preload_content(
+        self,
+        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
+        report_id: Annotated[StrictStr, Field(description="Report identifier (e.g., \"saft\")")],
+        year: Annotated[int, Field(strict=True, ge=2020, description="Report year")],
+        period: Annotated[Optional[Annotated[int, Field(le=12, strict=True, ge=0)]], Field(description="Report period (1-12 for monthly, 0 for full year)")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Generate and download a fiscalization report
+
+        Generates a country-specific report (e.g., SAF-T for Portugal) and returns it for download.
+
+        :param x_property_id: Property ID (required)
+        :type x_property_id: int
+        :param report_id: Report identifier (e.g., \"saft\") (required)
+        :type report_id: str
+        :param year: Report year (required)
+        :type year: int
+        :param period: Report period (1-12 for monthly, 0 for full year)
+        :type period: int
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_fiscalization_report_serialize(
+            x_property_id=x_property_id,
+            report_id=report_id,
+            year=year,
+            period=period,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "bytearray",
             '400': None,
             '404': None,
         }
@@ -1891,7 +1461,288 @@ class FiscalizationApi:
         return response_data.response
 
 
-    def _get_fiscalization_registration_rules_serialize(
+    def _get_fiscalization_report_serialize(
+        self,
+        x_property_id,
+        report_id,
+        year,
+        period,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if report_id is not None:
+            _path_params['reportId'] = report_id
+        # process the query parameters
+        if year is not None:
+            
+            _query_params.append(('year', year))
+            
+        if period is not None:
+            
+            _query_params.append(('period', period))
+            
+        # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-Id'] = x_property_id
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/xml'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'oauth2', 
+            'bearerAuth'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/fiscal-document/v1/fiscalization/reports/{reportId}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def get_fiscalization_series_rules(
+        self,
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., PT)")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> FiscalizationSeriesRulesResponse:
+        """(Deprecated) Get available series rules for a country
+
+        Returns the available document type prefixes and series types for the given country. Used by the frontend to build the series registration UI. 
+
+        :param country: ISO 3166-1 alpha-2 country code (e.g., PT) (required)
+        :type country: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/series/rules is deprecated.", DeprecationWarning)
+
+        _param = self._get_fiscalization_series_rules_serialize(
+            country=country,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalizationSeriesRulesResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def get_fiscalization_series_rules_with_http_info(
+        self,
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., PT)")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[FiscalizationSeriesRulesResponse]:
+        """(Deprecated) Get available series rules for a country
+
+        Returns the available document type prefixes and series types for the given country. Used by the frontend to build the series registration UI. 
+
+        :param country: ISO 3166-1 alpha-2 country code (e.g., PT) (required)
+        :type country: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/series/rules is deprecated.", DeprecationWarning)
+
+        _param = self._get_fiscalization_series_rules_serialize(
+            country=country,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalizationSeriesRulesResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def get_fiscalization_series_rules_without_preload_content(
+        self,
+        country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., PT)")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """(Deprecated) Get available series rules for a country
+
+        Returns the available document type prefixes and series types for the given country. Used by the frontend to build the series registration UI. 
+
+        :param country: ISO 3166-1 alpha-2 country code (e.g., PT) (required)
+        :type country: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/series/rules is deprecated.", DeprecationWarning)
+
+        _param = self._get_fiscalization_series_rules_serialize(
+            country=country,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "FiscalizationSeriesRulesResponse",
+            '400': None,
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_fiscalization_series_rules_serialize(
         self,
         country,
         _request_auth,
@@ -1936,540 +1787,13 @@ class FiscalizationApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/fiscal-document/v1/fiscalization/registration/rules',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def get_fiscalization_registration_status(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationRegistrationStatus:
-        """Get registration status for a property
-
-        Returns the registration status with government systems for each configured country
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_status_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationStatus",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def get_fiscalization_registration_status_with_http_info(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationRegistrationStatus]:
-        """Get registration status for a property
-
-        Returns the registration status with government systems for each configured country
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_status_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationStatus",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def get_fiscalization_registration_status_without_preload_content(
-        self,
-        x_property_id: Annotated[StrictInt, Field(description="Property ID")],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get registration status for a property
-
-        Returns the registration status with government systems for each configured country
-
-        :param x_property_id: Property ID (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_registration_status_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationStatus",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _get_fiscalization_registration_status_serialize(
-        self,
-        x_property_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if x_property_id is not None:
-            _header_params['X-Property-ID'] = x_property_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'bearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/fiscal-document/v1/fiscalization/registration/status',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def get_fiscalization_tax(
-        self,
-        x_property_id: StrictInt,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationTaxResponse:
-        """Get fiscalization tax for a property
-
-        Returns the fiscalization tax configuration for the given property
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_tax_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationTaxResponse",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def get_fiscalization_tax_with_http_info(
-        self,
-        x_property_id: StrictInt,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationTaxResponse]:
-        """Get fiscalization tax for a property
-
-        Returns the fiscalization tax configuration for the given property
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_tax_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationTaxResponse",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def get_fiscalization_tax_without_preload_content(
-        self,
-        x_property_id: StrictInt,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Get fiscalization tax for a property
-
-        Returns the fiscalization tax configuration for the given property
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._get_fiscalization_tax_serialize(
-            x_property_id=x_property_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationTaxResponse",
-            '404': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _get_fiscalization_tax_serialize(
-        self,
-        x_property_id,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if x_property_id is not None:
-            _header_params['X-Property-ID'] = x_property_id
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'bearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/fiscal-document/v1/fiscalization/tax',
+            resource_path='/fiscal-document/v1/fiscalization/series/rules',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -2489,6 +1813,7 @@ class FiscalizationApi:
     def get_fiscalization_tax_rules(
         self,
         country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        x_property_id: StrictInt,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2502,12 +1827,14 @@ class FiscalizationApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> FiscalizationTaxRulesResponse:
-        """Get fiscalization tax rules for a country
+        """(Deprecated) Get fiscalization tax rules for a country
 
         Returns country-specific tax categories and rates for configuring tax mappings
 
         :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
         :type country: str
+        :param x_property_id: (required)
+        :type x_property_id: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2529,9 +1856,11 @@ class FiscalizationApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/tax/rules is deprecated.", DeprecationWarning)
 
         _param = self._get_fiscalization_tax_rules_serialize(
             country=country,
+            x_property_id=x_property_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2557,6 +1886,7 @@ class FiscalizationApi:
     def get_fiscalization_tax_rules_with_http_info(
         self,
         country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        x_property_id: StrictInt,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2570,12 +1900,14 @@ class FiscalizationApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[FiscalizationTaxRulesResponse]:
-        """Get fiscalization tax rules for a country
+        """(Deprecated) Get fiscalization tax rules for a country
 
         Returns country-specific tax categories and rates for configuring tax mappings
 
         :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
         :type country: str
+        :param x_property_id: (required)
+        :type x_property_id: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2597,9 +1929,11 @@ class FiscalizationApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/tax/rules is deprecated.", DeprecationWarning)
 
         _param = self._get_fiscalization_tax_rules_serialize(
             country=country,
+            x_property_id=x_property_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2625,6 +1959,7 @@ class FiscalizationApi:
     def get_fiscalization_tax_rules_without_preload_content(
         self,
         country: Annotated[StrictStr, Field(description="ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX)")],
+        x_property_id: StrictInt,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2638,12 +1973,14 @@ class FiscalizationApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Get fiscalization tax rules for a country
+        """(Deprecated) Get fiscalization tax rules for a country
 
         Returns country-specific tax categories and rates for configuring tax mappings
 
         :param country: ISO 3166-1 alpha-2 country code (e.g., BR, PL, MX) (required)
         :type country: str
+        :param x_property_id: (required)
+        :type x_property_id: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2665,9 +2002,11 @@ class FiscalizationApi:
         :type _host_index: int, optional
         :return: Returns the result object.
         """ # noqa: E501
+        warnings.warn("GET /fiscal-document/v1/fiscalization/tax/rules is deprecated.", DeprecationWarning)
 
         _param = self._get_fiscalization_tax_rules_serialize(
             country=country,
+            x_property_id=x_property_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2688,6 +2027,7 @@ class FiscalizationApi:
     def _get_fiscalization_tax_rules_serialize(
         self,
         country,
+        x_property_id,
         _request_auth,
         _content_type,
         _headers,
@@ -2715,6 +2055,8 @@ class FiscalizationApi:
             _query_params.append(('country', country))
             
         # process the header parameters
+        if x_property_id is not None:
+            _header_params['X-Property-ID'] = x_property_id
         # process the form parameters
         # process the body parameter
 
@@ -2730,6 +2072,7 @@ class FiscalizationApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -2752,10 +2095,9 @@ class FiscalizationApi:
 
 
     @validate_call
-    def update_fiscalization_registration(
+    def get_invoice_type_options(
         self,
         x_property_id: StrictInt,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2768,15 +2110,13 @@ class FiscalizationApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationRegistrationResponse:
-        """Update fiscalization registration
+    ) -> InvoiceTypeOptionsResponse:
+        """Get invoicing options for a property
 
-        Updates the fiscalization registration for the given property.
+        Invoice classes a property may choose between when issuing an invoice; empty when there is no choice to surface. Country-specific (currently Argentina Responsable Inscripto); the country is resolved from the property's fiscalization config.
 
         :param x_property_id: (required)
         :type x_property_id: int
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2799,9 +2139,8 @@ class FiscalizationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_fiscalization_registration_serialize(
+        _param = self._get_invoice_type_options_serialize(
             x_property_id=x_property_id,
-            fiscalization_registration_request=fiscalization_registration_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2809,7 +2148,7 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationResponse",
+            '200': "InvoiceTypeOptionsResponse",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -2823,10 +2162,9 @@ class FiscalizationApi:
 
 
     @validate_call
-    def update_fiscalization_registration_with_http_info(
+    def get_invoice_type_options_with_http_info(
         self,
         x_property_id: StrictInt,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2839,15 +2177,13 @@ class FiscalizationApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationRegistrationResponse]:
-        """Update fiscalization registration
+    ) -> ApiResponse[InvoiceTypeOptionsResponse]:
+        """Get invoicing options for a property
 
-        Updates the fiscalization registration for the given property.
+        Invoice classes a property may choose between when issuing an invoice; empty when there is no choice to surface. Country-specific (currently Argentina Responsable Inscripto); the country is resolved from the property's fiscalization config.
 
         :param x_property_id: (required)
         :type x_property_id: int
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2870,9 +2206,8 @@ class FiscalizationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_fiscalization_registration_serialize(
+        _param = self._get_invoice_type_options_serialize(
             x_property_id=x_property_id,
-            fiscalization_registration_request=fiscalization_registration_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2880,7 +2215,7 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationResponse",
+            '200': "InvoiceTypeOptionsResponse",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -2894,10 +2229,9 @@ class FiscalizationApi:
 
 
     @validate_call
-    def update_fiscalization_registration_without_preload_content(
+    def get_invoice_type_options_without_preload_content(
         self,
         x_property_id: StrictInt,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2911,14 +2245,12 @@ class FiscalizationApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Update fiscalization registration
+        """Get invoicing options for a property
 
-        Updates the fiscalization registration for the given property.
+        Invoice classes a property may choose between when issuing an invoice; empty when there is no choice to surface. Country-specific (currently Argentina Responsable Inscripto); the country is resolved from the property's fiscalization config.
 
         :param x_property_id: (required)
         :type x_property_id: int
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2941,9 +2273,8 @@ class FiscalizationApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_fiscalization_registration_serialize(
+        _param = self._get_invoice_type_options_serialize(
             x_property_id=x_property_id,
-            fiscalization_registration_request=fiscalization_registration_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2951,7 +2282,7 @@ class FiscalizationApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationRegistrationResponse",
+            '200': "InvoiceTypeOptionsResponse",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -2960,10 +2291,9 @@ class FiscalizationApi:
         return response_data.response
 
 
-    def _update_fiscalization_registration_serialize(
+    def _get_invoice_type_options_serialize(
         self,
         x_property_id,
-        fiscalization_registration_request,
         _request_auth,
         _content_type,
         _headers,
@@ -2991,8 +2321,6 @@ class FiscalizationApi:
             _header_params['X-Property-ID'] = x_property_id
         # process the form parameters
         # process the body parameter
-        if fiscalization_registration_request is not None:
-            _body_params = fiscalization_registration_request
 
 
         # set the HTTP header `Accept`
@@ -3003,594 +2331,16 @@ class FiscalizationApi:
                 ]
             )
 
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
         return self.api_client.param_serialize(
-            method='PUT',
-            resource_path='/fiscal-document/v1/fiscalization/registration',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def update_fiscalization_tax(
-        self,
-        x_property_id: StrictInt,
-        fiscalization_tax_request: FiscalizationTaxRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationTaxResponse:
-        """Update fiscalization tax for a property
-
-        Creates or updates the fiscalization tax configuration for the given property
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param fiscalization_tax_request: (required)
-        :type fiscalization_tax_request: FiscalizationTaxRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._update_fiscalization_tax_serialize(
-            x_property_id=x_property_id,
-            fiscalization_tax_request=fiscalization_tax_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationTaxResponse",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def update_fiscalization_tax_with_http_info(
-        self,
-        x_property_id: StrictInt,
-        fiscalization_tax_request: FiscalizationTaxRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationTaxResponse]:
-        """Update fiscalization tax for a property
-
-        Creates or updates the fiscalization tax configuration for the given property
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param fiscalization_tax_request: (required)
-        :type fiscalization_tax_request: FiscalizationTaxRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._update_fiscalization_tax_serialize(
-            x_property_id=x_property_id,
-            fiscalization_tax_request=fiscalization_tax_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationTaxResponse",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def update_fiscalization_tax_without_preload_content(
-        self,
-        x_property_id: StrictInt,
-        fiscalization_tax_request: FiscalizationTaxRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Update fiscalization tax for a property
-
-        Creates or updates the fiscalization tax configuration for the given property
-
-        :param x_property_id: (required)
-        :type x_property_id: int
-        :param fiscalization_tax_request: (required)
-        :type fiscalization_tax_request: FiscalizationTaxRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._update_fiscalization_tax_serialize(
-            x_property_id=x_property_id,
-            fiscalization_tax_request=fiscalization_tax_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationTaxResponse",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _update_fiscalization_tax_serialize(
-        self,
-        x_property_id,
-        fiscalization_tax_request,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        if x_property_id is not None:
-            _header_params['X-Property-ID'] = x_property_id
-        # process the form parameters
-        # process the body parameter
-        if fiscalization_tax_request is not None:
-            _body_params = fiscalization_tax_request
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'bearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='PUT',
-            resource_path='/fiscal-document/v1/fiscalization/tax',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    def validate_fiscalization_data(
-        self,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> FiscalizationValidationResult:
-        """Validate fiscalization registration data
-
-        Validates party data against country-specific fiscalization rules based on the $regime field
-
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._validate_fiscalization_data_serialize(
-            fiscalization_registration_request=fiscalization_registration_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationValidationResult",
-            '400': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    def validate_fiscalization_data_with_http_info(
-        self,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[FiscalizationValidationResult]:
-        """Validate fiscalization registration data
-
-        Validates party data against country-specific fiscalization rules based on the $regime field
-
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._validate_fiscalization_data_serialize(
-            fiscalization_registration_request=fiscalization_registration_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationValidationResult",
-            '400': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    def validate_fiscalization_data_without_preload_content(
-        self,
-        fiscalization_registration_request: FiscalizationRegistrationRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Validate fiscalization registration data
-
-        Validates party data against country-specific fiscalization rules based on the $regime field
-
-        :param fiscalization_registration_request: (required)
-        :type fiscalization_registration_request: FiscalizationRegistrationRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._validate_fiscalization_data_serialize(
-            fiscalization_registration_request=fiscalization_registration_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "FiscalizationValidationResult",
-            '400': None,
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _validate_fiscalization_data_serialize(
-        self,
-        fiscalization_registration_request,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if fiscalization_registration_request is not None:
-            _body_params = fiscalization_registration_request
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'bearerAuth'
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/fiscal-document/v1/fiscalization/registration/validate',
+            method='GET',
+            resource_path='/fiscal-document/v1/fiscalization/invoice-type-options',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

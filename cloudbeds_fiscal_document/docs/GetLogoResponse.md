@@ -5,7 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**logo_url** | **str** | Presigned URL to access the logo file | [optional] 
+**logo_url** | **str** | Presigned URL to access the (cropped) logo file | [optional] 
+**original_logo_url** | **str** | Presigned URL to access the original uncropped logo; only present when a crop has been applied | [optional] 
 
 ## Example
 

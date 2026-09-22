@@ -28,6 +28,7 @@ Name | Type | Description | Notes
 **amount_to** | **float** | Maximum document amount | [optional] 
 **balance_from** | **float** | Minimum document balance | [optional] 
 **balance_to** | **float** | Maximum document balance | [optional] 
+**has_discrepancies** | **bool** | Filter by whether the document has pending-transaction discrepancies. Reads the persisted &#x60;hasDiscrepancies&#x60; flag, the same one returned in the response payload. | [optional] 
 
 ## Example
 

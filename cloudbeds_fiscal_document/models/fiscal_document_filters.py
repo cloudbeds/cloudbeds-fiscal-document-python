@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import date, datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
@@ -54,7 +54,8 @@ class FiscalDocumentFilters(BaseModel):
     amount_to: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Maximum document amount", alias="amountTo")
     balance_from: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Minimum document balance", alias="balanceFrom")
     balance_to: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Maximum document balance", alias="balanceTo")
-    __properties: ClassVar[List[str]] = ["ids", "sourceIds", "sourceIdentifiers", "sourceKind", "sourceKinds", "numberContains", "statuses", "kinds", "origins", "createdAtFrom", "createdAtTo", "invoiceDateFrom", "invoiceDateTo", "invoiceDatePropertyTimezoneFrom", "invoiceDatePropertyTimezoneTo", "dueDateFrom", "dueDateTo", "dueDatePropertyTimezoneFrom", "dueDatePropertyTimezoneTo", "amountFrom", "amountTo", "balanceFrom", "balanceTo"]
+    has_discrepancies: Optional[StrictBool] = Field(default=None, description="Filter by whether the document has pending-transaction discrepancies. Reads the persisted `hasDiscrepancies` flag, the same one returned in the response payload.", alias="hasDiscrepancies")
+    __properties: ClassVar[List[str]] = ["ids", "sourceIds", "sourceIdentifiers", "sourceKind", "sourceKinds", "numberContains", "statuses", "kinds", "origins", "createdAtFrom", "createdAtTo", "invoiceDateFrom", "invoiceDateTo", "invoiceDatePropertyTimezoneFrom", "invoiceDatePropertyTimezoneTo", "dueDateFrom", "dueDateTo", "dueDatePropertyTimezoneFrom", "dueDatePropertyTimezoneTo", "amountFrom", "amountTo", "balanceFrom", "balanceTo", "hasDiscrepancies"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -129,7 +130,8 @@ class FiscalDocumentFilters(BaseModel):
             "amountFrom": obj.get("amountFrom"),
             "amountTo": obj.get("amountTo"),
             "balanceFrom": obj.get("balanceFrom"),
-            "balanceTo": obj.get("balanceTo")
+            "balanceTo": obj.get("balanceTo"),
+            "hasDiscrepancies": obj.get("hasDiscrepancies")
         })
         return _obj
 

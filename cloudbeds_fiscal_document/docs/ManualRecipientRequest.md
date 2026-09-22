@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **tax_id** | **str** | Tax ID / VAT number | 
 **address** | [**ManualRecipientRequestAddress**](ManualRecipientRequestAddress.md) |  | [optional] 
 **document** | [**ManualRecipientRequestDocument**](ManualRecipientRequestDocument.md) |  | [optional] 
+**country_data** | **Dict[str, str]** | Country-specific recipient fields collected from country requirements (e.g. Argentina \&quot;ar_iva_condition\&quot;), stored on the recipient&#39;s countryData.  | [optional] 
 
 ## Example
 

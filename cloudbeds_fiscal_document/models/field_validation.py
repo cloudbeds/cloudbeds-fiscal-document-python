@@ -31,7 +31,9 @@ class FieldValidation(BaseModel):
     max: Optional[StrictInt] = Field(default=None, description="Maximum length")
     checksum: Optional[StrictBool] = Field(default=None, description="Whether field has checksum validation")
     format: Optional[StrictStr] = Field(default=None, description="Display format mask (e.g., XX.XXX.XXX/XXXX-XX)")
-    __properties: ClassVar[List[str]] = ["pattern", "min", "max", "checksum", "format"]
+    message: Optional[StrictStr] = Field(default=None, description="Human-readable description of the rule, suitable for FE error messages (e.g. \"NFS-e series must be 1-5 alphanumeric characters\").")
+    example: Optional[StrictStr] = Field(default=None, description="A valid example value that can be shown as a placeholder hint (e.g. \"ABC12\" for NFS-e, \"1\" for NFC-e).")
+    __properties: ClassVar[List[str]] = ["pattern", "min", "max", "checksum", "format", "message", "example"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -88,7 +90,9 @@ class FieldValidation(BaseModel):
             "min": obj.get("min"),
             "max": obj.get("max"),
             "checksum": obj.get("checksum"),
-            "format": obj.get("format")
+            "format": obj.get("format"),
+            "message": obj.get("message"),
+            "example": obj.get("example")
         })
         return _obj
 

@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import date
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
@@ -42,7 +42,8 @@ class ProFormaInvoicePreviewRequest(BaseModel):
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
-    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
+    package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
+    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds", "packageBreakdown"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -101,6 +102,11 @@ class ProFormaInvoicePreviewRequest(BaseModel):
         if self.user_id is None and "user_id" in self.model_fields_set:
             _dict['userId'] = None
 
+        # set to None if package_breakdown (nullable) is None
+        # and model_fields_set contains the field
+        if self.package_breakdown is None and "package_breakdown" in self.model_fields_set:
+            _dict['packageBreakdown'] = None
+
         return _dict
 
     @classmethod
@@ -124,7 +130,8 @@ class ProFormaInvoicePreviewRequest(BaseModel):
             "invoiceDate": obj.get("invoiceDate"),
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
-            "includeTransactionIds": obj.get("includeTransactionIds")
+            "includeTransactionIds": obj.get("includeTransactionIds"),
+            "packageBreakdown": obj.get("packageBreakdown")
         })
         return _obj
 

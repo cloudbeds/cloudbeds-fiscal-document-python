@@ -6,6 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **type** | [**DocumentAction**](DocumentAction.md) |  | [optional] 
+**fields** | [**List[FieldDefinition]**](FieldDefinition.md) | Action-specific input fields the UI must collect before submitting. Uses the same FieldDefinition schema as /fiscalization/rules.  | [optional] 
 
 ## Example
 

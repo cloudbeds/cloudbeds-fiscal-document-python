@@ -321,6 +321,7 @@ class ExportApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -625,6 +626,7 @@ class ExportApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 

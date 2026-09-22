@@ -14,13 +14,14 @@
 """  # noqa: E501
 
 
-__version__ = "1.23.0"
+__version__ = "1.24.0"
 
 # Define package exports
 __all__ = [
     "ConfigsApi",
     "ExportApi",
     "FeaturesApi",
+    "FiscalConnectionConfigApi",
     "FiscalDocumentsApi",
     "FiscalizationApi",
     "ApiResponse",
@@ -33,6 +34,7 @@ __all__ = [
     "ApiAttributeError",
     "ApiException",
     "Action",
+    "ActivateSeriesRequest",
     "AllocateReceiptPaymentRequest",
     "AllocationsData",
     "AllocationsSummary",
@@ -42,22 +44,50 @@ __all__ = [
     "ConfigsResponse",
     "ConfigsUpdateRequest",
     "CountryInfo",
+    "CountryRequirements",
     "CreateCreditNoteRequest",
     "CreateInvoiceRequest",
     "CreateReceiptRequest",
     "CreateSettlementInvoiceRequest",
     "CreateSimpleReceiptRequest",
     "CreationMethod",
+    "CropLogoRequest",
+    "CropParam",
     "DateDisplay",
+    "DiscrepanciesCount",
     "DocumentAction",
     "DocumentTriggerEvent",
+    "EmailSubjectRecipientType",
+    "EmailSubjectResponse",
     "ExportFormat",
+    "FieldCondition",
     "FieldData",
     "FieldDefinition",
     "FieldDefinitionDefault",
     "FieldValidation",
+    "FiscalChannel",
+    "FiscalChannelFlow",
+    "FiscalChannelListResponse",
+    "FiscalConnection",
+    "FiscalConnectionActivateRequest",
+    "FiscalConnectionAuthorization",
+    "FiscalConnectionChannel",
+    "FiscalConnectionCreateRequest",
+    "FiscalConnectionDraft",
+    "FiscalConnectionDraftListResponse",
+    "FiscalConnectionDraftUpsertRequest",
+    "FiscalConnectionListResponse",
+    "FiscalConnectionOnboarding",
+    "FiscalConnectionOnboardingCurrent",
+    "FiscalConnectionOnboardingFailed",
+    "FiscalConnectionProvider",
+    "FiscalConnectionTestResult",
+    "FiscalConnectionUpdateRequest",
+    "FiscalCountryListResponse",
     "FiscalDocumentDetailedResponse",
     "FiscalDocumentEmailRequest",
+    "FiscalDocumentFile",
+    "FiscalDocumentFileCategory",
     "FiscalDocumentFilters",
     "FiscalDocumentKind",
     "FiscalDocumentPaginated",
@@ -71,27 +101,40 @@ __all__ = [
     "FiscalDocumentTransactionsPaginated",
     "FiscalDocumentTransactionsSummary",
     "FiscalDocumentTransactionsSummaryTaxesInner",
+    "FiscalProvider",
+    "FiscalProviderChannel",
+    "FiscalProviderListResponse",
+    "FiscalProviderOnboardingStep",
+    "FiscalProviderSection",
+    "FiscalProviderVisual",
+    "FiscalRoutingListResponse",
+    "FiscalRoutingRule",
+    "FiscalRoutingRulePatch",
     "FiscalizationAddress",
-    "FiscalizationConsentRequest",
-    "FiscalizationConsentResponse",
-    "FiscalizationCountryOption",
+    "FiscalizationCertificateStatus",
     "FiscalizationEmail",
-    "FiscalizationListResponse",
+    "FiscalizationFlowStatus",
+    "FiscalizationFlowStatusChannel",
+    "FiscalizationFlowStatusConnection",
+    "FiscalizationFlowStatusFlow",
+    "FiscalizationOperatorRulesResponse",
     "FiscalizationPhone",
-    "FiscalizationProviderInfo",
     "FiscalizationRegistrationRequest",
     "FiscalizationRegistrationResponse",
     "FiscalizationRegistrationRulesResponse",
     "FiscalizationRegistrationStatus",
-    "FiscalizationTaxRequest",
-    "FiscalizationTaxResponse",
+    "FiscalizationSeriesResponse",
+    "FiscalizationSeriesRulesResponse",
+    "FiscalizationStatusResponse",
     "FiscalizationTaxRulesResponse",
     "FiscalizationValidationResult",
+    "FolioExportSort",
     "GetCreditNotePreviewRequest",
     "GetFolioExportRequest",
     "GetInvoicePreviewRequest",
     "GetLogoResponse",
     "GetRectifyInvoiceNotePreviewRequest",
+    "GovernmentDocumentType",
     "GovernmentIntegration",
     "GovernmentIntegrationQr",
     "GuestDocumentType",
@@ -99,17 +142,31 @@ __all__ = [
     "IntegrationSignature",
     "InvoiceAllocationsResponse",
     "InvoiceTransactionAllocation",
+    "InvoiceTypeOptionsResponse",
+    "InvoicedStatus",
+    "IssuerRegistryResponse",
+    "IssuerRegistryUpdate",
+    "ItemCategoryRequirement",
+    "ItemExtensionField",
+    "ItemExtensionRulesResponse",
     "LatestLinkedDocument",
     "LinkedDocument",
     "ManualRecipientRequest",
     "ManualRecipientRequestAddress",
     "ManualRecipientRequestDocument",
     "Origin",
+    "PaymentMethodRule",
+    "PaymentMethodRulesResponse",
     "PreviewRequest",
     "ProFormaInvoicePreviewRequest",
     "ProFormaInvoiceRequest",
     "ProFormaStatusUpdateRequest",
     "PropertyConfigsResponse",
+    "PropertySettingsResponse",
+    "PropertySettingsUpdateRequest",
+    "ProviderOption",
+    "ProviderOptionsReplaceRequest",
+    "ProviderOptionsReplaceResponse",
     "ReceiptTransactionAllocation",
     "RecipientAddress",
     "RecipientCompany",
@@ -120,21 +177,34 @@ __all__ = [
     "RecipientTaxInfo",
     "RecipientType",
     "RectifyInvoiceNoteRequest",
+    "ReportDefinition",
+    "ReportParam",
+    "Requirement",
+    "RequirementField",
+    "RulesSection",
     "SelectOption",
+    "SeriesDimensionGroup",
+    "SeriesDocumentType",
+    "SeriesMapping",
+    "SeriesOptions",
+    "SeriesType",
     "SingleAllocation",
     "SourceKind",
-    "TaxMapping",
     "TaxRule",
     "TransactionForAllocationResponse",
     "TransactionStatus",
     "TransactionsSummaryRequest",
+    "UpdateRequireAttentionRequest",
+    "UploadConnectionCertificate422Response",
     "ValidationError",
+    "VoidReceiptRequest",
 ]
 
 # import apis into sdk package
 from cloudbeds_fiscal_document.api.configs_api import ConfigsApi as ConfigsApi
 from cloudbeds_fiscal_document.api.export_api import ExportApi as ExportApi
 from cloudbeds_fiscal_document.api.features_api import FeaturesApi as FeaturesApi
+from cloudbeds_fiscal_document.api.fiscal_connection_config_api import FiscalConnectionConfigApi as FiscalConnectionConfigApi
 from cloudbeds_fiscal_document.api.fiscal_documents_api import FiscalDocumentsApi as FiscalDocumentsApi
 from cloudbeds_fiscal_document.api.fiscalization_api import FiscalizationApi as FiscalizationApi
 
@@ -151,6 +221,7 @@ from cloudbeds_fiscal_document.exceptions import ApiException as ApiException
 
 # import models into sdk package
 from cloudbeds_fiscal_document.models.action import Action as Action
+from cloudbeds_fiscal_document.models.activate_series_request import ActivateSeriesRequest as ActivateSeriesRequest
 from cloudbeds_fiscal_document.models.allocate_receipt_payment_request import AllocateReceiptPaymentRequest as AllocateReceiptPaymentRequest
 from cloudbeds_fiscal_document.models.allocations_data import AllocationsData as AllocationsData
 from cloudbeds_fiscal_document.models.allocations_summary import AllocationsSummary as AllocationsSummary
@@ -160,22 +231,50 @@ from cloudbeds_fiscal_document.models.array_item_definition import ArrayItemDefi
 from cloudbeds_fiscal_document.models.configs_response import ConfigsResponse as ConfigsResponse
 from cloudbeds_fiscal_document.models.configs_update_request import ConfigsUpdateRequest as ConfigsUpdateRequest
 from cloudbeds_fiscal_document.models.country_info import CountryInfo as CountryInfo
+from cloudbeds_fiscal_document.models.country_requirements import CountryRequirements as CountryRequirements
 from cloudbeds_fiscal_document.models.create_credit_note_request import CreateCreditNoteRequest as CreateCreditNoteRequest
 from cloudbeds_fiscal_document.models.create_invoice_request import CreateInvoiceRequest as CreateInvoiceRequest
 from cloudbeds_fiscal_document.models.create_receipt_request import CreateReceiptRequest as CreateReceiptRequest
 from cloudbeds_fiscal_document.models.create_settlement_invoice_request import CreateSettlementInvoiceRequest as CreateSettlementInvoiceRequest
 from cloudbeds_fiscal_document.models.create_simple_receipt_request import CreateSimpleReceiptRequest as CreateSimpleReceiptRequest
 from cloudbeds_fiscal_document.models.creation_method import CreationMethod as CreationMethod
+from cloudbeds_fiscal_document.models.crop_logo_request import CropLogoRequest as CropLogoRequest
+from cloudbeds_fiscal_document.models.crop_param import CropParam as CropParam
 from cloudbeds_fiscal_document.models.date_display import DateDisplay as DateDisplay
+from cloudbeds_fiscal_document.models.discrepancies_count import DiscrepanciesCount as DiscrepanciesCount
 from cloudbeds_fiscal_document.models.document_action import DocumentAction as DocumentAction
 from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent as DocumentTriggerEvent
+from cloudbeds_fiscal_document.models.email_subject_recipient_type import EmailSubjectRecipientType as EmailSubjectRecipientType
+from cloudbeds_fiscal_document.models.email_subject_response import EmailSubjectResponse as EmailSubjectResponse
 from cloudbeds_fiscal_document.models.export_format import ExportFormat as ExportFormat
+from cloudbeds_fiscal_document.models.field_condition import FieldCondition as FieldCondition
 from cloudbeds_fiscal_document.models.field_data import FieldData as FieldData
 from cloudbeds_fiscal_document.models.field_definition import FieldDefinition as FieldDefinition
 from cloudbeds_fiscal_document.models.field_definition_default import FieldDefinitionDefault as FieldDefinitionDefault
 from cloudbeds_fiscal_document.models.field_validation import FieldValidation as FieldValidation
+from cloudbeds_fiscal_document.models.fiscal_channel import FiscalChannel as FiscalChannel
+from cloudbeds_fiscal_document.models.fiscal_channel_flow import FiscalChannelFlow as FiscalChannelFlow
+from cloudbeds_fiscal_document.models.fiscal_channel_list_response import FiscalChannelListResponse as FiscalChannelListResponse
+from cloudbeds_fiscal_document.models.fiscal_connection import FiscalConnection as FiscalConnection
+from cloudbeds_fiscal_document.models.fiscal_connection_activate_request import FiscalConnectionActivateRequest as FiscalConnectionActivateRequest
+from cloudbeds_fiscal_document.models.fiscal_connection_authorization import FiscalConnectionAuthorization as FiscalConnectionAuthorization
+from cloudbeds_fiscal_document.models.fiscal_connection_channel import FiscalConnectionChannel as FiscalConnectionChannel
+from cloudbeds_fiscal_document.models.fiscal_connection_create_request import FiscalConnectionCreateRequest as FiscalConnectionCreateRequest
+from cloudbeds_fiscal_document.models.fiscal_connection_draft import FiscalConnectionDraft as FiscalConnectionDraft
+from cloudbeds_fiscal_document.models.fiscal_connection_draft_list_response import FiscalConnectionDraftListResponse as FiscalConnectionDraftListResponse
+from cloudbeds_fiscal_document.models.fiscal_connection_draft_upsert_request import FiscalConnectionDraftUpsertRequest as FiscalConnectionDraftUpsertRequest
+from cloudbeds_fiscal_document.models.fiscal_connection_list_response import FiscalConnectionListResponse as FiscalConnectionListResponse
+from cloudbeds_fiscal_document.models.fiscal_connection_onboarding import FiscalConnectionOnboarding as FiscalConnectionOnboarding
+from cloudbeds_fiscal_document.models.fiscal_connection_onboarding_current import FiscalConnectionOnboardingCurrent as FiscalConnectionOnboardingCurrent
+from cloudbeds_fiscal_document.models.fiscal_connection_onboarding_failed import FiscalConnectionOnboardingFailed as FiscalConnectionOnboardingFailed
+from cloudbeds_fiscal_document.models.fiscal_connection_provider import FiscalConnectionProvider as FiscalConnectionProvider
+from cloudbeds_fiscal_document.models.fiscal_connection_test_result import FiscalConnectionTestResult as FiscalConnectionTestResult
+from cloudbeds_fiscal_document.models.fiscal_connection_update_request import FiscalConnectionUpdateRequest as FiscalConnectionUpdateRequest
+from cloudbeds_fiscal_document.models.fiscal_country_list_response import FiscalCountryListResponse as FiscalCountryListResponse
 from cloudbeds_fiscal_document.models.fiscal_document_detailed_response import FiscalDocumentDetailedResponse as FiscalDocumentDetailedResponse
 from cloudbeds_fiscal_document.models.fiscal_document_email_request import FiscalDocumentEmailRequest as FiscalDocumentEmailRequest
+from cloudbeds_fiscal_document.models.fiscal_document_file import FiscalDocumentFile as FiscalDocumentFile
+from cloudbeds_fiscal_document.models.fiscal_document_file_category import FiscalDocumentFileCategory as FiscalDocumentFileCategory
 from cloudbeds_fiscal_document.models.fiscal_document_filters import FiscalDocumentFilters as FiscalDocumentFilters
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind as FiscalDocumentKind
 from cloudbeds_fiscal_document.models.fiscal_document_paginated import FiscalDocumentPaginated as FiscalDocumentPaginated
@@ -189,27 +288,40 @@ from cloudbeds_fiscal_document.models.fiscal_document_transactions_for_allocatio
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_paginated import FiscalDocumentTransactionsPaginated as FiscalDocumentTransactionsPaginated
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_summary import FiscalDocumentTransactionsSummary as FiscalDocumentTransactionsSummary
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_summary_taxes_inner import FiscalDocumentTransactionsSummaryTaxesInner as FiscalDocumentTransactionsSummaryTaxesInner
+from cloudbeds_fiscal_document.models.fiscal_provider import FiscalProvider as FiscalProvider
+from cloudbeds_fiscal_document.models.fiscal_provider_channel import FiscalProviderChannel as FiscalProviderChannel
+from cloudbeds_fiscal_document.models.fiscal_provider_list_response import FiscalProviderListResponse as FiscalProviderListResponse
+from cloudbeds_fiscal_document.models.fiscal_provider_onboarding_step import FiscalProviderOnboardingStep as FiscalProviderOnboardingStep
+from cloudbeds_fiscal_document.models.fiscal_provider_section import FiscalProviderSection as FiscalProviderSection
+from cloudbeds_fiscal_document.models.fiscal_provider_visual import FiscalProviderVisual as FiscalProviderVisual
+from cloudbeds_fiscal_document.models.fiscal_routing_list_response import FiscalRoutingListResponse as FiscalRoutingListResponse
+from cloudbeds_fiscal_document.models.fiscal_routing_rule import FiscalRoutingRule as FiscalRoutingRule
+from cloudbeds_fiscal_document.models.fiscal_routing_rule_patch import FiscalRoutingRulePatch as FiscalRoutingRulePatch
 from cloudbeds_fiscal_document.models.fiscalization_address import FiscalizationAddress as FiscalizationAddress
-from cloudbeds_fiscal_document.models.fiscalization_consent_request import FiscalizationConsentRequest as FiscalizationConsentRequest
-from cloudbeds_fiscal_document.models.fiscalization_consent_response import FiscalizationConsentResponse as FiscalizationConsentResponse
-from cloudbeds_fiscal_document.models.fiscalization_country_option import FiscalizationCountryOption as FiscalizationCountryOption
+from cloudbeds_fiscal_document.models.fiscalization_certificate_status import FiscalizationCertificateStatus as FiscalizationCertificateStatus
 from cloudbeds_fiscal_document.models.fiscalization_email import FiscalizationEmail as FiscalizationEmail
-from cloudbeds_fiscal_document.models.fiscalization_list_response import FiscalizationListResponse as FiscalizationListResponse
+from cloudbeds_fiscal_document.models.fiscalization_flow_status import FiscalizationFlowStatus as FiscalizationFlowStatus
+from cloudbeds_fiscal_document.models.fiscalization_flow_status_channel import FiscalizationFlowStatusChannel as FiscalizationFlowStatusChannel
+from cloudbeds_fiscal_document.models.fiscalization_flow_status_connection import FiscalizationFlowStatusConnection as FiscalizationFlowStatusConnection
+from cloudbeds_fiscal_document.models.fiscalization_flow_status_flow import FiscalizationFlowStatusFlow as FiscalizationFlowStatusFlow
+from cloudbeds_fiscal_document.models.fiscalization_operator_rules_response import FiscalizationOperatorRulesResponse as FiscalizationOperatorRulesResponse
 from cloudbeds_fiscal_document.models.fiscalization_phone import FiscalizationPhone as FiscalizationPhone
-from cloudbeds_fiscal_document.models.fiscalization_provider_info import FiscalizationProviderInfo as FiscalizationProviderInfo
 from cloudbeds_fiscal_document.models.fiscalization_registration_request import FiscalizationRegistrationRequest as FiscalizationRegistrationRequest
 from cloudbeds_fiscal_document.models.fiscalization_registration_response import FiscalizationRegistrationResponse as FiscalizationRegistrationResponse
 from cloudbeds_fiscal_document.models.fiscalization_registration_rules_response import FiscalizationRegistrationRulesResponse as FiscalizationRegistrationRulesResponse
 from cloudbeds_fiscal_document.models.fiscalization_registration_status import FiscalizationRegistrationStatus as FiscalizationRegistrationStatus
-from cloudbeds_fiscal_document.models.fiscalization_tax_request import FiscalizationTaxRequest as FiscalizationTaxRequest
-from cloudbeds_fiscal_document.models.fiscalization_tax_response import FiscalizationTaxResponse as FiscalizationTaxResponse
+from cloudbeds_fiscal_document.models.fiscalization_series_response import FiscalizationSeriesResponse as FiscalizationSeriesResponse
+from cloudbeds_fiscal_document.models.fiscalization_series_rules_response import FiscalizationSeriesRulesResponse as FiscalizationSeriesRulesResponse
+from cloudbeds_fiscal_document.models.fiscalization_status_response import FiscalizationStatusResponse as FiscalizationStatusResponse
 from cloudbeds_fiscal_document.models.fiscalization_tax_rules_response import FiscalizationTaxRulesResponse as FiscalizationTaxRulesResponse
 from cloudbeds_fiscal_document.models.fiscalization_validation_result import FiscalizationValidationResult as FiscalizationValidationResult
+from cloudbeds_fiscal_document.models.folio_export_sort import FolioExportSort as FolioExportSort
 from cloudbeds_fiscal_document.models.get_credit_note_preview_request import GetCreditNotePreviewRequest as GetCreditNotePreviewRequest
 from cloudbeds_fiscal_document.models.get_folio_export_request import GetFolioExportRequest as GetFolioExportRequest
 from cloudbeds_fiscal_document.models.get_invoice_preview_request import GetInvoicePreviewRequest as GetInvoicePreviewRequest
 from cloudbeds_fiscal_document.models.get_logo_response import GetLogoResponse as GetLogoResponse
 from cloudbeds_fiscal_document.models.get_rectify_invoice_note_preview_request import GetRectifyInvoiceNotePreviewRequest as GetRectifyInvoiceNotePreviewRequest
+from cloudbeds_fiscal_document.models.government_document_type import GovernmentDocumentType as GovernmentDocumentType
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration as GovernmentIntegration
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr as GovernmentIntegrationQr
 from cloudbeds_fiscal_document.models.guest_document_type import GuestDocumentType as GuestDocumentType
@@ -217,17 +329,31 @@ from cloudbeds_fiscal_document.models.guest_gender import GuestGender as GuestGe
 from cloudbeds_fiscal_document.models.integration_signature import IntegrationSignature as IntegrationSignature
 from cloudbeds_fiscal_document.models.invoice_allocations_response import InvoiceAllocationsResponse as InvoiceAllocationsResponse
 from cloudbeds_fiscal_document.models.invoice_transaction_allocation import InvoiceTransactionAllocation as InvoiceTransactionAllocation
+from cloudbeds_fiscal_document.models.invoice_type_options_response import InvoiceTypeOptionsResponse as InvoiceTypeOptionsResponse
+from cloudbeds_fiscal_document.models.invoiced_status import InvoicedStatus as InvoicedStatus
+from cloudbeds_fiscal_document.models.issuer_registry_response import IssuerRegistryResponse as IssuerRegistryResponse
+from cloudbeds_fiscal_document.models.issuer_registry_update import IssuerRegistryUpdate as IssuerRegistryUpdate
+from cloudbeds_fiscal_document.models.item_category_requirement import ItemCategoryRequirement as ItemCategoryRequirement
+from cloudbeds_fiscal_document.models.item_extension_field import ItemExtensionField as ItemExtensionField
+from cloudbeds_fiscal_document.models.item_extension_rules_response import ItemExtensionRulesResponse as ItemExtensionRulesResponse
 from cloudbeds_fiscal_document.models.latest_linked_document import LatestLinkedDocument as LatestLinkedDocument
 from cloudbeds_fiscal_document.models.linked_document import LinkedDocument as LinkedDocument
 from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest as ManualRecipientRequest
 from cloudbeds_fiscal_document.models.manual_recipient_request_address import ManualRecipientRequestAddress as ManualRecipientRequestAddress
 from cloudbeds_fiscal_document.models.manual_recipient_request_document import ManualRecipientRequestDocument as ManualRecipientRequestDocument
 from cloudbeds_fiscal_document.models.origin import Origin as Origin
+from cloudbeds_fiscal_document.models.payment_method_rule import PaymentMethodRule as PaymentMethodRule
+from cloudbeds_fiscal_document.models.payment_method_rules_response import PaymentMethodRulesResponse as PaymentMethodRulesResponse
 from cloudbeds_fiscal_document.models.preview_request import PreviewRequest as PreviewRequest
 from cloudbeds_fiscal_document.models.pro_forma_invoice_preview_request import ProFormaInvoicePreviewRequest as ProFormaInvoicePreviewRequest
 from cloudbeds_fiscal_document.models.pro_forma_invoice_request import ProFormaInvoiceRequest as ProFormaInvoiceRequest
 from cloudbeds_fiscal_document.models.pro_forma_status_update_request import ProFormaStatusUpdateRequest as ProFormaStatusUpdateRequest
 from cloudbeds_fiscal_document.models.property_configs_response import PropertyConfigsResponse as PropertyConfigsResponse
+from cloudbeds_fiscal_document.models.property_settings_response import PropertySettingsResponse as PropertySettingsResponse
+from cloudbeds_fiscal_document.models.property_settings_update_request import PropertySettingsUpdateRequest as PropertySettingsUpdateRequest
+from cloudbeds_fiscal_document.models.provider_option import ProviderOption as ProviderOption
+from cloudbeds_fiscal_document.models.provider_options_replace_request import ProviderOptionsReplaceRequest as ProviderOptionsReplaceRequest
+from cloudbeds_fiscal_document.models.provider_options_replace_response import ProviderOptionsReplaceResponse as ProviderOptionsReplaceResponse
 from cloudbeds_fiscal_document.models.receipt_transaction_allocation import ReceiptTransactionAllocation as ReceiptTransactionAllocation
 from cloudbeds_fiscal_document.models.recipient_address import RecipientAddress as RecipientAddress
 from cloudbeds_fiscal_document.models.recipient_company import RecipientCompany as RecipientCompany
@@ -238,13 +364,25 @@ from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest 
 from cloudbeds_fiscal_document.models.recipient_tax_info import RecipientTaxInfo as RecipientTaxInfo
 from cloudbeds_fiscal_document.models.recipient_type import RecipientType as RecipientType
 from cloudbeds_fiscal_document.models.rectify_invoice_note_request import RectifyInvoiceNoteRequest as RectifyInvoiceNoteRequest
+from cloudbeds_fiscal_document.models.report_definition import ReportDefinition as ReportDefinition
+from cloudbeds_fiscal_document.models.report_param import ReportParam as ReportParam
+from cloudbeds_fiscal_document.models.requirement import Requirement as Requirement
+from cloudbeds_fiscal_document.models.requirement_field import RequirementField as RequirementField
+from cloudbeds_fiscal_document.models.rules_section import RulesSection as RulesSection
 from cloudbeds_fiscal_document.models.select_option import SelectOption as SelectOption
+from cloudbeds_fiscal_document.models.series_dimension_group import SeriesDimensionGroup as SeriesDimensionGroup
+from cloudbeds_fiscal_document.models.series_document_type import SeriesDocumentType as SeriesDocumentType
+from cloudbeds_fiscal_document.models.series_mapping import SeriesMapping as SeriesMapping
+from cloudbeds_fiscal_document.models.series_options import SeriesOptions as SeriesOptions
+from cloudbeds_fiscal_document.models.series_type import SeriesType as SeriesType
 from cloudbeds_fiscal_document.models.single_allocation import SingleAllocation as SingleAllocation
 from cloudbeds_fiscal_document.models.source_kind import SourceKind as SourceKind
-from cloudbeds_fiscal_document.models.tax_mapping import TaxMapping as TaxMapping
 from cloudbeds_fiscal_document.models.tax_rule import TaxRule as TaxRule
 from cloudbeds_fiscal_document.models.transaction_for_allocation_response import TransactionForAllocationResponse as TransactionForAllocationResponse
 from cloudbeds_fiscal_document.models.transaction_status import TransactionStatus as TransactionStatus
 from cloudbeds_fiscal_document.models.transactions_summary_request import TransactionsSummaryRequest as TransactionsSummaryRequest
+from cloudbeds_fiscal_document.models.update_require_attention_request import UpdateRequireAttentionRequest as UpdateRequireAttentionRequest
+from cloudbeds_fiscal_document.models.upload_connection_certificate422_response import UploadConnectionCertificate422Response as UploadConnectionCertificate422Response
 from cloudbeds_fiscal_document.models.validation_error import ValidationError as ValidationError
+from cloudbeds_fiscal_document.models.void_receipt_request import VoidReceiptRequest as VoidReceiptRequest
 

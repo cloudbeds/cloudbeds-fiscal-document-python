@@ -1,6 +1,6 @@
 # cloudbeds_fiscal_document.FeaturesApi
 
-All URIs are relative to *http://localhost:8700*
+All URIs are relative to *https://api.cloudbeds.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -17,6 +17,7 @@ Returns a map of feature flags enabled for the authenticated user in the context
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -24,16 +25,18 @@ import cloudbeds_fiscal_document
 from cloudbeds_fiscal_document.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost:8700
+# Defining the host is optional and defaults to https://api.cloudbeds.com
 # See configuration.py for a list of all supported configuration parameters.
 configuration = cloudbeds_fiscal_document.Configuration(
-    host = "http://localhost:8700"
+    host = "https://api.cloudbeds.com"
 )
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -70,7 +73,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

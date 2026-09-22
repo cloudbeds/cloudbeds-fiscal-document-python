@@ -49,7 +49,8 @@ class TestTransactionsSummaryRequest(unittest.TestCase):
                     ],
                 transaction_id_to_amount = {
                     'key' : 1.337
-                    }
+                    },
+                currency = ''
             )
         else:
             return TransactionsSummaryRequest(

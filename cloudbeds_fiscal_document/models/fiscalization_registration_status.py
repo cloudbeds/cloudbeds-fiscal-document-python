@@ -31,10 +31,11 @@ class FiscalizationRegistrationStatus(BaseModel):
     status: StrictStr = Field(description="Registration status with government systems")
     provider_id: Optional[StrictStr] = Field(default=None, description="Provider-specific registration ID", alias="providerId")
     link_url: Optional[StrictStr] = Field(default=None, description="External link URL when status is AWAITING (e.g., government portal)", alias="linkUrl")
+    registered_at: Optional[datetime] = Field(default=None, description="When the registration last succeeded. For channels with expiring credentials (e.g. Italy Smart Receipts, 90-day AdE re-authentication) the UI uses this to compute the next re-authenticate-by date. ", alias="registeredAt")
     created_at: Optional[datetime] = Field(default=None, description="When registration was created", alias="createdAt")
     updated_at: Optional[datetime] = Field(default=None, description="When status was last updated", alias="updatedAt")
     error: Optional[StrictStr] = Field(default=None, description="Error if registration failed")
-    __properties: ClassVar[List[str]] = ["countryCode", "status", "providerId", "linkUrl", "createdAt", "updatedAt", "error"]
+    __properties: ClassVar[List[str]] = ["countryCode", "status", "providerId", "linkUrl", "registeredAt", "createdAt", "updatedAt", "error"]
 
     @field_validator('status')
     def status_validate_enum(cls, value):
@@ -99,6 +100,7 @@ class FiscalizationRegistrationStatus(BaseModel):
             "status": obj.get("status"),
             "providerId": obj.get("providerId"),
             "linkUrl": obj.get("linkUrl"),
+            "registeredAt": obj.get("registeredAt"),
             "createdAt": obj.get("createdAt"),
             "updatedAt": obj.get("updatedAt"),
             "error": obj.get("error")

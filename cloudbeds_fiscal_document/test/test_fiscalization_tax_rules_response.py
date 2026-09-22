@@ -40,6 +40,8 @@ class TestFiscalizationTaxRulesResponse(unittest.TestCase):
                     name = 'Brazil', ),
                 taxes = [
                     cloudbeds_fiscal_document.models.tax_rule.TaxRule(
+                        value = '', 
+                        label = '', 
                         category = '', 
                         key = '', 
                         rate = '', 
@@ -54,6 +56,8 @@ class TestFiscalizationTaxRulesResponse(unittest.TestCase):
                     name = 'Brazil', ),
                 taxes = [
                     cloudbeds_fiscal_document.models.tax_rule.TaxRule(
+                        value = '', 
+                        label = '', 
                         category = '', 
                         key = '', 
                         rate = '', 

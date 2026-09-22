@@ -35,6 +35,7 @@ class TestFiscalizationRegistrationResponse(unittest.TestCase):
         model = FiscalizationRegistrationResponse()
         if include_optional:
             return FiscalizationRegistrationResponse(
+                partner_id = 56,
                 country = 'IT',
                 name = 'Mario Rossi Albergo',
                 tax_id = '98765432103',
@@ -59,13 +60,14 @@ class TestFiscalizationRegistrationResponse(unittest.TestCase):
                         label = 'Office', )
                     ],
                 identities = {it-fiscal-code=98765432103},
-                extensions = {it-regime-fiscale=RF07, it-sdi-format=FPR12},
+                extensions = {it-regime-fiscale=RF07, it-sdi-format=FPR12, mx_border_zone=true},
                 property_id = 56,
                 status = cloudbeds_fiscal_document.models.fiscalization_registration_status.FiscalizationRegistrationStatus(
                     country_code = '', 
                     status = 'NOT_REGISTERED', 
                     provider_id = '', 
                     link_url = '', 
+                    registered_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     error = '', ),
@@ -84,6 +86,7 @@ class TestFiscalizationRegistrationResponse(unittest.TestCase):
                     status = 'NOT_REGISTERED', 
                     provider_id = '', 
                     link_url = '', 
+                    registered_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     created_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     updated_at = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
                     error = '', ),

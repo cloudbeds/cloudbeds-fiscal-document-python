@@ -40,6 +40,7 @@ class TestFiscalDocumentPatchRequest(unittest.TestCase):
                 government_integration = cloudbeds_fiscal_document.models.government_integration.GovernmentIntegration(
                     number = '', 
                     series = '', 
+                    invoice_type = '', 
                     status = '', 
                     qr = cloudbeds_fiscal_document.models.government_integration_qr.GovernmentIntegration_qr(
                         url = '', 
@@ -61,7 +62,10 @@ class TestFiscalDocumentPatchRequest(unittest.TestCase):
                             raw_metadata = {
                                 'key' : ''
                                 }, )
-                        ], )
+                        ], 
+                    folio_fiscal = '9B3E26F4-1234-4A5B-8C9D-ABCDEF012345', 
+                    sat_qr_code = '', 
+                    connection_id = 56, )
             )
         else:
             return FiscalDocumentPatchRequest(

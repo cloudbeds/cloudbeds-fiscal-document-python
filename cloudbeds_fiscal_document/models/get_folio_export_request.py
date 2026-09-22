@@ -18,9 +18,10 @@ import re  # noqa: F401
 import json
 
 from datetime import date
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from cloudbeds_fiscal_document.models.export_format import ExportFormat
+from cloudbeds_fiscal_document.models.folio_export_sort import FolioExportSort
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
@@ -30,16 +31,22 @@ class GetFolioExportRequest(BaseModel):
     """
     GetFolioExportRequest
     """ # noqa: E501
-    folio_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions from the specified folio IDs. If omitted, all transactions for the source are included.", alias="folioIds")
+    folio_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions from the specified folio IDs. If omitted, all transactions for the source are included. The same filter set is applied to each selected folio.", alias="folioIds")
     source_kind: SourceKind = Field(alias="sourceKind")
     source_id: StrictInt = Field(description="source ID of folio", alias="sourceId")
     credit_debit_view: Optional[StrictBool] = Field(default=None, description="Should transactions be separated into debit/credits", alias="creditDebitView")
     revenue_compact: Optional[StrictBool] = Field(default=None, description="Compact revenue transactions, valid only for sourceKind = RESERVATION", alias="revenueCompact")
-    date_from: Optional[date] = Field(default=None, description="Minimum date filter (inclusive). Required for sourceKind = HOUSE_ACCOUNT, optional for others.", alias="dateFrom")
-    date_to: Optional[date] = Field(default=None, description="Maximum date filter (inclusive), optional.", alias="dateTo")
+    date_from: Optional[date] = Field(default=None, description="Filter transactions with transaction datetime from this point (inclusive). Required for sourceKind = HOUSE_ACCOUNT, optional for others.", alias="dateFrom")
+    date_to: Optional[date] = Field(default=None, description="Filter transactions with transaction datetime up to this point (inclusive).", alias="dateTo")
+    search_query: Optional[StrictStr] = Field(default=None, description="Case-insensitive substring match on transaction description.", alias="searchQuery")
+    description_filters: Optional[List[StrictStr]] = Field(default=None, description="Composite identifiers used to filter by transaction type. Accepts the same values as POST /accounting/v1.0/folios/transactions descriptionFilters: typed item ids (\"product_123\", \"tax_456\", \"addon_789\", \"fee_101\", \"custom_item_202\", \"bookable_resource_303\"), room revenue groups (\"rate\", \"roomRevenue_manual\", \"roomRevenue_cancellation\", \"roomRevenue_no_show\", \"accountsReceivable\"), or payment method codes (\"cash\", \"ebanking\", \"cards_visa\", \"cards_master\", \"pay_pal\"). ", alias="descriptionFilters")
+    posted: Optional[StrictBool] = Field(default=None, description="Tri-state. true = only posted, false = only pending, omit = both.")
+    include_voided: Optional[StrictBool] = Field(default=True, description="Include voided transactions and their full chain. Default true.", alias="includeVoided")
+    sub_source_ids: Optional[List[StrictInt]] = Field(default=None, description="Filter by sub-source IDs (booking room IDs for RESERVATION sources). Mirrors the same filter on POST /accounting/v1.0/folios/transactions. ", alias="subSourceIds")
+    sort: Optional[List[FolioExportSort]] = Field(default=None, description="Optional ordering applied to the rendered transactions. Field names mirror POST /accounting/v1.0/folios/transactions: transaction_datetime, service_date, internal_code, description, notes, quantity, amount. When omitted the renderer uses its template default order. ")
     format: Optional[ExportFormat] = None
     recipient: Optional[RecipientRequest] = None
-    __properties: ClassVar[List[str]] = ["folioIds", "sourceKind", "sourceId", "creditDebitView", "revenueCompact", "dateFrom", "dateTo", "format", "recipient"]
+    __properties: ClassVar[List[str]] = ["folioIds", "sourceKind", "sourceId", "creditDebitView", "revenueCompact", "dateFrom", "dateTo", "searchQuery", "descriptionFilters", "posted", "includeVoided", "subSourceIds", "sort", "format", "recipient"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -80,6 +87,13 @@ class GetFolioExportRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in sort (list)
+        _items = []
+        if self.sort:
+            for _item_sort in self.sort:
+                if _item_sort:
+                    _items.append(_item_sort.to_dict())
+            _dict['sort'] = _items
         # override the default output from pydantic by calling `to_dict()` of recipient
         if self.recipient:
             _dict['recipient'] = self.recipient.to_dict()
@@ -92,6 +106,31 @@ class GetFolioExportRequest(BaseModel):
         # and model_fields_set contains the field
         if self.date_to is None and "date_to" in self.model_fields_set:
             _dict['dateTo'] = None
+
+        # set to None if search_query (nullable) is None
+        # and model_fields_set contains the field
+        if self.search_query is None and "search_query" in self.model_fields_set:
+            _dict['searchQuery'] = None
+
+        # set to None if description_filters (nullable) is None
+        # and model_fields_set contains the field
+        if self.description_filters is None and "description_filters" in self.model_fields_set:
+            _dict['descriptionFilters'] = None
+
+        # set to None if posted (nullable) is None
+        # and model_fields_set contains the field
+        if self.posted is None and "posted" in self.model_fields_set:
+            _dict['posted'] = None
+
+        # set to None if sub_source_ids (nullable) is None
+        # and model_fields_set contains the field
+        if self.sub_source_ids is None and "sub_source_ids" in self.model_fields_set:
+            _dict['subSourceIds'] = None
+
+        # set to None if sort (nullable) is None
+        # and model_fields_set contains the field
+        if self.sort is None and "sort" in self.model_fields_set:
+            _dict['sort'] = None
 
         return _dict
 
@@ -112,6 +151,12 @@ class GetFolioExportRequest(BaseModel):
             "revenueCompact": obj.get("revenueCompact"),
             "dateFrom": obj.get("dateFrom"),
             "dateTo": obj.get("dateTo"),
+            "searchQuery": obj.get("searchQuery"),
+            "descriptionFilters": obj.get("descriptionFilters"),
+            "posted": obj.get("posted"),
+            "includeVoided": obj.get("includeVoided") if obj.get("includeVoided") is not None else True,
+            "subSourceIds": obj.get("subSourceIds"),
+            "sort": [FolioExportSort.from_dict(_item) for _item in obj["sort"]] if obj.get("sort") is not None else None,
             "format": obj.get("format"),
             "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None
         })

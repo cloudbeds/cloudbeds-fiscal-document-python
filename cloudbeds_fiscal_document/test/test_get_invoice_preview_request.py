@@ -45,6 +45,7 @@ class TestGetInvoicePreviewRequest(unittest.TestCase):
                 sequence_id = 1,
                 source_kind = 'GROUP_PROFILE',
                 user_id = 0,
+                currency = '',
                 recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
                     type = 'GUEST', 
                     id = 1, 
@@ -70,7 +71,10 @@ class TestGetInvoicePreviewRequest(unittest.TestCase):
                         number = '', 
                         issue_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
                         issuing_country = '', 
-                        expiration_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), ), ),
+                        expiration_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), ), 
+                    country_data = {
+                        'key' : ''
+                        }, ),
                 folio_ids = [
                     1
                     ],
@@ -81,6 +85,7 @@ class TestGetInvoicePreviewRequest(unittest.TestCase):
                     1
                     ],
                 simplified = True,
+                package_breakdown = True,
                 due_date_property_timezone = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date()
             )
         else:

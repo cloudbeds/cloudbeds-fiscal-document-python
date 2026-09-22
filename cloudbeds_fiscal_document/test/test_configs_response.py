@@ -52,12 +52,18 @@ class TestConfigsResponse(unittest.TestCase):
                     'key' : ''
                     },
                 show_legal_company_name = True,
+                show_property_details = True,
                 include_room_number = True,
                 use_document_number = True,
                 is_compact = True,
                 tax_id1 = '',
                 tax_id2 = '',
                 cpf = '',
+                company_country = '',
+                company_address = '',
+                company_state = '',
+                company_city = '',
+                company_post_code = '',
                 custom_text = {
                     'key' : ''
                     },
@@ -67,7 +73,13 @@ class TestConfigsResponse(unittest.TestCase):
                 update_invoice_on_link_document = True,
                 use_invoice_document_settings = True,
                 use_invoice_title_and_numbering = True,
-                date_display = 'transaction_date'
+                date_display = 'transaction_date',
+                simplified_supported = True,
+                simplified_enabled = True,
+                simplified_threshold_editable = True,
+                simplified_threshold = 1.337,
+                simplified_threshold_max = 1.337,
+                simplified_threshold_action = 'NOTICE_ONLY'
             )
         else:
             return ConfigsResponse(

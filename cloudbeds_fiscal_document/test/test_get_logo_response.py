@@ -35,7 +35,8 @@ class TestGetLogoResponse(unittest.TestCase):
         model = GetLogoResponse()
         if include_optional:
             return GetLogoResponse(
-                logo_url = ''
+                logo_url = '',
+                original_logo_url = ''
             )
         else:
             return GetLogoResponse(

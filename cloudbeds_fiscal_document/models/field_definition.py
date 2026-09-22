@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from cloudbeds_fiscal_document.models.field_condition import FieldCondition
 from cloudbeds_fiscal_document.models.field_data import FieldData
 from cloudbeds_fiscal_document.models.field_definition_default import FieldDefinitionDefault
 from cloudbeds_fiscal_document.models.field_validation import FieldValidation
@@ -34,8 +35,11 @@ class FieldDefinition(BaseModel):
     label: StrictStr = Field(description="Display label for the field")
     type: StrictStr = Field(description="Field input type")
     category: Optional[StrictStr] = Field(default=None, description="Field grouping category")
+    section_key: Optional[StrictStr] = Field(default=None, description="Key of the RulesSection that hosts this field. Defaults to \"registration\" when absent. Nested fields inside arrays/objects inherit the parent's section and should omit this attribute.", alias="sectionKey")
     required: StrictBool = Field(description="Whether field is required")
+    required_if: Optional[FieldCondition] = Field(default=None, alias="requiredIf")
     primary: Optional[StrictBool] = Field(default=False, description="Indicates primary tax ID field")
+    editable: Optional[StrictBool] = Field(default=False, description="Whether this field can still be edited once the property is a connected provider. Defaults to false; the registration email and any country-specific editable fields (e.g. Croatia's Business Premises Code and POS Device Code) are true.")
     validation: Optional[FieldValidation] = None
     data: Optional[FieldData] = None
     options: Optional[List[SelectOption]] = None
@@ -43,12 +47,12 @@ class FieldDefinition(BaseModel):
     properties: Optional[Dict[str, FieldDefinition]] = Field(default=None, description="Object properties for object type fields")
     default: Optional[FieldDefinitionDefault] = None
     description: Optional[StrictStr] = Field(default=None, description="Field description")
-    __properties: ClassVar[List[str]] = ["path", "label", "type", "category", "required", "primary", "validation", "data", "options", "item", "properties", "default", "description"]
+    __properties: ClassVar[List[str]] = ["path", "label", "type", "category", "sectionKey", "required", "requiredIf", "primary", "editable", "validation", "data", "options", "item", "properties", "default", "description"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
         """Validates the enum, returning unknown_default_open_api for unrecognized values"""
-        _allowed_values = set(['text', 'email', 'select', 'boolean', 'array', 'object', 'unknown_default_open_api'])
+        _allowed_values = set(['text', 'email', 'password', 'file', 'select', 'boolean', 'array', 'object', 'unknown_default_open_api'])
         if value not in _allowed_values:
             return 'unknown_default_open_api'
         return value
@@ -103,6 +107,9 @@ class FieldDefinition(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of required_if
+        if self.required_if:
+            _dict['requiredIf'] = self.required_if.to_dict()
         # override the default output from pydantic by calling `to_dict()` of validation
         if self.validation:
             _dict['validation'] = self.validation.to_dict()
@@ -145,8 +152,11 @@ class FieldDefinition(BaseModel):
             "label": obj.get("label"),
             "type": obj.get("type"),
             "category": obj.get("category"),
+            "sectionKey": obj.get("sectionKey"),
             "required": obj.get("required"),
+            "requiredIf": FieldCondition.from_dict(obj["requiredIf"]) if obj.get("requiredIf") is not None else None,
             "primary": obj.get("primary") if obj.get("primary") is not None else False,
+            "editable": obj.get("editable") if obj.get("editable") is not None else False,
             "validation": FieldValidation.from_dict(obj["validation"]) if obj.get("validation") is not None else None,
             "data": FieldData.from_dict(obj["data"]) if obj.get("data") is not None else None,
             "options": [SelectOption.from_dict(_item) for _item in obj["options"]] if obj.get("options") is not None else None,

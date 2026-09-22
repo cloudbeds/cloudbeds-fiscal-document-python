@@ -9,8 +9,11 @@ Name | Type | Description | Notes
 **label** | **str** | Display label for the field | 
 **type** | **str** | Field input type | 
 **category** | **str** | Field grouping category | [optional] 
+**section_key** | **str** | Key of the RulesSection that hosts this field. Defaults to \&quot;registration\&quot; when absent. Nested fields inside arrays/objects inherit the parent&#39;s section and should omit this attribute. | [optional] 
 **required** | **bool** | Whether field is required | 
+**required_if** | [**FieldCondition**](FieldCondition.md) |  | [optional] 
 **primary** | **bool** | Indicates primary tax ID field | [optional] [default to False]
+**editable** | **bool** | Whether this field can still be edited once the property is a connected provider. Defaults to false; the registration email and any country-specific editable fields (e.g. Croatia&#39;s Business Premises Code and POS Device Code) are true. | [optional] [default to False]
 **validation** | [**FieldValidation**](FieldValidation.md) |  | [optional] 
 **data** | [**FieldData**](FieldData.md) |  | [optional] 
 **options** | [**List[SelectOption]**](SelectOption.md) |  | [optional] 

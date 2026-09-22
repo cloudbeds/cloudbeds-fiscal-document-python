@@ -17,8 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.date_display import DateDisplay
 from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
@@ -32,7 +32,7 @@ class ConfigsUpdateRequest(BaseModel):
     trigger_events: Optional[List[DocumentTriggerEvent]] = Field(default=None, alias="triggerEvents")
     show_detailed_tax_fee: StrictBool = Field(alias="showDetailedTaxFee")
     charge_breakdown: StrictBool = Field(alias="chargeBreakdown")
-    allow_pending_transactions: Optional[StrictBool] = Field(default=False, alias="allowPendingTransactions")
+    allow_pending_transactions: Optional[StrictBool] = Field(default=None, alias="allowPendingTransactions")
     use_guest_lang: StrictBool = Field(alias="useGuestLang")
     due_days: Optional[StrictInt] = Field(default=0, alias="dueDays")
     sequence_start_number: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceStartNumber")
@@ -42,7 +42,8 @@ class ConfigsUpdateRequest(BaseModel):
     suffix: Optional[StrictStr] = None
     legal_company_name: Optional[StrictStr] = Field(default=None, alias="legalCompanyName")
     title: Optional[Dict[str, StrictStr]] = None
-    show_legal_company_name: StrictBool = Field(alias="showLegalCompanyName")
+    show_legal_company_name: StrictBool = Field(description="Show the company block (legal company name, tax IDs, registered legal address).", alias="showLegalCompanyName")
+    show_property_details: Optional[StrictBool] = Field(default=None, description="Show the property block. Keep optional (never `required`): when omitted the stored value is preserved (a brand-new config defaults to true). At least one of the two blocks must show. ", alias="showPropertyDetails")
     include_room_number: StrictBool = Field(alias="includeRoomNumber")
     use_document_number: StrictBool = Field(alias="useDocumentNumber")
     update_invoice_on_link_document: Optional[StrictBool] = Field(default=False, alias="updateInvoiceOnLinkDocument")
@@ -53,10 +54,29 @@ class ConfigsUpdateRequest(BaseModel):
     tax_id1: Optional[StrictStr] = Field(default=None, alias="taxId1")
     tax_id2: Optional[StrictStr] = Field(default=None, alias="taxId2")
     cpf: Optional[StrictStr] = None
+    company_country: Optional[StrictStr] = Field(default=None, description="Registered legal address country (ISO code). Part of the company block.", alias="companyCountry")
+    company_address: Optional[StrictStr] = Field(default=None, description="Registered legal address street. Part of the company block.", alias="companyAddress")
+    company_state: Optional[StrictStr] = Field(default=None, description="Registered legal address state/province. Part of the company block.", alias="companyState")
+    company_city: Optional[StrictStr] = Field(default=None, description="Registered legal address city. Part of the company block.", alias="companyCity")
+    company_post_code: Optional[StrictStr] = Field(default=None, description="Registered legal address post code. Part of the company block.", alias="companyPostCode")
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
     logo_id: Optional[StrictInt] = Field(default=None, alias="logoId")
     date_display: Optional[DateDisplay] = Field(default=DateDisplay.TRANSACTION_DATE, alias="dateDisplay")
-    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "allowPendingTransactions", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "separator", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "customText", "logoId", "dateDisplay"]
+    simplified_enabled: Optional[StrictBool] = Field(default=None, description="Whether simplified invoices are enabled for this property (INVOICE kind). When true, simplifiedThreshold (unless the country enforces one) and simplifiedThresholdAction are required. ", alias="simplifiedEnabled")
+    simplified_threshold: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Simplified-invoice monetary threshold in the property currency (INVOICE kind). Optional; required when enabled and the threshold is editable. Silently ignored rather than rejected where the country fixes the threshold itself (simplifiedThresholdEditable false) or does not support simplified invoices at all, because in those cases there is nothing to store. Must not exceed simplifiedThresholdMax when one is returned; a higher value is rejected with 400. ", alias="simplifiedThreshold")
+    simplified_threshold_action: Optional[StrictStr] = Field(default=None, description="Behaviour when a transaction total exceeds the simplified-invoice threshold (INVOICE kind). Optional; required when enabled. ", alias="simplifiedThresholdAction")
+    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "allowPendingTransactions", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "separator", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "showPropertyDetails", "includeRoomNumber", "useDocumentNumber", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "companyCountry", "companyAddress", "companyState", "companyCity", "companyPostCode", "customText", "logoId", "dateDisplay", "simplifiedEnabled", "simplifiedThreshold", "simplifiedThresholdAction"]
+
+    @field_validator('simplified_threshold_action')
+    def simplified_threshold_action_validate_enum(cls, value):
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
+        if value is None:
+            return value
+
+        _allowed_values = set(['NOTICE_ONLY', 'WARN_SWITCH', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -132,6 +152,11 @@ class ConfigsUpdateRequest(BaseModel):
         if self.title is None and "title" in self.model_fields_set:
             _dict['title'] = None
 
+        # set to None if show_property_details (nullable) is None
+        # and model_fields_set contains the field
+        if self.show_property_details is None and "show_property_details" in self.model_fields_set:
+            _dict['showPropertyDetails'] = None
+
         # set to None if tax_id1 (nullable) is None
         # and model_fields_set contains the field
         if self.tax_id1 is None and "tax_id1" in self.model_fields_set:
@@ -147,6 +172,31 @@ class ConfigsUpdateRequest(BaseModel):
         if self.cpf is None and "cpf" in self.model_fields_set:
             _dict['cpf'] = None
 
+        # set to None if company_country (nullable) is None
+        # and model_fields_set contains the field
+        if self.company_country is None and "company_country" in self.model_fields_set:
+            _dict['companyCountry'] = None
+
+        # set to None if company_address (nullable) is None
+        # and model_fields_set contains the field
+        if self.company_address is None and "company_address" in self.model_fields_set:
+            _dict['companyAddress'] = None
+
+        # set to None if company_state (nullable) is None
+        # and model_fields_set contains the field
+        if self.company_state is None and "company_state" in self.model_fields_set:
+            _dict['companyState'] = None
+
+        # set to None if company_city (nullable) is None
+        # and model_fields_set contains the field
+        if self.company_city is None and "company_city" in self.model_fields_set:
+            _dict['companyCity'] = None
+
+        # set to None if company_post_code (nullable) is None
+        # and model_fields_set contains the field
+        if self.company_post_code is None and "company_post_code" in self.model_fields_set:
+            _dict['companyPostCode'] = None
+
         # set to None if custom_text (nullable) is None
         # and model_fields_set contains the field
         if self.custom_text is None and "custom_text" in self.model_fields_set:
@@ -156,6 +206,11 @@ class ConfigsUpdateRequest(BaseModel):
         # and model_fields_set contains the field
         if self.logo_id is None and "logo_id" in self.model_fields_set:
             _dict['logoId'] = None
+
+        # set to None if simplified_enabled (nullable) is None
+        # and model_fields_set contains the field
+        if self.simplified_enabled is None and "simplified_enabled" in self.model_fields_set:
+            _dict['simplifiedEnabled'] = None
 
         return _dict
 
@@ -172,7 +227,7 @@ class ConfigsUpdateRequest(BaseModel):
             "triggerEvents": obj.get("triggerEvents"),
             "showDetailedTaxFee": obj.get("showDetailedTaxFee"),
             "chargeBreakdown": obj.get("chargeBreakdown"),
-            "allowPendingTransactions": obj.get("allowPendingTransactions") if obj.get("allowPendingTransactions") is not None else False,
+            "allowPendingTransactions": obj.get("allowPendingTransactions"),
             "useGuestLang": obj.get("useGuestLang"),
             "dueDays": obj.get("dueDays") if obj.get("dueDays") is not None else 0,
             "sequenceStartNumber": obj.get("sequenceStartNumber"),
@@ -183,6 +238,7 @@ class ConfigsUpdateRequest(BaseModel):
             "legalCompanyName": obj.get("legalCompanyName"),
             "title": obj.get("title"),
             "showLegalCompanyName": obj.get("showLegalCompanyName") if obj.get("showLegalCompanyName") is not None else False,
+            "showPropertyDetails": obj.get("showPropertyDetails"),
             "includeRoomNumber": obj.get("includeRoomNumber") if obj.get("includeRoomNumber") is not None else False,
             "useDocumentNumber": obj.get("useDocumentNumber"),
             "updateInvoiceOnLinkDocument": obj.get("updateInvoiceOnLinkDocument") if obj.get("updateInvoiceOnLinkDocument") is not None else False,
@@ -193,9 +249,17 @@ class ConfigsUpdateRequest(BaseModel):
             "taxId1": obj.get("taxId1"),
             "taxId2": obj.get("taxId2"),
             "cpf": obj.get("cpf"),
+            "companyCountry": obj.get("companyCountry"),
+            "companyAddress": obj.get("companyAddress"),
+            "companyState": obj.get("companyState"),
+            "companyCity": obj.get("companyCity"),
+            "companyPostCode": obj.get("companyPostCode"),
             "customText": obj.get("customText"),
             "logoId": obj.get("logoId"),
-            "dateDisplay": obj.get("dateDisplay") if obj.get("dateDisplay") is not None else DateDisplay.TRANSACTION_DATE
+            "dateDisplay": obj.get("dateDisplay") if obj.get("dateDisplay") is not None else DateDisplay.TRANSACTION_DATE,
+            "simplifiedEnabled": obj.get("simplifiedEnabled"),
+            "simplifiedThreshold": obj.get("simplifiedThreshold"),
+            "simplifiedThresholdAction": obj.get("simplifiedThresholdAction")
         })
         return _obj
 

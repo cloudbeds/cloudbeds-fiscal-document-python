@@ -17,9 +17,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from cloudbeds_fiscal_document.models.document_action import DocumentAction
+from cloudbeds_fiscal_document.models.field_definition import FieldDefinition
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,7 +29,8 @@ class Action(BaseModel):
     Action
     """ # noqa: E501
     type: Optional[DocumentAction] = None
-    __properties: ClassVar[List[str]] = ["type"]
+    fields: Optional[List[FieldDefinition]] = Field(default=None, description="Action-specific input fields the UI must collect before submitting. Uses the same FieldDefinition schema as /fiscalization/rules. ")
+    __properties: ClassVar[List[str]] = ["type", "fields"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -69,6 +71,13 @@ class Action(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in fields (list)
+        _items = []
+        if self.fields:
+            for _item_fields in self.fields:
+                if _item_fields:
+                    _items.append(_item_fields.to_dict())
+            _dict['fields'] = _items
         return _dict
 
     @classmethod
@@ -81,7 +90,8 @@ class Action(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "type": obj.get("type")
+            "type": obj.get("type"),
+            "fields": [FieldDefinition.from_dict(_item) for _item in obj["fields"]] if obj.get("fields") is not None else None
         })
         return _obj
 

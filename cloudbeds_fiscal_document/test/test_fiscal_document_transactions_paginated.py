@@ -49,13 +49,42 @@ class TestFiscalDocumentTransactionsPaginated(unittest.TestCase):
                         amount = 1.337, 
                         available_amount = 1.337, 
                         document_fiscalized_amount = 1.337, 
+                        currency = '', 
+                        display_currency = '', 
+                        display_amount = 1.337, 
+                        display_available_amount = 1.337, 
+                        display_document_fiscalized_amount = 1.337, 
                         folio_id = '', 
                         status = 'PENDING', 
                         paid_amount = 1.337, 
                         allocations = [
                             cloudbeds_fiscal_document.models.fiscal_document_transaction_allocation.FiscalDocumentTransactionAllocation(
                                 receipt_number = '', )
-                            ], )
+                            ], 
+                        taxes = [
+                            cloudbeds_fiscal_document.models.fiscal_document_transaction_response.FiscalDocumentTransactionResponse(
+                                id = '', 
+                                property_id = '', 
+                                source_id = '', 
+                                source_identifier = '', 
+                                transaction_date = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'), 
+                                guest_name = '', 
+                                description = '', 
+                                internal_code = '', 
+                                amount = 1.337, 
+                                available_amount = 1.337, 
+                                document_fiscalized_amount = 1.337, 
+                                currency = '', 
+                                display_currency = '', 
+                                display_amount = 1.337, 
+                                display_available_amount = 1.337, 
+                                display_document_fiscalized_amount = 1.337, 
+                                folio_id = '', 
+                                status = 'PENDING', 
+                                paid_amount = 1.337, 
+                                invoiced_status = 'NOT_INVOICED', )
+                            ], 
+                        invoiced_status = 'NOT_INVOICED', )
                     ],
                 next_page_token = ''
             )

@@ -117,6 +117,13 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """
         pass
 
+    def test_get_count_fiscal_documents_with_discrepancies(self) -> None:
+        """Test case for get_count_fiscal_documents_with_discrepancies
+
+        Get count of fiscal documents with discrepancies
+        """
+        pass
+
     def test_get_credit_note_preview(self) -> None:
         """Test case for get_credit_note_preview
 
@@ -128,6 +135,20 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """Test case for get_document_preview
 
         Get fiscal document preview of the type invoice
+        """
+        pass
+
+    def test_get_document_rules(self) -> None:
+        """Test case for get_document_rules
+
+        Get document creation rules for a given document kind
+        """
+        pass
+
+    def test_get_fiscal_document_email_subject(self) -> None:
+        """Test case for get_fiscal_document_email_subject
+
+        Resolve the email subject for a fiscal document
         """
         pass
 
@@ -219,6 +240,13 @@ class TestFiscalDocumentsApi(unittest.TestCase):
         """Test case for update_pro_forma_invoice_status
 
         Update pro forma invoice status
+        """
+        pass
+
+    def test_update_require_attention(self) -> None:
+        """Test case for update_require_attention
+
+        Update require attention flag for a fiscal document
         """
         pass
 

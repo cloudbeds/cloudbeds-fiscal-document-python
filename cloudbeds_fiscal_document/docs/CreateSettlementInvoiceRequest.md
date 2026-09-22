@@ -15,6 +15,8 @@ Name | Type | Description | Notes
 **manual_recipient** | [**ManualRecipientRequest**](ManualRecipientRequest.md) |  | [optional] 
 **sequence_id** | **int** |  | [optional] 
 **due_date_property_timezone** | **date** |  | [optional] 
+**note** | **str** |  | [optional] 
+**package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
 
 ## Example
 

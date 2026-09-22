@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **status** | **str** | Registration status with government systems | 
 **provider_id** | **str** | Provider-specific registration ID | [optional] 
 **link_url** | **str** | External link URL when status is AWAITING (e.g., government portal) | [optional] 
+**registered_at** | **datetime** | When the registration last succeeded. For channels with expiring credentials (e.g. Italy Smart Receipts, 90-day AdE re-authentication) the UI uses this to compute the next re-authenticate-by date.  | [optional] 
 **created_at** | **datetime** | When registration was created | [optional] 
 **updated_at** | **datetime** | When status was last updated | [optional] 
 **error** | **str** | Error if registration failed | [optional] 

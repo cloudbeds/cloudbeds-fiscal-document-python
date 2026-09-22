@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictBytes, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictBytes, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration_qr import GovernmentIntegrationQr
@@ -31,6 +31,7 @@ class GovernmentIntegration(BaseModel):
     """ # noqa: E501
     number: Optional[StrictStr] = None
     series: Optional[StrictStr] = None
+    invoice_type: Optional[StrictStr] = Field(default=None, description="AR ARCA invoice class (A/B/C/T) for this document, used to disambiguate documents that share series + number across classes. Null for non-AR documents. ", alias="invoiceType")
     status: Optional[StrictStr] = None
     qr: Optional[GovernmentIntegrationQr] = None
     url: Optional[StrictStr] = None
@@ -41,7 +42,10 @@ class GovernmentIntegration(BaseModel):
     pdf_file_base64: Optional[Union[StrictBytes, StrictStr]] = Field(default=None, description="Base64-encoded PDF file content. Only allowed when status is COMPLETED_INTEGRATION.", alias="pdfFileBase64")
     handwritten: Optional[StrictBool] = Field(default=None, description="Indicates this is a handwritten receipt created during POS unavailability.")
     signatures: Optional[List[IntegrationSignature]] = Field(default=None, description="Array of semantic signatures/response data from the government integration.")
-    __properties: ClassVar[List[str]] = ["number", "series", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64", "handwritten", "signatures"]
+    folio_fiscal: Optional[StrictStr] = Field(default=None, description="MX SAT UUID (Folio Fiscal) — populated after CFDI acceptance by Fonoa.", alias="folioFiscal")
+    sat_qr_code: Optional[StrictStr] = Field(default=None, description="MX SAT validation URL used to verify a CFDI at verificacfdi.facturaelectronica.sat.gob.mx.", alias="satQrCode")
+    connection_id: Optional[StrictInt] = Field(default=None, description="The fiscalization connection this document was dispatched through; its provider and channel are those of the connection. Read-only — a partner reporting an outcome cannot change where the document was routed, and uses this to confirm the document was addressed to it before acting on it. ", alias="connectionId")
+    __properties: ClassVar[List[str]] = ["number", "series", "invoiceType", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64", "handwritten", "signatures", "folioFiscal", "satQrCode", "connectionId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -73,8 +77,10 @@ class GovernmentIntegration(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * OpenAPI `readOnly` fields are excluded.
         """
         excluded_fields: Set[str] = set([
+            "connection_id",
         ])
 
         _dict = self.model_dump(
@@ -92,6 +98,11 @@ class GovernmentIntegration(BaseModel):
                 if _item_signatures:
                     _items.append(_item_signatures.to_dict())
             _dict['signatures'] = _items
+        # set to None if invoice_type (nullable) is None
+        # and model_fields_set contains the field
+        if self.invoice_type is None and "invoice_type" in self.model_fields_set:
+            _dict['invoiceType'] = None
+
         return _dict
 
     @classmethod
@@ -106,6 +117,7 @@ class GovernmentIntegration(BaseModel):
         _obj = cls.model_validate({
             "number": obj.get("number"),
             "series": obj.get("series"),
+            "invoiceType": obj.get("invoiceType"),
             "status": obj.get("status"),
             "qr": GovernmentIntegrationQr.from_dict(obj["qr"]) if obj.get("qr") is not None else None,
             "url": obj.get("url"),
@@ -115,7 +127,10 @@ class GovernmentIntegration(BaseModel):
             "cancellationFailedFallbackStatus": obj.get("cancellationFailedFallbackStatus"),
             "pdfFileBase64": obj.get("pdfFileBase64"),
             "handwritten": obj.get("handwritten"),
-            "signatures": [IntegrationSignature.from_dict(_item) for _item in obj["signatures"]] if obj.get("signatures") is not None else None
+            "signatures": [IntegrationSignature.from_dict(_item) for _item in obj["signatures"]] if obj.get("signatures") is not None else None,
+            "folioFiscal": obj.get("folioFiscal"),
+            "satQrCode": obj.get("satQrCode"),
+            "connectionId": obj.get("connectionId")
         })
         return _obj
 

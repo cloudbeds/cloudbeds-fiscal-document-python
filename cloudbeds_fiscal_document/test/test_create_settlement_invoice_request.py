@@ -76,9 +76,14 @@ class TestCreateSettlementInvoiceRequest(unittest.TestCase):
                         number = '', 
                         issue_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), 
                         issuing_country = '', 
-                        expiration_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), ), ),
+                        expiration_date = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(), ), 
+                    country_data = {
+                        'key' : ''
+                        }, ),
                 sequence_id = 1,
-                due_date_property_timezone = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date()
+                due_date_property_timezone = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(),
+                note = '',
+                package_breakdown = True
             )
         else:
             return CreateSettlementInvoiceRequest(

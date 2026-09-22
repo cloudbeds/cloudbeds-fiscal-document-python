@@ -8,12 +8,16 @@ Name | Type | Description | Notes
 **sequence_id** | **int** |  | [optional] 
 **invoice_id** | **int** |  | 
 **reason** | **str** |  | [optional] 
+**note** | **str** |  | [optional] 
 **user_id** | **int** |  | [optional] 
 **method** | [**CreationMethod**](CreationMethod.md) |  | 
 **transaction_ids** | **List[int]** | Include transactions with the specified IDs (deprecated, use &#x60;includeTransactionIds&#x60; instead) | [optional] 
 **folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
 **exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs | [optional] 
 **include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
+**package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
+**emails** | **List[str]** | Optional list of email addresses to send the document to once it is ready | [optional] 
+**subject** | **str** | Optional per-send override for the email subject. When omitted or blank, the subject is resolved from the property&#39;s email template, falling back to the service default. Supports the same [Placeholder] tokens as template subjects. | [optional] 
 
 ## Example
 

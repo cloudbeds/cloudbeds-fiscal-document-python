@@ -112,6 +112,7 @@ AuthSettings = TypedDict(
     "AuthSettings",
     {
         "bearerAuth": BearerFormatAuthSetting,
+        "oauth2": OAuth2AuthSetting,
     },
     total=False,
 )
@@ -192,7 +193,7 @@ class Configuration:
     ) -> None:
         """Constructor
         """
-        self._base_path = "http://localhost:8700" if host is None else host
+        self._base_path = "https://api.cloudbeds.com" if host is None else host
         """Default Base url
         """
         self.server_index = 0 if server_index is None and host is None else server_index
@@ -503,6 +504,13 @@ class Configuration:
                 'key': 'Authorization',
                 'value': 'Bearer ' + self.access_token
             }
+        if self.access_token is not None:
+            auth['oauth2'] = {
+                'type': 'oauth2',
+                'in': 'header',
+                'key': 'Authorization',
+                'value': 'Bearer ' + self.access_token
+            }
         return auth
 
     def to_debug_report(self) -> str:
@@ -514,7 +522,7 @@ class Configuration:
                "OS: {env}\n"\
                "Python Version: {pyversion}\n"\
                "Version of the API: v1\n"\
-               "SDK Package Version: 1.23.0".\
+               "SDK Package Version: 1.24.0".\
                format(env=sys.platform, pyversion=sys.version)
 
     def get_host_settings(self) -> List[HostSetting]:
@@ -524,43 +532,22 @@ class Configuration:
         """
         return [
             {
-                'url': "http://localhost:8700",
-                'description': "No description provided",
-            },
-            {
                 'url': "https://api.{environment}.com",
                 'description': "No description provided",
                 'variables': {
                     'environment': {
                         'description': "No description provided",
-                        'default_value': "cloudbeds-stage",
+                        'default_value': "cloudbeds",
                         'enum_values': [
-                            "cloudbeds-stage",
-                            "cloudbeds"
+                            "cloudbeds",
+                            "cloudbeds-stage"
                         ]
                         }
                     }
             },
             {
-                'url': "https://api.{island}.{environment}.com",
+                'url': "http://localhost:8700",
                 'description': "No description provided",
-                'variables': {
-                    'island': {
-                        'description': "No description provided",
-                        'default_value': "us2",
-                        'enum_values': [
-                            "us2"
-                        ]
-                        },
-                    'environment': {
-                        'description': "No description provided",
-                        'default_value': "cloudbeds-stage",
-                        'enum_values': [
-                            "cloudbeds-stage",
-                            "cloudbeds"
-                        ]
-                        }
-                    }
             }
         ]
 

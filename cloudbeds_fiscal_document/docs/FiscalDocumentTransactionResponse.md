@@ -17,10 +17,17 @@ Name | Type | Description | Notes
 **amount** | **float** |  | [optional] 
 **available_amount** | **float** |  | [optional] 
 **document_fiscalized_amount** | **float** | Will be null if filter is not by document id | [optional] 
+**currency** | **str** | Original transaction currency code. | [optional] 
+**display_currency** | **str** | Currency code used for the display amounts in this response. | [optional] 
+**display_amount** | **float** | Amount converted to the display currency. | [optional] 
+**display_available_amount** | **float** | Available amount converted to the display currency. | [optional] 
+**display_document_fiscalized_amount** | **float** | Document fiscalized amount converted to the display currency. | [optional] 
 **folio_id** | **str** |  | [optional] 
 **status** | **str** | Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions | [optional] 
 **paid_amount** | **float** |  | [optional] 
 **allocations** | [**List[FiscalDocumentTransactionAllocation]**](FiscalDocumentTransactionAllocation.md) |  | [optional] 
+**taxes** | [**List[FiscalDocumentTransactionResponse]**](FiscalDocumentTransactionResponse.md) | Child VAT taxes of this transaction. Populated only when nestTaxes&#x3D;true; taxes not classified as VAT are never nested here and are returned as top-level transactions instead. | [optional] 
+**invoiced_status** | [**InvoicedStatus**](InvoicedStatus.md) |  | [optional] 
 
 ## Example
 

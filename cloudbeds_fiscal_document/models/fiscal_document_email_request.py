@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
@@ -28,7 +28,9 @@ class FiscalDocumentEmailRequest(BaseModel):
     FiscalDocumentEmailRequest
     """ # noqa: E501
     emails: Annotated[List[StrictStr], Field(min_length=1, max_length=10)]
-    __properties: ClassVar[List[str]] = ["emails"]
+    file_ids: Optional[Annotated[List[StrictStr], Field(max_length=10)]] = Field(default=None, description="Ids of additional stored files to attach (from files on the list response), e.g. the Portuguese duplicate. The primary file is always attached; these are added on top. Absent or empty attaches only the primary file. Duplicate ids are ignored.", alias="fileIds")
+    subject: Optional[Annotated[str, Field(min_length=1, strict=True, max_length=255)]] = Field(default=None, description="Optional per-send override for the email subject. When omitted or blank, the subject is resolved from the property's email template, falling back to the service default. Supports the same [Placeholder] tokens as template subjects.")
+    __properties: ClassVar[List[str]] = ["emails", "fileIds", "subject"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -69,6 +71,11 @@ class FiscalDocumentEmailRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if subject (nullable) is None
+        # and model_fields_set contains the field
+        if self.subject is None and "subject" in self.model_fields_set:
+            _dict['subject'] = None
+
         return _dict
 
     @classmethod
@@ -81,7 +88,9 @@ class FiscalDocumentEmailRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "emails": obj.get("emails")
+            "emails": obj.get("emails"),
+            "fileIds": obj.get("fileIds"),
+            "subject": obj.get("subject")
         })
         return _obj
 

@@ -17,6 +17,9 @@ Name | Type | Description | Notes
 **folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
 **exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs | [optional] 
 **include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
+**emails** | **List[str]** | Optional list of email addresses to send the document to once it is ready | [optional] 
+**subject** | **str** | Optional per-send override for the email subject. When omitted or blank, the subject is resolved from the property&#39;s email template, falling back to the service default. Supports the same [Placeholder] tokens as template subjects. | [optional] 
+**package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
 
 ## Example
 

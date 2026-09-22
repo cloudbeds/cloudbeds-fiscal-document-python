@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.creation_method import CreationMethod
@@ -31,13 +31,17 @@ class CreateCreditNoteRequest(BaseModel):
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
     invoice_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="invoiceId")
     reason: Optional[StrictStr] = None
+    note: Optional[Annotated[str, Field(strict=True, max_length=500)]] = None
     user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
     method: CreationMethod
     transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions with the specified IDs (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
     folio_ids: Optional[List[StrictInt]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[StrictInt]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
-    __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "userId", "method", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
+    package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
+    emails: Optional[Annotated[List[StrictStr], Field(max_length=10)]] = Field(default=None, description="Optional list of email addresses to send the document to once it is ready")
+    subject: Optional[Annotated[str, Field(min_length=1, strict=True, max_length=255)]] = Field(default=None, description="Optional per-send override for the email subject. When omitted or blank, the subject is resolved from the property's email template, falling back to the service default. Supports the same [Placeholder] tokens as template subjects.")
+    __properties: ClassVar[List[str]] = ["sequenceId", "invoiceId", "reason", "note", "userId", "method", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds", "packageBreakdown", "emails", "subject"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -88,10 +92,30 @@ class CreateCreditNoteRequest(BaseModel):
         if self.reason is None and "reason" in self.model_fields_set:
             _dict['reason'] = None
 
+        # set to None if note (nullable) is None
+        # and model_fields_set contains the field
+        if self.note is None and "note" in self.model_fields_set:
+            _dict['note'] = None
+
         # set to None if user_id (nullable) is None
         # and model_fields_set contains the field
         if self.user_id is None and "user_id" in self.model_fields_set:
             _dict['userId'] = None
+
+        # set to None if package_breakdown (nullable) is None
+        # and model_fields_set contains the field
+        if self.package_breakdown is None and "package_breakdown" in self.model_fields_set:
+            _dict['packageBreakdown'] = None
+
+        # set to None if emails (nullable) is None
+        # and model_fields_set contains the field
+        if self.emails is None and "emails" in self.model_fields_set:
+            _dict['emails'] = None
+
+        # set to None if subject (nullable) is None
+        # and model_fields_set contains the field
+        if self.subject is None and "subject" in self.model_fields_set:
+            _dict['subject'] = None
 
         return _dict
 
@@ -108,12 +132,16 @@ class CreateCreditNoteRequest(BaseModel):
             "sequenceId": obj.get("sequenceId"),
             "invoiceId": obj.get("invoiceId"),
             "reason": obj.get("reason"),
+            "note": obj.get("note"),
             "userId": obj.get("userId"),
             "method": obj.get("method"),
             "transactionIds": obj.get("transactionIds"),
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
-            "includeTransactionIds": obj.get("includeTransactionIds")
+            "includeTransactionIds": obj.get("includeTransactionIds"),
+            "packageBreakdown": obj.get("packageBreakdown"),
+            "emails": obj.get("emails"),
+            "subject": obj.get("subject")
         })
         return _obj
 

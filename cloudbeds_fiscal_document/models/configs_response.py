@@ -17,8 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.date_display import DateDisplay
 from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
@@ -44,19 +44,42 @@ class ConfigsResponse(BaseModel):
     legal_company_name: Optional[StrictStr] = Field(default=None, alias="legalCompanyName")
     title: Optional[Dict[str, StrictStr]] = None
     show_legal_company_name: Optional[StrictBool] = Field(default=None, alias="showLegalCompanyName")
+    show_property_details: Optional[StrictBool] = Field(default=None, alias="showPropertyDetails")
     include_room_number: Optional[StrictBool] = Field(default=None, alias="includeRoomNumber")
     use_document_number: Optional[StrictBool] = Field(default=None, alias="useDocumentNumber")
     is_compact: Optional[StrictBool] = Field(default=None, alias="isCompact")
     tax_id1: Optional[StrictStr] = Field(default=None, alias="taxId1")
     tax_id2: Optional[StrictStr] = Field(default=None, alias="taxId2")
     cpf: Optional[StrictStr] = None
+    company_country: Optional[StrictStr] = Field(default=None, alias="companyCountry")
+    company_address: Optional[StrictStr] = Field(default=None, alias="companyAddress")
+    company_state: Optional[StrictStr] = Field(default=None, alias="companyState")
+    company_city: Optional[StrictStr] = Field(default=None, alias="companyCity")
+    company_post_code: Optional[StrictStr] = Field(default=None, alias="companyPostCode")
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
     trigger_events: Optional[List[DocumentTriggerEvent]] = Field(default=None, alias="triggerEvents")
     update_invoice_on_link_document: Optional[StrictBool] = Field(default=False, alias="updateInvoiceOnLinkDocument")
     use_invoice_document_settings: Optional[StrictBool] = Field(default=False, alias="useInvoiceDocumentSettings")
     use_invoice_title_and_numbering: Optional[StrictBool] = Field(default=False, alias="useInvoiceTitleAndNumbering")
     date_display: Optional[DateDisplay] = Field(default=DateDisplay.TRANSACTION_DATE, alias="dateDisplay")
-    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "allowPendingTransactions", "dueDays", "lang", "prefix", "suffix", "separator", "legalCompanyName", "title", "showLegalCompanyName", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering", "dateDisplay"]
+    simplified_supported: Optional[StrictBool] = Field(default=None, description="Whether simplified invoices are supported for this property's country (INVOICE kind)", alias="simplifiedSupported")
+    simplified_enabled: Optional[StrictBool] = Field(default=None, description="Whether simplified invoices are enabled for this property (INVOICE kind)", alias="simplifiedEnabled")
+    simplified_threshold_editable: Optional[StrictBool] = Field(default=None, description="Whether the property may choose the simplified threshold. false means the country fixes it in regulation, so the threshold returned below is that country-fixed value: render it read-only and do not send one on save. ", alias="simplifiedThresholdEditable")
+    simplified_threshold: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Effective simplified-invoice threshold in the property currency (INVOICE kind): the country-fixed value where the country fixes one, otherwise the property-configured value. Null when not configured. ", alias="simplifiedThreshold")
+    simplified_threshold_max: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Statutory ceiling for the simplified-invoice threshold in the property currency (INVOICE kind). The property may configure any amount up to this; a higher value is rejected on save. Null when the country has no legal limit (e.g. Italy) or does not support simplified invoices at all. ", alias="simplifiedThresholdMax")
+    simplified_threshold_action: Optional[StrictStr] = Field(default=None, description="Behaviour when the total exceeds the simplified-invoice threshold (INVOICE kind)", alias="simplifiedThresholdAction")
+    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "allowPendingTransactions", "dueDays", "lang", "prefix", "suffix", "separator", "legalCompanyName", "title", "showLegalCompanyName", "showPropertyDetails", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "companyCountry", "companyAddress", "companyState", "companyCity", "companyPostCode", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering", "dateDisplay", "simplifiedSupported", "simplifiedEnabled", "simplifiedThresholdEditable", "simplifiedThreshold", "simplifiedThresholdMax", "simplifiedThresholdAction"]
+
+    @field_validator('simplified_threshold_action')
+    def simplified_threshold_action_validate_enum(cls, value):
+        """Validates the enum, returning unknown_default_open_api for unrecognized values"""
+        if value is None:
+            return value
+
+        _allowed_values = set(['NOTICE_ONLY', 'WARN_SWITCH', 'unknown_default_open_api'])
+        if value not in _allowed_values:
+            return 'unknown_default_open_api'
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -97,6 +120,21 @@ class ConfigsResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if simplified_threshold (nullable) is None
+        # and model_fields_set contains the field
+        if self.simplified_threshold is None and "simplified_threshold" in self.model_fields_set:
+            _dict['simplifiedThreshold'] = None
+
+        # set to None if simplified_threshold_max (nullable) is None
+        # and model_fields_set contains the field
+        if self.simplified_threshold_max is None and "simplified_threshold_max" in self.model_fields_set:
+            _dict['simplifiedThresholdMax'] = None
+
+        # set to None if simplified_threshold_action (nullable) is None
+        # and model_fields_set contains the field
+        if self.simplified_threshold_action is None and "simplified_threshold_action" in self.model_fields_set:
+            _dict['simplifiedThresholdAction'] = None
+
         return _dict
 
     @classmethod
@@ -124,18 +162,30 @@ class ConfigsResponse(BaseModel):
             "legalCompanyName": obj.get("legalCompanyName"),
             "title": obj.get("title"),
             "showLegalCompanyName": obj.get("showLegalCompanyName"),
+            "showPropertyDetails": obj.get("showPropertyDetails"),
             "includeRoomNumber": obj.get("includeRoomNumber"),
             "useDocumentNumber": obj.get("useDocumentNumber"),
             "isCompact": obj.get("isCompact"),
             "taxId1": obj.get("taxId1"),
             "taxId2": obj.get("taxId2"),
             "cpf": obj.get("cpf"),
+            "companyCountry": obj.get("companyCountry"),
+            "companyAddress": obj.get("companyAddress"),
+            "companyState": obj.get("companyState"),
+            "companyCity": obj.get("companyCity"),
+            "companyPostCode": obj.get("companyPostCode"),
             "customText": obj.get("customText"),
             "triggerEvents": obj.get("triggerEvents"),
             "updateInvoiceOnLinkDocument": obj.get("updateInvoiceOnLinkDocument") if obj.get("updateInvoiceOnLinkDocument") is not None else False,
             "useInvoiceDocumentSettings": obj.get("useInvoiceDocumentSettings") if obj.get("useInvoiceDocumentSettings") is not None else False,
             "useInvoiceTitleAndNumbering": obj.get("useInvoiceTitleAndNumbering") if obj.get("useInvoiceTitleAndNumbering") is not None else False,
-            "dateDisplay": obj.get("dateDisplay") if obj.get("dateDisplay") is not None else DateDisplay.TRANSACTION_DATE
+            "dateDisplay": obj.get("dateDisplay") if obj.get("dateDisplay") is not None else DateDisplay.TRANSACTION_DATE,
+            "simplifiedSupported": obj.get("simplifiedSupported"),
+            "simplifiedEnabled": obj.get("simplifiedEnabled"),
+            "simplifiedThresholdEditable": obj.get("simplifiedThresholdEditable"),
+            "simplifiedThreshold": obj.get("simplifiedThreshold"),
+            "simplifiedThresholdMax": obj.get("simplifiedThresholdMax"),
+            "simplifiedThresholdAction": obj.get("simplifiedThresholdAction")
         })
         return _obj
 

@@ -37,7 +37,11 @@ class TestFiscalDocumentEmailRequest(unittest.TestCase):
             return FiscalDocumentEmailRequest(
                 emails = [
                     ''
-                    ]
+                    ],
+                file_ids = [
+                    ''
+                    ],
+                subject = '0'
             )
         else:
             return FiscalDocumentEmailRequest(

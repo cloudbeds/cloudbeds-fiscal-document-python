@@ -42,6 +42,18 @@ class TestGetFolioExportRequest(unittest.TestCase):
                 revenue_compact = True,
                 date_from = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(),
                 date_to = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date(),
+                search_query = '',
+                description_filters = ["rate","product_123","cards_visa"],
+                posted = True,
+                include_voided = True,
+                sub_source_ids = [
+                    56
+                    ],
+                sort = [
+                    cloudbeds_fiscal_document.models.folio_export_sort.FolioExportSort(
+                        field = '', 
+                        direction = 'ASC', )
+                    ],
                 format = 'PDF',
                 recipient = cloudbeds_fiscal_document.models.recipient_request.RecipientRequest(
                     type = 'GUEST', 

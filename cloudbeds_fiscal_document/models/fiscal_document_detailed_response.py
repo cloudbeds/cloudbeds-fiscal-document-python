@@ -22,6 +22,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, Stri
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.action import Action
 from cloudbeds_fiscal_document.models.creation_method import CreationMethod
+from cloudbeds_fiscal_document.models.fiscal_document_file import FiscalDocumentFile
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
 from cloudbeds_fiscal_document.models.fiscal_document_status import FiscalDocumentStatus
 from cloudbeds_fiscal_document.models.government_integration import GovernmentIntegration
@@ -48,6 +49,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
     invoice_date: Optional[date] = Field(default=None, alias="invoiceDate")
     invoice_date_property_timezone: Optional[date] = Field(default=None, alias="invoiceDatePropertyTimezone")
     file_name: Optional[StrictStr] = Field(default=None, alias="fileName")
+    files: List[FiscalDocumentFile] = Field(description="All files available for this document, primary first followed by any additional stored files (e.g. the Portuguese duplicate). Always present as an array, but may be empty for documents whose file has not been generated yet (e.g. REQUESTED or early FAILED status). The primary file entry, when present, has a null id (the download endpoint serves it without a fileId; additional entries are downloaded by passing their id as the fileId query parameter). ")
     amount: Optional[Union[StrictFloat, StrictInt]] = None
     balance: Optional[Union[StrictFloat, StrictInt]] = None
     due_date: Optional[date] = Field(default=None, alias="dueDate")
@@ -57,6 +59,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
     origin: Optional[StrictStr] = None
     external_id: Optional[StrictStr] = Field(default=None, alias="externalId")
     fail_reason: Optional[StrictStr] = Field(default=None, alias="failReason")
+    reason: Optional[StrictStr] = Field(default=None, description="Correction reason recorded when the document was created (credit notes and rectifying invoices). One of the slugs offered by the credit-note action's reason field, or free text on the Spanish rectify path. Null when no reason was given.")
     method: Optional[CreationMethod] = None
     created_at: Optional[datetime] = Field(default=None, alias="createdAt")
     parent_id: Optional[StrictStr] = Field(default=None, alias="parentId")
@@ -67,7 +70,13 @@ class FiscalDocumentDetailedResponse(BaseModel):
     actions: Optional[List[Action]] = Field(default=None, description="Returns the list of actions available for the transaction")
     source_identifier: Optional[StrictStr] = Field(default=None, description="Reservation Identifier or a group code", alias="sourceIdentifier")
     simplified: Optional[StrictBool] = Field(default=None, description="Applies to invoices only.")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "method", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier", "simplified"]
+    require_attention: Optional[StrictBool] = Field(default=None, description="Indicates whether this document requires manual attention.", alias="requireAttention")
+    has_discrepancies: Optional[StrictBool] = Field(default=None, description="Indicates whether this document has pending transaction discrepancies.", alias="hasDiscrepancies")
+    package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
+    currency: Optional[StrictStr] = Field(default=None, description="Currency the document amount is expressed in. Equals the invoice/document currency, which may differ from the property base currency when a foreign-currency invoice was issued.")
+    property_currency: Optional[StrictStr] = Field(default=None, description="The property's base currency code.", alias="propertyCurrency")
+    property_currency_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The document amount converted to the property's base currency using the property's configured exchange rates. Null when the document currency already equals the property base currency (no conversion needed).", alias="propertyCurrencyAmount")
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "files", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "reason", "method", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier", "simplified", "requireAttention", "hasDiscrepancies", "packageBreakdown", "currency", "propertyCurrency", "propertyCurrencyAmount"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -108,6 +117,13 @@ class FiscalDocumentDetailedResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in files (list)
+        _items = []
+        if self.files:
+            for _item_files in self.files:
+                if _item_files:
+                    _items.append(_item_files.to_dict())
+            _dict['files'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in recipients (list)
         _items = []
         if self.recipients:
@@ -135,6 +151,31 @@ class FiscalDocumentDetailedResponse(BaseModel):
                 if _item_actions:
                     _items.append(_item_actions.to_dict())
             _dict['actions'] = _items
+        # set to None if reason (nullable) is None
+        # and model_fields_set contains the field
+        if self.reason is None and "reason" in self.model_fields_set:
+            _dict['reason'] = None
+
+        # set to None if package_breakdown (nullable) is None
+        # and model_fields_set contains the field
+        if self.package_breakdown is None and "package_breakdown" in self.model_fields_set:
+            _dict['packageBreakdown'] = None
+
+        # set to None if currency (nullable) is None
+        # and model_fields_set contains the field
+        if self.currency is None and "currency" in self.model_fields_set:
+            _dict['currency'] = None
+
+        # set to None if property_currency (nullable) is None
+        # and model_fields_set contains the field
+        if self.property_currency is None and "property_currency" in self.model_fields_set:
+            _dict['propertyCurrency'] = None
+
+        # set to None if property_currency_amount (nullable) is None
+        # and model_fields_set contains the field
+        if self.property_currency_amount is None and "property_currency_amount" in self.model_fields_set:
+            _dict['propertyCurrencyAmount'] = None
+
         return _dict
 
     @classmethod
@@ -159,6 +200,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "invoiceDate": obj.get("invoiceDate"),
             "invoiceDatePropertyTimezone": obj.get("invoiceDatePropertyTimezone"),
             "fileName": obj.get("fileName"),
+            "files": [FiscalDocumentFile.from_dict(_item) for _item in obj["files"]] if obj.get("files") is not None else None,
             "amount": obj.get("amount"),
             "balance": obj.get("balance"),
             "dueDate": obj.get("dueDate"),
@@ -168,6 +210,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "origin": obj.get("origin"),
             "externalId": obj.get("externalId"),
             "failReason": obj.get("failReason"),
+            "reason": obj.get("reason"),
             "method": obj.get("method"),
             "createdAt": obj.get("createdAt"),
             "parentId": obj.get("parentId"),
@@ -177,7 +220,13 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "linkedDocuments": [LinkedDocument.from_dict(_item) for _item in obj["linkedDocuments"]] if obj.get("linkedDocuments") is not None else None,
             "actions": [Action.from_dict(_item) for _item in obj["actions"]] if obj.get("actions") is not None else None,
             "sourceIdentifier": obj.get("sourceIdentifier"),
-            "simplified": obj.get("simplified")
+            "simplified": obj.get("simplified"),
+            "requireAttention": obj.get("requireAttention"),
+            "hasDiscrepancies": obj.get("hasDiscrepancies"),
+            "packageBreakdown": obj.get("packageBreakdown"),
+            "currency": obj.get("currency"),
+            "propertyCurrency": obj.get("propertyCurrency"),
+            "propertyCurrencyAmount": obj.get("propertyCurrencyAmount")
         })
         return _obj
 

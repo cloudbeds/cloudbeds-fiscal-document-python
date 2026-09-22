@@ -35,6 +35,8 @@ class TestTaxRule(unittest.TestCase):
         model = TaxRule()
         if include_optional:
             return TaxRule(
+                value = '',
+                label = '',
                 category = '',
                 key = '',
                 rate = '',
@@ -43,6 +45,8 @@ class TestTaxRule(unittest.TestCase):
             )
         else:
             return TaxRule(
+                value = '',
+                label = '',
                 category = '',
                 key = '',
                 rate = '',

@@ -20,7 +20,9 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from cloudbeds_fiscal_document.models.country_info import CountryInfo
+from cloudbeds_fiscal_document.models.country_requirements import CountryRequirements
 from cloudbeds_fiscal_document.models.field_definition import FieldDefinition
+from cloudbeds_fiscal_document.models.rules_section import RulesSection
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,8 +32,10 @@ class FiscalizationRegistrationRulesResponse(BaseModel):
     """ # noqa: E501
     country: CountryInfo
     fields: List[FieldDefinition]
+    sections: Optional[List[RulesSection]] = Field(default=None, description="Ordered list of UI sections that host the country's fields. The frontend uses this list to render sub-navigation; each field references a section via its sectionKey. When absent, all fields belong to an implicit \"registration\" section.")
     examples: Optional[Dict[str, StrictStr]] = Field(default=None, description="Example values for common fields")
-    __properties: ClassVar[List[str]] = ["country", "fields", "examples"]
+    requires: Optional[CountryRequirements] = None
+    __properties: ClassVar[List[str]] = ["country", "fields", "sections", "examples", "requires"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -82,6 +86,16 @@ class FiscalizationRegistrationRulesResponse(BaseModel):
                 if _item_fields:
                     _items.append(_item_fields.to_dict())
             _dict['fields'] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in sections (list)
+        _items = []
+        if self.sections:
+            for _item_sections in self.sections:
+                if _item_sections:
+                    _items.append(_item_sections.to_dict())
+            _dict['sections'] = _items
+        # override the default output from pydantic by calling `to_dict()` of requires
+        if self.requires:
+            _dict['requires'] = self.requires.to_dict()
         return _dict
 
     @classmethod
@@ -96,7 +110,9 @@ class FiscalizationRegistrationRulesResponse(BaseModel):
         _obj = cls.model_validate({
             "country": CountryInfo.from_dict(obj["country"]) if obj.get("country") is not None else None,
             "fields": [FieldDefinition.from_dict(_item) for _item in obj["fields"]] if obj.get("fields") is not None else None,
-            "examples": obj.get("examples")
+            "sections": [RulesSection.from_dict(_item) for _item in obj["sections"]] if obj.get("sections") is not None else None,
+            "examples": obj.get("examples"),
+            "requires": CountryRequirements.from_dict(obj["requires"]) if obj.get("requires") is not None else None
         })
         return _obj
 

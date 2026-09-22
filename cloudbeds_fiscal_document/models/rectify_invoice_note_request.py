@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.creation_method import CreationMethod
@@ -36,7 +36,8 @@ class RectifyInvoiceNoteRequest(BaseModel):
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
-    __properties: ClassVar[List[str]] = ["invoiceId", "reason", "userId", "method", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds"]
+    package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
+    __properties: ClassVar[List[str]] = ["invoiceId", "reason", "userId", "method", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds", "packageBreakdown"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -97,6 +98,11 @@ class RectifyInvoiceNoteRequest(BaseModel):
         if self.include_transaction_ids is None and "include_transaction_ids" in self.model_fields_set:
             _dict['includeTransactionIds'] = None
 
+        # set to None if package_breakdown (nullable) is None
+        # and model_fields_set contains the field
+        if self.package_breakdown is None and "package_breakdown" in self.model_fields_set:
+            _dict['packageBreakdown'] = None
+
         return _dict
 
     @classmethod
@@ -116,7 +122,8 @@ class RectifyInvoiceNoteRequest(BaseModel):
             "transactionIds": obj.get("transactionIds"),
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
-            "includeTransactionIds": obj.get("includeTransactionIds")
+            "includeTransactionIds": obj.get("includeTransactionIds"),
+            "packageBreakdown": obj.get("packageBreakdown")
         })
         return _obj
 

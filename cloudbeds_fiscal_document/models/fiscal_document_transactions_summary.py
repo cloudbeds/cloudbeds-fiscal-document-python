@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from cloudbeds_fiscal_document.models.fiscal_document_transactions_summary_taxes_inner import FiscalDocumentTransactionsSummaryTaxesInner
 from typing import Optional, Set
@@ -32,7 +32,12 @@ class FiscalDocumentTransactionsSummary(BaseModel):
     paid: Optional[StrictStr] = None
     refunded: Optional[StrictStr] = None
     total: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["chargesAndAdjustments", "taxes", "paid", "refunded", "total"]
+    currency: Optional[StrictStr] = Field(default=None, description="Currency the totals are expressed in. Equals the requested invoice currency when one was provided (totals converted from the property currency using the property's configured exchange rates), otherwise the property currency.")
+    property_currency: Optional[StrictStr] = Field(default=None, description="The property's base currency code.", alias="propertyCurrency")
+    property_currency_total: Optional[StrictStr] = Field(default=None, description="The invoice total in the property's base currency, shown as a reference alongside the converted total when an invoice currency was requested.", alias="propertyCurrencyTotal")
+    transaction_count: Optional[StrictInt] = Field(default=None, description="Number of transactions the current selection resolves to. Lets the caller warn before submitting a selection that would be rejected for exceeding maxTransactions.", alias="transactionCount")
+    max_transactions: Optional[StrictInt] = Field(default=None, description="Maximum number of transactions allowed on a single fiscal document.", alias="maxTransactions")
+    __properties: ClassVar[List[str]] = ["chargesAndAdjustments", "taxes", "paid", "refunded", "total", "currency", "propertyCurrency", "propertyCurrencyTotal", "transactionCount", "maxTransactions"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -96,7 +101,12 @@ class FiscalDocumentTransactionsSummary(BaseModel):
             "taxes": [FiscalDocumentTransactionsSummaryTaxesInner.from_dict(_item) for _item in obj["taxes"]] if obj.get("taxes") is not None else None,
             "paid": obj.get("paid"),
             "refunded": obj.get("refunded"),
-            "total": obj.get("total")
+            "total": obj.get("total"),
+            "currency": obj.get("currency"),
+            "propertyCurrency": obj.get("propertyCurrency"),
+            "propertyCurrencyTotal": obj.get("propertyCurrencyTotal"),
+            "transactionCount": obj.get("transactionCount"),
+            "maxTransactions": obj.get("maxTransactions")
         })
         return _obj
 

@@ -51,7 +51,8 @@ class TestGetCreditNotePreviewRequest(unittest.TestCase):
                     ],
                 include_transaction_ids = [
                     56
-                    ]
+                    ],
+                package_breakdown = True
             )
         else:
             return GetCreditNotePreviewRequest(

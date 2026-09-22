@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **exclude_transaction_ids** | **List[int]** | Transaction IDs to exclude. | [optional] 
 **include_transaction_ids** | **List[int]** | Transaction IDs to include. | [optional] 
 **transaction_id_to_amount** | **Dict[str, float]** | Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion. | [optional] 
+**currency** | **str** | Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property&#39;s configured exchange rates. Defaults to the property currency when omitted. | [optional] 
 
 ## Example
 

@@ -26,66 +26,45 @@ class TestFiscalizationApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_create_fiscalization_consent(self) -> None:
-        """Test case for create_fiscalization_consent
+    def test_get_connection_report(self) -> None:
+        """Test case for get_connection_report
 
-        Record user consent for fiscalization
+        Generate and download a report for one connection
         """
         pass
 
-    def test_create_fiscalization_registration(self) -> None:
-        """Test case for create_fiscalization_registration
+    def test_get_fiscalization_item_extension_rules(self) -> None:
+        """Test case for get_fiscalization_item_extension_rules
 
-        Create fiscalization registration
+        Get item extension mapping rules for a country
         """
         pass
 
-    def test_get_fiscalization_consent(self) -> None:
-        """Test case for get_fiscalization_consent
+    def test_get_fiscalization_payment_method_rules(self) -> None:
+        """Test case for get_fiscalization_payment_method_rules
 
-        Get consent status for a property
-        """
-        pass
-
-    def test_get_fiscalization_provider(self) -> None:
-        """Test case for get_fiscalization_provider
-
-        Get fiscalization provider info for a country
-        """
-        pass
-
-    def test_get_fiscalization_registration(self) -> None:
-        """Test case for get_fiscalization_registration
-
-        Get fiscalization registration for a property
-        """
-        pass
-
-    def test_get_fiscalization_registration_countries(self) -> None:
-        """Test case for get_fiscalization_registration_countries
-
-        Get available countries for property registration
+        Get fiscalization payment method rules for a country
         """
         pass
 
     def test_get_fiscalization_registration_rules(self) -> None:
         """Test case for get_fiscalization_registration_rules
 
-        Get fiscalization registration rules for a country
+        Get fiscalization rules for a country
         """
         pass
 
-    def test_get_fiscalization_registration_status(self) -> None:
-        """Test case for get_fiscalization_registration_status
+    def test_get_fiscalization_report(self) -> None:
+        """Test case for get_fiscalization_report
 
-        Get registration status for a property
+        Generate and download a fiscalization report
         """
         pass
 
-    def test_get_fiscalization_tax(self) -> None:
-        """Test case for get_fiscalization_tax
+    def test_get_fiscalization_series_rules(self) -> None:
+        """Test case for get_fiscalization_series_rules
 
-        Get fiscalization tax for a property
+        Get available series rules for a country
         """
         pass
 
@@ -96,24 +75,10 @@ class TestFiscalizationApi(unittest.TestCase):
         """
         pass
 
-    def test_update_fiscalization_registration(self) -> None:
-        """Test case for update_fiscalization_registration
+    def test_get_invoice_type_options(self) -> None:
+        """Test case for get_invoice_type_options
 
-        Update fiscalization registration
-        """
-        pass
-
-    def test_update_fiscalization_tax(self) -> None:
-        """Test case for update_fiscalization_tax
-
-        Update fiscalization tax for a property
-        """
-        pass
-
-    def test_validate_fiscalization_data(self) -> None:
-        """Test case for validate_fiscalization_data
-
-        Validate fiscalization registration data
+        Get invoicing options for a property
         """
         pass
 

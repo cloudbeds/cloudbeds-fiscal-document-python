@@ -6,6 +6,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **emails** | **List[str]** |  | 
+**file_ids** | **List[str]** | Ids of additional stored files to attach (from files on the list response), e.g. the Portuguese duplicate. The primary file is always attached; these are added on top. Absent or empty attaches only the primary file. Duplicate ids are ignored. | [optional] 
+**subject** | **str** | Optional per-send override for the email subject. When omitted or blank, the subject is resolved from the property&#39;s email template, falling back to the service default. Supports the same [Placeholder] tokens as template subjects. | [optional] 
 
 ## Example
 

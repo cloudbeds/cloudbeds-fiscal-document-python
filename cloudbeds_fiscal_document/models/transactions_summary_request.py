@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
@@ -36,7 +36,8 @@ class TransactionsSummaryRequest(BaseModel):
     exclude_transaction_ids: Optional[Annotated[List[StrictInt], Field(min_length=1)]] = Field(default=None, description="Transaction IDs to exclude.", alias="excludeTransactionIds")
     include_transaction_ids: Optional[Annotated[List[StrictInt], Field(min_length=1)]] = Field(default=None, description="Transaction IDs to include.", alias="includeTransactionIds")
     transaction_id_to_amount: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(default=None, description="Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion.", alias="transactionIdToAmount")
-    __properties: ClassVar[List[str]] = ["documentKind", "sourceId", "sourceKind", "folioIds", "excludeTransactionIds", "includeTransactionIds", "transactionIdToAmount"]
+    currency: Optional[StrictStr] = Field(default=None, description="Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. Defaults to the property currency when omitted.")
+    __properties: ClassVar[List[str]] = ["documentKind", "sourceId", "sourceKind", "folioIds", "excludeTransactionIds", "includeTransactionIds", "transactionIdToAmount", "currency"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -100,7 +101,8 @@ class TransactionsSummaryRequest(BaseModel):
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
             "includeTransactionIds": obj.get("includeTransactionIds"),
-            "transactionIdToAmount": obj.get("transactionIdToAmount")
+            "transactionIdToAmount": obj.get("transactionIdToAmount"),
+            "currency": obj.get("currency")
         })
         return _obj
 

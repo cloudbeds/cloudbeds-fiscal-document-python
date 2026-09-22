@@ -40,7 +40,8 @@ class ManualRecipientRequest(BaseModel):
     tax_id: Optional[StrictStr] = Field(description="Tax ID / VAT number", alias="taxId")
     address: Optional[ManualRecipientRequestAddress] = None
     document: Optional[ManualRecipientRequestDocument] = None
-    __properties: ClassVar[List[str]] = ["type", "name", "gender", "email", "birthday", "phone", "cellPhone", "taxId", "address", "document"]
+    country_data: Optional[Dict[str, StrictStr]] = Field(default=None, description="Country-specific recipient fields collected from country requirements (e.g. Argentina \"ar_iva_condition\"), stored on the recipient's countryData. ", alias="countryData")
+    __properties: ClassVar[List[str]] = ["type", "name", "gender", "email", "birthday", "phone", "cellPhone", "taxId", "address", "document", "countryData"]
 
     @field_validator('type')
     def type_validate_enum(cls, value):
@@ -135,6 +136,11 @@ class ManualRecipientRequest(BaseModel):
         if self.document is None and "document" in self.model_fields_set:
             _dict['document'] = None
 
+        # set to None if country_data (nullable) is None
+        # and model_fields_set contains the field
+        if self.country_data is None and "country_data" in self.model_fields_set:
+            _dict['countryData'] = None
+
         return _dict
 
     @classmethod
@@ -156,7 +162,8 @@ class ManualRecipientRequest(BaseModel):
             "cellPhone": obj.get("cellPhone"),
             "taxId": obj.get("taxId"),
             "address": ManualRecipientRequestAddress.from_dict(obj["address"]) if obj.get("address") is not None else None,
-            "document": ManualRecipientRequestDocument.from_dict(obj["document"]) if obj.get("document") is not None else None
+            "document": ManualRecipientRequestDocument.from_dict(obj["document"]) if obj.get("document") is not None else None,
+            "countryData": obj.get("countryData")
         })
         return _obj
 

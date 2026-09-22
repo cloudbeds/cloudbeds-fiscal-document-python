@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import date
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
@@ -37,14 +37,16 @@ class GetInvoicePreviewRequest(BaseModel):
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
     source_kind: SourceKind = Field(alias="sourceKind")
     user_id: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=None, alias="userId")
+    currency: Optional[StrictStr] = Field(default=None, description="Invoice currency. Selected transactions are converted into this currency at creation using the property's current exchange rate, which is locked on the issued document, and the converted amounts are fiscalized. Defaults to the property currency when omitted.")
     recipient: Optional[RecipientRequest] = None
     manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
     simplified: Optional[StrictBool] = False
+    package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
     due_date_property_timezone: Optional[date] = Field(default=None, alias="dueDatePropertyTimezone")
-    __properties: ClassVar[List[str]] = ["transactionIdToAmount", "transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "dueDatePropertyTimezone"]
+    __properties: ClassVar[List[str]] = ["transactionIdToAmount", "transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "currency", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "packageBreakdown", "dueDatePropertyTimezone"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -106,6 +108,16 @@ class GetInvoicePreviewRequest(BaseModel):
         if self.user_id is None and "user_id" in self.model_fields_set:
             _dict['userId'] = None
 
+        # set to None if currency (nullable) is None
+        # and model_fields_set contains the field
+        if self.currency is None and "currency" in self.model_fields_set:
+            _dict['currency'] = None
+
+        # set to None if package_breakdown (nullable) is None
+        # and model_fields_set contains the field
+        if self.package_breakdown is None and "package_breakdown" in self.model_fields_set:
+            _dict['packageBreakdown'] = None
+
         return _dict
 
     @classmethod
@@ -124,12 +136,14 @@ class GetInvoicePreviewRequest(BaseModel):
             "sequenceId": obj.get("sequenceId"),
             "sourceKind": obj.get("sourceKind"),
             "userId": obj.get("userId"),
+            "currency": obj.get("currency"),
             "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
             "manualRecipient": ManualRecipientRequest.from_dict(obj["manualRecipient"]) if obj.get("manualRecipient") is not None else None,
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
             "includeTransactionIds": obj.get("includeTransactionIds"),
             "simplified": obj.get("simplified") if obj.get("simplified") is not None else False,
+            "packageBreakdown": obj.get("packageBreakdown"),
             "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone")
         })
         return _obj

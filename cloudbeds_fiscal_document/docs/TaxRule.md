@@ -5,6 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**value** | **str** | Identifier to store against a mapping and send back on save. Composed by this service so the caller never has to build one: the category/key/rate triple joined by \&quot;:\&quot; for a country-defined option, or the partner&#39;s own code for a provider-supplied one. | 
+**label** | **str** | Display text for the option; same as name for country-defined options. | 
 **category** | **str** | Tax category code (e.g., VAT, ISR) | 
 **key** | **str** | Tax key describing the tax situation (e.g., standard, exempt) | 
 **rate** | **str** | Rate within the category and key (e.g., general, reduced) | 

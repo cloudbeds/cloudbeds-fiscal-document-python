@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from datetime import date
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
@@ -40,7 +40,9 @@ class CreateSettlementInvoiceRequest(BaseModel):
     manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
     due_date_property_timezone: Optional[date] = Field(default=None, alias="dueDatePropertyTimezone")
-    __properties: ClassVar[List[str]] = ["userId", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds", "transactionIdToAmount", "recipient", "manualRecipient", "sequenceId", "dueDatePropertyTimezone"]
+    note: Optional[Annotated[str, Field(strict=True, max_length=500)]] = None
+    package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
+    __properties: ClassVar[List[str]] = ["userId", "transactionIds", "folioIds", "excludeTransactionIds", "includeTransactionIds", "transactionIdToAmount", "recipient", "manualRecipient", "sequenceId", "dueDatePropertyTimezone", "note", "packageBreakdown"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -97,6 +99,16 @@ class CreateSettlementInvoiceRequest(BaseModel):
         if self.sequence_id is None and "sequence_id" in self.model_fields_set:
             _dict['sequenceId'] = None
 
+        # set to None if note (nullable) is None
+        # and model_fields_set contains the field
+        if self.note is None and "note" in self.model_fields_set:
+            _dict['note'] = None
+
+        # set to None if package_breakdown (nullable) is None
+        # and model_fields_set contains the field
+        if self.package_breakdown is None and "package_breakdown" in self.model_fields_set:
+            _dict['packageBreakdown'] = None
+
         return _dict
 
     @classmethod
@@ -118,7 +130,9 @@ class CreateSettlementInvoiceRequest(BaseModel):
             "recipient": RecipientRequest.from_dict(obj["recipient"]) if obj.get("recipient") is not None else None,
             "manualRecipient": ManualRecipientRequest.from_dict(obj["manualRecipient"]) if obj.get("manualRecipient") is not None else None,
             "sequenceId": obj.get("sequenceId"),
-            "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone")
+            "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone"),
+            "note": obj.get("note"),
+            "packageBreakdown": obj.get("packageBreakdown")
         })
         return _obj
 

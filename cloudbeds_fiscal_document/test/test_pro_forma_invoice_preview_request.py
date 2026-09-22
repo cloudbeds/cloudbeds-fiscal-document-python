@@ -61,7 +61,8 @@ class TestProFormaInvoicePreviewRequest(unittest.TestCase):
                     ],
                 include_transaction_ids = [
                     1
-                    ]
+                    ],
+                package_breakdown = True
             )
         else:
             return ProFormaInvoicePreviewRequest(
