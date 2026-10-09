@@ -21,6 +21,7 @@ from datetime import date
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.line_grouping_selection_request import LineGroupingSelectionRequest
 from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
@@ -32,6 +33,7 @@ class GetInvoicePreviewRequest(BaseModel):
     GetInvoicePreviewRequest
     """ # noqa: E501
     transaction_id_to_amount: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(default=None, description="Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion", alias="transactionIdToAmount")
+    transaction_id_to_display_amount: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(default=None, description="Map of transaction ID to amount in the invoice currency (major units, as in displayAmount) for partial transaction inclusion, recorded on the document exactly as given. Takes precedence over transactionIdToAmount for the same transaction. When the invoice currency is the property currency it behaves like transactionIdToAmount.", alias="transactionIdToDisplayAmount")
     transaction_ids: List[Annotated[int, Field(strict=True, ge=1)]] = Field(description="Include transactions with the specified IDs (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
     source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
@@ -45,8 +47,9 @@ class GetInvoicePreviewRequest(BaseModel):
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
     simplified: Optional[StrictBool] = False
     package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
+    line_grouping_selection: Optional[LineGroupingSelectionRequest] = Field(default=None, alias="lineGroupingSelection")
     due_date_property_timezone: Optional[date] = Field(default=None, alias="dueDatePropertyTimezone")
-    __properties: ClassVar[List[str]] = ["transactionIdToAmount", "transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "currency", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "packageBreakdown", "dueDatePropertyTimezone"]
+    __properties: ClassVar[List[str]] = ["transactionIdToAmount", "transactionIdToDisplayAmount", "transactionIds", "sourceId", "sequenceId", "sourceKind", "userId", "currency", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "packageBreakdown", "lineGroupingSelection", "dueDatePropertyTimezone"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -93,10 +96,18 @@ class GetInvoicePreviewRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of manual_recipient
         if self.manual_recipient:
             _dict['manualRecipient'] = self.manual_recipient.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of line_grouping_selection
+        if self.line_grouping_selection:
+            _dict['lineGroupingSelection'] = self.line_grouping_selection.to_dict()
         # set to None if transaction_id_to_amount (nullable) is None
         # and model_fields_set contains the field
         if self.transaction_id_to_amount is None and "transaction_id_to_amount" in self.model_fields_set:
             _dict['transactionIdToAmount'] = None
+
+        # set to None if transaction_id_to_display_amount (nullable) is None
+        # and model_fields_set contains the field
+        if self.transaction_id_to_display_amount is None and "transaction_id_to_display_amount" in self.model_fields_set:
+            _dict['transactionIdToDisplayAmount'] = None
 
         # set to None if sequence_id (nullable) is None
         # and model_fields_set contains the field
@@ -131,6 +142,7 @@ class GetInvoicePreviewRequest(BaseModel):
 
         _obj = cls.model_validate({
             "transactionIdToAmount": obj.get("transactionIdToAmount"),
+            "transactionIdToDisplayAmount": obj.get("transactionIdToDisplayAmount"),
             "transactionIds": obj.get("transactionIds"),
             "sourceId": obj.get("sourceId"),
             "sequenceId": obj.get("sequenceId"),
@@ -144,6 +156,7 @@ class GetInvoicePreviewRequest(BaseModel):
             "includeTransactionIds": obj.get("includeTransactionIds"),
             "simplified": obj.get("simplified") if obj.get("simplified") is not None else False,
             "packageBreakdown": obj.get("packageBreakdown"),
+            "lineGroupingSelection": LineGroupingSelectionRequest.from_dict(obj["lineGroupingSelection"]) if obj.get("lineGroupingSelection") is not None else None,
             "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone")
         })
         return _obj

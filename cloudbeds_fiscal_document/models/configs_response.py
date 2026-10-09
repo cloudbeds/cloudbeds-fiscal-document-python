@@ -22,6 +22,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from cloudbeds_fiscal_document.models.date_display import DateDisplay
 from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
 from cloudbeds_fiscal_document.models.fiscal_document_kind import FiscalDocumentKind
+from cloudbeds_fiscal_document.models.line_grouping_settings import LineGroupingSettings
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -62,13 +63,14 @@ class ConfigsResponse(BaseModel):
     use_invoice_document_settings: Optional[StrictBool] = Field(default=False, alias="useInvoiceDocumentSettings")
     use_invoice_title_and_numbering: Optional[StrictBool] = Field(default=False, alias="useInvoiceTitleAndNumbering")
     date_display: Optional[DateDisplay] = Field(default=DateDisplay.TRANSACTION_DATE, alias="dateDisplay")
+    line_grouping_settings: Optional[LineGroupingSettings] = Field(default=None, alias="lineGroupingSettings")
     simplified_supported: Optional[StrictBool] = Field(default=None, description="Whether simplified invoices are supported for this property's country (INVOICE kind)", alias="simplifiedSupported")
     simplified_enabled: Optional[StrictBool] = Field(default=None, description="Whether simplified invoices are enabled for this property (INVOICE kind)", alias="simplifiedEnabled")
     simplified_threshold_editable: Optional[StrictBool] = Field(default=None, description="Whether the property may choose the simplified threshold. false means the country fixes it in regulation, so the threshold returned below is that country-fixed value: render it read-only and do not send one on save. ", alias="simplifiedThresholdEditable")
     simplified_threshold: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Effective simplified-invoice threshold in the property currency (INVOICE kind): the country-fixed value where the country fixes one, otherwise the property-configured value. Null when not configured. ", alias="simplifiedThreshold")
     simplified_threshold_max: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Statutory ceiling for the simplified-invoice threshold in the property currency (INVOICE kind). The property may configure any amount up to this; a higher value is rejected on save. Null when the country has no legal limit (e.g. Italy) or does not support simplified invoices at all. ", alias="simplifiedThresholdMax")
     simplified_threshold_action: Optional[StrictStr] = Field(default=None, description="Behaviour when the total exceeds the simplified-invoice threshold (INVOICE kind)", alias="simplifiedThresholdAction")
-    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "allowPendingTransactions", "dueDays", "lang", "prefix", "suffix", "separator", "legalCompanyName", "title", "showLegalCompanyName", "showPropertyDetails", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "companyCountry", "companyAddress", "companyState", "companyCity", "companyPostCode", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering", "dateDisplay", "simplifiedSupported", "simplifiedEnabled", "simplifiedThresholdEditable", "simplifiedThreshold", "simplifiedThresholdMax", "simplifiedThresholdAction"]
+    __properties: ClassVar[List[str]] = ["propertyId", "documentKind", "showDetailedTaxFee", "showCreditNotesAndReceipts", "chargeBreakdown", "useGuestLang", "allowPendingTransactions", "dueDays", "lang", "prefix", "suffix", "separator", "legalCompanyName", "title", "showLegalCompanyName", "showPropertyDetails", "includeRoomNumber", "useDocumentNumber", "isCompact", "taxId1", "taxId2", "cpf", "companyCountry", "companyAddress", "companyState", "companyCity", "companyPostCode", "customText", "triggerEvents", "updateInvoiceOnLinkDocument", "useInvoiceDocumentSettings", "useInvoiceTitleAndNumbering", "dateDisplay", "lineGroupingSettings", "simplifiedSupported", "simplifiedEnabled", "simplifiedThresholdEditable", "simplifiedThreshold", "simplifiedThresholdMax", "simplifiedThresholdAction"]
 
     @field_validator('simplified_threshold_action')
     def simplified_threshold_action_validate_enum(cls, value):
@@ -120,6 +122,9 @@ class ConfigsResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of line_grouping_settings
+        if self.line_grouping_settings:
+            _dict['lineGroupingSettings'] = self.line_grouping_settings.to_dict()
         # set to None if simplified_threshold (nullable) is None
         # and model_fields_set contains the field
         if self.simplified_threshold is None and "simplified_threshold" in self.model_fields_set:
@@ -180,6 +185,7 @@ class ConfigsResponse(BaseModel):
             "useInvoiceDocumentSettings": obj.get("useInvoiceDocumentSettings") if obj.get("useInvoiceDocumentSettings") is not None else False,
             "useInvoiceTitleAndNumbering": obj.get("useInvoiceTitleAndNumbering") if obj.get("useInvoiceTitleAndNumbering") is not None else False,
             "dateDisplay": obj.get("dateDisplay") if obj.get("dateDisplay") is not None else DateDisplay.TRANSACTION_DATE,
+            "lineGroupingSettings": LineGroupingSettings.from_dict(obj["lineGroupingSettings"]) if obj.get("lineGroupingSettings") is not None else None,
             "simplifiedSupported": obj.get("simplifiedSupported"),
             "simplifiedEnabled": obj.get("simplifiedEnabled"),
             "simplifiedThresholdEditable": obj.get("simplifiedThresholdEditable"),

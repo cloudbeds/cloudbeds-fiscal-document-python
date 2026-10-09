@@ -122,6 +122,7 @@ class FiscalConnectionConfigApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalConnection",
             '400': "ApiError",
+            '403': "ApiError",
             '404': "ApiError",
         }
         response_data = self.api_client.call_api(
@@ -198,6 +199,7 @@ class FiscalConnectionConfigApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalConnection",
             '400': "ApiError",
+            '403': "ApiError",
             '404': "ApiError",
         }
         response_data = self.api_client.call_api(
@@ -274,6 +276,7 @@ class FiscalConnectionConfigApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "FiscalConnection",
             '400': "ApiError",
+            '403': "ApiError",
             '404': "ApiError",
         }
         response_data = self.api_client.call_api(
@@ -2652,6 +2655,7 @@ class FiscalConnectionConfigApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -2946,6 +2950,7 @@ class FiscalConnectionConfigApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -3222,6 +3227,7 @@ class FiscalConnectionConfigApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -3480,6 +3486,7 @@ class FiscalConnectionConfigApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -3996,6 +4003,7 @@ class FiscalConnectionConfigApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -4271,6 +4279,7 @@ class FiscalConnectionConfigApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -4772,6 +4781,7 @@ class FiscalConnectionConfigApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -6845,6 +6855,7 @@ class FiscalConnectionConfigApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 

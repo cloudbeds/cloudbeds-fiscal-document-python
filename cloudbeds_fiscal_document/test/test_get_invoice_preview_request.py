@@ -38,6 +38,9 @@ class TestGetInvoicePreviewRequest(unittest.TestCase):
                 transaction_id_to_amount = {
                     'key' : 1.337
                     },
+                transaction_id_to_display_amount = {
+                    'key' : 1.337
+                    },
                 transaction_ids = [
                     1
                     ],
@@ -86,6 +89,11 @@ class TestGetInvoicePreviewRequest(unittest.TestCase):
                     ],
                 simplified = True,
                 package_breakdown = True,
+                line_grouping_selection = cloudbeds_fiscal_document.models.line_grouping_selection_request.LineGroupingSelectionRequest(
+                    line_grouping = 'NONE', 
+                    pos_grouping = 'NOTHING', 
+                    group_by_room = True, 
+                    group_by_business_date = True, ),
                 due_date_property_timezone = datetime.datetime.strptime('1975-12-30', '%Y-%m-%d').date()
             )
         else:

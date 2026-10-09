@@ -140,6 +140,7 @@ Apply receipt to invoice. Receipt should not have allocations
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -158,6 +159,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -196,7 +199,7 @@ void (empty response body)
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -208,8 +211,7 @@ void (empty response body)
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | Receipt successfully voided |  -  |
-**400** | Bad Request - Invalid status or document type |  -  |
-**404** | Receipt not found |  -  |
+**400** | Bad Request - Invalid status or document type, or receipt or invoice not found in the property |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1115,6 +1117,7 @@ Retrieves allocations summary.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1134,6 +1137,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1178,7 +1183,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1359,6 +1364,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Successful file download |  * Content-Disposition - Used to indicate if the content should be displayed inline or as an attachment. <br>  |
+**400** | The property reports to a fiscal journal that admits no unissued document, so nothing may be rendered before it is issued. No document was created or submitted.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1442,6 +1448,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Successful file download |  * Content-Disposition - Used to indicate if the content should be displayed inline or as an attachment. <br>  |
+**400** | The property reports to a fiscal journal that admits no unissued document, so nothing may be rendered before it is issued. No document was created or submitted.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1655,6 +1662,7 @@ Retrieves a list of recipients associated to the transaction.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1673,6 +1681,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1711,7 +1721,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1886,7 +1896,7 @@ with cloudbeds_fiscal_document.ApiClient(configuration) as api_client:
     limit = 20 # int | Number of results to return per page. (optional) (default to 20)
     folio_ids = [56] # List[int] | Filter by folio IDs. (optional)
     nest_taxes = False # bool | When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level. (optional) (default to False)
-    currency = 'currency_example' # str | Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied. (optional)
+    currency = 'currency_example' # str | Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, only a document issued in another currency is converted (see displayDocumentFiscalizedAmount). (optional)
 
     try:
         # Get list of transactions for a given fiscal document id
@@ -1912,7 +1922,7 @@ Name | Type | Description  | Notes
  **limit** | **int**| Number of results to return per page. | [optional] [default to 20]
  **folio_ids** | [**List[int]**](int.md)| Filter by folio IDs. | [optional] 
  **nest_taxes** | **bool**| When true, VAT tax transactions are nested inside their parent transaction&#39;s taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level. | [optional] [default to False]
- **currency** | **str**| Invoice currency to convert every transaction into. Each transaction&#39;s amount is converted to this currency using the property&#39;s current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied. | [optional] 
+ **currency** | **str**| Invoice currency to convert every transaction into. Each transaction&#39;s amount is converted to this currency using the property&#39;s current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, only a document issued in another currency is converted (see displayDocumentFiscalizedAmount). | [optional] 
 
 ### Return type
 
@@ -1945,6 +1955,7 @@ Retrieves a paginated list of available transactions for allocations.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1965,6 +1976,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -2019,7 +2032,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -2299,6 +2312,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Successful file download |  * Content-Disposition - Used to indicate if the content should be displayed inline or as an attachment. <br>  |
+**400** | The property reports to a fiscal journal that admits no unissued document, so nothing may be rendered before it is issued. No document was created or submitted.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2390,6 +2404,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Successful file download |  * Content-Disposition - Used to indicate if the content should be displayed inline or as an attachment. <br>  |
+**400** | The property reports to a fiscal journal that admits no unissued document, so nothing may be rendered before it is issued. No document was created or submitted.  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2591,6 +2606,7 @@ Supports partial transaction amounts via transactionIdToAmount.
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -2610,6 +2626,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -2648,7 +2666,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

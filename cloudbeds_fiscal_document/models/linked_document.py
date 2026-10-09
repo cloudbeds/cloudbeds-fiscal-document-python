@@ -35,7 +35,7 @@ class LinkedDocument(BaseModel):
     kind: Optional[FiscalDocumentKind] = None
     status: Optional[FiscalDocumentStatus] = None
     is_latest: Optional[StrictBool] = Field(default=None, description="Whether this is the latest document in the chain", alias="isLatest")
-    relationship_type: Optional[StrictStr] = Field(default=None, description="The relationship type - PARENT means this document is linked to the current document, CHILD means the current document is linked to this one", alias="relationshipType")
+    relationship_type: Optional[StrictStr] = Field(default=None, description="PARENT means this document is linked to the current document, CHILD means the current document is linked to this one. REPLACED and REPLACED_BY are the two sides of a replacement: on an invoice, REPLACED names a receipt it withdrew — one that already declared the same charges and was voided when the invoice was issued; on that receipt, REPLACED_BY names the invoice that withdrew it. A client that presents the two differently should read this field; one that lists related documents plainly needs no change.", alias="relationshipType")
     __properties: ClassVar[List[str]] = ["id", "number", "createdAt", "kind", "status", "isLatest", "relationshipType"]
 
     @field_validator('relationship_type')
@@ -44,7 +44,7 @@ class LinkedDocument(BaseModel):
         if value is None:
             return value
 
-        _allowed_values = set(['PARENT', 'CHILD', 'unknown_default_open_api'])
+        _allowed_values = set(['PARENT', 'CHILD', 'REPLACED', 'REPLACED_BY', 'unknown_default_open_api'])
         if value not in _allowed_values:
             return 'unknown_default_open_api'
         return value

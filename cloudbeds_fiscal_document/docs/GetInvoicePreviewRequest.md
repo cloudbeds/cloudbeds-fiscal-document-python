@@ -6,6 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **transaction_id_to_amount** | **Dict[str, float]** | Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion | [optional] 
+**transaction_id_to_display_amount** | **Dict[str, float]** | Map of transaction ID to amount in the invoice currency (major units, as in displayAmount) for partial transaction inclusion, recorded on the document exactly as given. Takes precedence over transactionIdToAmount for the same transaction. When the invoice currency is the property currency it behaves like transactionIdToAmount. | [optional] 
 **transaction_ids** | **List[int]** | Include transactions with the specified IDs (deprecated, use &#x60;includeTransactionIds&#x60; instead) | 
 **source_id** | **int** |  | 
 **sequence_id** | **int** |  | [optional] 
@@ -19,6 +20,7 @@ Name | Type | Description | Notes
 **include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
 **simplified** | **bool** |  | [optional] [default to False]
 **package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
+**line_grouping_selection** | [**LineGroupingSelectionRequest**](LineGroupingSelectionRequest.md) |  | [optional] 
 **due_date_property_timezone** | **date** |  | [optional] 
 
 ## Example

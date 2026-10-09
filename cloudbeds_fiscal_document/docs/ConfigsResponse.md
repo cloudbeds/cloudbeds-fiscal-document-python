@@ -38,6 +38,7 @@ Name | Type | Description | Notes
 **use_invoice_document_settings** | **bool** |  | [optional] [default to False]
 **use_invoice_title_and_numbering** | **bool** |  | [optional] [default to False]
 **date_display** | [**DateDisplay**](DateDisplay.md) |  | [optional] [default to DateDisplay.TRANSACTION_DATE]
+**line_grouping_settings** | [**LineGroupingSettings**](LineGroupingSettings.md) |  | [optional] 
 **simplified_supported** | **bool** | Whether simplified invoices are supported for this property&#39;s country (INVOICE kind) | [optional] 
 **simplified_enabled** | **bool** | Whether simplified invoices are enabled for this property (INVOICE kind) | [optional] 
 **simplified_threshold_editable** | **bool** | Whether the property may choose the simplified threshold. false means the country fixes it in regulation, so the threshold returned below is that country-fixed value: render it read-only and do not send one on save.  | [optional] 

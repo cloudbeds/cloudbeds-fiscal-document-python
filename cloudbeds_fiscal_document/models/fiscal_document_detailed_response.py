@@ -30,6 +30,7 @@ from cloudbeds_fiscal_document.models.latest_linked_document import LatestLinked
 from cloudbeds_fiscal_document.models.linked_document import LinkedDocument
 from cloudbeds_fiscal_document.models.recipient_details import RecipientDetails
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
+from cloudbeds_fiscal_document.models.vat_display import VatDisplay
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -73,10 +74,11 @@ class FiscalDocumentDetailedResponse(BaseModel):
     require_attention: Optional[StrictBool] = Field(default=None, description="Indicates whether this document requires manual attention.", alias="requireAttention")
     has_discrepancies: Optional[StrictBool] = Field(default=None, description="Indicates whether this document has pending transaction discrepancies.", alias="hasDiscrepancies")
     package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
+    vat_display: Optional[VatDisplay] = Field(default=None, alias="vatDisplay")
     currency: Optional[StrictStr] = Field(default=None, description="Currency the document amount is expressed in. Equals the invoice/document currency, which may differ from the property base currency when a foreign-currency invoice was issued.")
     property_currency: Optional[StrictStr] = Field(default=None, description="The property's base currency code.", alias="propertyCurrency")
     property_currency_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="The document amount converted to the property's base currency using the property's configured exchange rates. Null when the document currency already equals the property base currency (no conversion needed).", alias="propertyCurrencyAmount")
-    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "files", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "reason", "method", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier", "simplified", "requireAttention", "hasDiscrepancies", "packageBreakdown", "currency", "propertyCurrency", "propertyCurrencyAmount"]
+    __properties: ClassVar[List[str]] = ["id", "number", "propertyId", "userId", "userFullName", "sourceName", "sourceId", "sourceKind", "kind", "invoiceDate", "invoiceDatePropertyTimezone", "fileName", "files", "amount", "balance", "dueDate", "dueDatePropertyTimezone", "recipients", "status", "origin", "externalId", "failReason", "reason", "method", "createdAt", "parentId", "updatedAt", "governmentIntegration", "latestLinkedDocument", "linkedDocuments", "actions", "sourceIdentifier", "simplified", "requireAttention", "hasDiscrepancies", "packageBreakdown", "vatDisplay", "currency", "propertyCurrency", "propertyCurrencyAmount"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -224,6 +226,7 @@ class FiscalDocumentDetailedResponse(BaseModel):
             "requireAttention": obj.get("requireAttention"),
             "hasDiscrepancies": obj.get("hasDiscrepancies"),
             "packageBreakdown": obj.get("packageBreakdown"),
+            "vatDisplay": obj.get("vatDisplay"),
             "currency": obj.get("currency"),
             "propertyCurrency": obj.get("propertyCurrency"),
             "propertyCurrencyAmount": obj.get("propertyCurrencyAmount")

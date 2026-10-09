@@ -46,7 +46,7 @@ class FiscalDocumentTransactionResponse(BaseModel):
     display_currency: Optional[StrictStr] = Field(default=None, description="Currency code used for the display amounts in this response.", alias="displayCurrency")
     display_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Amount converted to the display currency.", alias="displayAmount")
     display_available_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Available amount converted to the display currency.", alias="displayAvailableAmount")
-    display_document_fiscalized_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Document fiscalized amount converted to the display currency.", alias="displayDocumentFiscalizedAmount")
+    display_document_fiscalized_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Document fiscalized amount converted to the display currency. Without a requested currency, set for a document issued in another currency, at the exchange rate locked when it was issued.", alias="displayDocumentFiscalizedAmount")
     folio_id: Optional[StrictStr] = Field(default=None, alias="folioId")
     status: Optional[StrictStr] = Field(default=None, description="Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions")
     paid_amount: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="paidAmount")

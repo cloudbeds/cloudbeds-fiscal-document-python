@@ -114,6 +114,7 @@ Name | Type | Description  | Notes
 |-------------|-------------|------------------|
 **200** | OK |  -  |
 **400** | Bad Request |  -  |
+**403** | Access denied |  -  |
 **404** | Not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -711,6 +712,7 @@ Returns the current configuration for the given section, reading from the same d
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -728,6 +730,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -768,7 +772,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -793,6 +797,7 @@ Returns available options and field definitions for sections that have rules (se
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -810,6 +815,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -850,7 +857,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -873,6 +880,7 @@ Get a single connection
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -891,6 +899,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -929,7 +939,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -952,6 +962,7 @@ Check if the property is ready to issue fiscal documents
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -970,6 +981,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1006,7 +1019,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1104,6 +1117,7 @@ List in-progress connection drafts
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1122,6 +1136,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1158,7 +1174,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1180,6 +1196,7 @@ List connections for a property
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1198,6 +1215,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1236,7 +1255,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1330,6 +1349,7 @@ List all routing rules for a property
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1348,6 +1368,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1384,7 +1406,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -1910,6 +1932,7 @@ Test the connection to the tax authority
 
 ### Example
 
+* OAuth Authentication (oauth2):
 * Bearer (JWT) Authentication (bearerAuth):
 
 ```python
@@ -1928,6 +1951,8 @@ configuration = cloudbeds_fiscal_document.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+configuration.access_token = os.environ["ACCESS_TOKEN"]
 
 # Configure Bearer authorization (JWT): bearerAuth
 configuration = cloudbeds_fiscal_document.Configuration(
@@ -1966,7 +1991,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[bearerAuth](../README.md#bearerAuth)
+[oauth2](../README.md#oauth2), [bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

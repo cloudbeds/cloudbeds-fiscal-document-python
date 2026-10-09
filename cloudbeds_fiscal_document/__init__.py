@@ -14,7 +14,7 @@
 """  # noqa: E501
 
 
-__version__ = "1.24.0"
+__version__ = "1.25.0"
 
 # Define package exports
 __all__ = [
@@ -150,6 +150,9 @@ __all__ = [
     "ItemExtensionField",
     "ItemExtensionRulesResponse",
     "LatestLinkedDocument",
+    "LineGrouping",
+    "LineGroupingSelectionRequest",
+    "LineGroupingSettings",
     "LinkedDocument",
     "ManualRecipientRequest",
     "ManualRecipientRequestAddress",
@@ -157,6 +160,7 @@ __all__ = [
     "Origin",
     "PaymentMethodRule",
     "PaymentMethodRulesResponse",
+    "PosGrouping",
     "PreviewRequest",
     "ProFormaInvoicePreviewRequest",
     "ProFormaInvoiceRequest",
@@ -197,6 +201,7 @@ __all__ = [
     "UpdateRequireAttentionRequest",
     "UploadConnectionCertificate422Response",
     "ValidationError",
+    "VatDisplay",
     "VoidReceiptRequest",
 ]
 
@@ -337,6 +342,9 @@ from cloudbeds_fiscal_document.models.item_category_requirement import ItemCateg
 from cloudbeds_fiscal_document.models.item_extension_field import ItemExtensionField as ItemExtensionField
 from cloudbeds_fiscal_document.models.item_extension_rules_response import ItemExtensionRulesResponse as ItemExtensionRulesResponse
 from cloudbeds_fiscal_document.models.latest_linked_document import LatestLinkedDocument as LatestLinkedDocument
+from cloudbeds_fiscal_document.models.line_grouping import LineGrouping as LineGrouping
+from cloudbeds_fiscal_document.models.line_grouping_selection_request import LineGroupingSelectionRequest as LineGroupingSelectionRequest
+from cloudbeds_fiscal_document.models.line_grouping_settings import LineGroupingSettings as LineGroupingSettings
 from cloudbeds_fiscal_document.models.linked_document import LinkedDocument as LinkedDocument
 from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest as ManualRecipientRequest
 from cloudbeds_fiscal_document.models.manual_recipient_request_address import ManualRecipientRequestAddress as ManualRecipientRequestAddress
@@ -344,6 +352,7 @@ from cloudbeds_fiscal_document.models.manual_recipient_request_document import M
 from cloudbeds_fiscal_document.models.origin import Origin as Origin
 from cloudbeds_fiscal_document.models.payment_method_rule import PaymentMethodRule as PaymentMethodRule
 from cloudbeds_fiscal_document.models.payment_method_rules_response import PaymentMethodRulesResponse as PaymentMethodRulesResponse
+from cloudbeds_fiscal_document.models.pos_grouping import PosGrouping as PosGrouping
 from cloudbeds_fiscal_document.models.preview_request import PreviewRequest as PreviewRequest
 from cloudbeds_fiscal_document.models.pro_forma_invoice_preview_request import ProFormaInvoicePreviewRequest as ProFormaInvoicePreviewRequest
 from cloudbeds_fiscal_document.models.pro_forma_invoice_request import ProFormaInvoiceRequest as ProFormaInvoiceRequest
@@ -384,5 +393,6 @@ from cloudbeds_fiscal_document.models.transactions_summary_request import Transa
 from cloudbeds_fiscal_document.models.update_require_attention_request import UpdateRequireAttentionRequest as UpdateRequireAttentionRequest
 from cloudbeds_fiscal_document.models.upload_connection_certificate422_response import UploadConnectionCertificate422Response as UploadConnectionCertificate422Response
 from cloudbeds_fiscal_document.models.validation_error import ValidationError as ValidationError
+from cloudbeds_fiscal_document.models.vat_display import VatDisplay as VatDisplay
 from cloudbeds_fiscal_document.models.void_receipt_request import VoidReceiptRequest as VoidReceiptRequest
 

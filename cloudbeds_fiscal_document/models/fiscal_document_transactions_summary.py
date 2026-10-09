@@ -32,12 +32,15 @@ class FiscalDocumentTransactionsSummary(BaseModel):
     paid: Optional[StrictStr] = None
     refunded: Optional[StrictStr] = None
     total: Optional[StrictStr] = None
-    currency: Optional[StrictStr] = Field(default=None, description="Currency the totals are expressed in. Equals the requested invoice currency when one was provided (totals converted from the property currency using the property's configured exchange rates), otherwise the property currency.")
+    currency: Optional[StrictStr] = Field(default=None, description="Currency the totals are expressed in. For an existing document, the currency it was issued in; for a selection, the requested invoice currency (converted at the property's configured rates), otherwise the property currency.")
     property_currency: Optional[StrictStr] = Field(default=None, description="The property's base currency code.", alias="propertyCurrency")
-    property_currency_total: Optional[StrictStr] = Field(default=None, description="The invoice total in the property's base currency, shown as a reference alongside the converted total when an invoice currency was requested.", alias="propertyCurrencyTotal")
+    property_currency_total: Optional[StrictStr] = Field(default=None, description="The total in the property's base currency, shown as a reference alongside the total when the totals are expressed in another currency.", alias="propertyCurrencyTotal")
+    exchange_rate: Optional[StrictStr] = Field(default=None, description="The property's configured rate from its base currency into the currency the totals are expressed in (1 base unit = exchangeRate units), the rate an invoice issued now is locked at. Absent when the totals are in the property currency or no rate is configured.", alias="exchangeRate")
     transaction_count: Optional[StrictInt] = Field(default=None, description="Number of transactions the current selection resolves to. Lets the caller warn before submitting a selection that would be rejected for exceeding maxTransactions.", alias="transactionCount")
     max_transactions: Optional[StrictInt] = Field(default=None, description="Maximum number of transactions allowed on a single fiscal document.", alias="maxTransactions")
-    __properties: ClassVar[List[str]] = ["chargesAndAdjustments", "taxes", "paid", "refunded", "total", "currency", "propertyCurrency", "propertyCurrencyTotal", "transactionCount", "maxTransactions"]
+    replaced_receipts: Optional[List[StrictStr]] = Field(default=None, description="For an invoice selection on a property whose invoice replaces the receipts that already declared its charges: the receipts issuing it would void, by number (or id while one is still waiting for its number), in issue order. Absent when nothing would be replaced.", alias="replacedReceipts")
+    receipt_replacement_conflict: Optional[StrictStr] = Field(default=None, description="Why an invoice over this selection could not replace the receipts behind it — a receipt still being signed, or a covered charge not taken in full. The same message the create request refuses with, so a client can block issuing before submit. Absent when it can.", alias="receiptReplacementConflict")
+    __properties: ClassVar[List[str]] = ["chargesAndAdjustments", "taxes", "paid", "refunded", "total", "currency", "propertyCurrency", "propertyCurrencyTotal", "exchangeRate", "transactionCount", "maxTransactions", "replacedReceipts", "receiptReplacementConflict"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -105,8 +108,11 @@ class FiscalDocumentTransactionsSummary(BaseModel):
             "currency": obj.get("currency"),
             "propertyCurrency": obj.get("propertyCurrency"),
             "propertyCurrencyTotal": obj.get("propertyCurrencyTotal"),
+            "exchangeRate": obj.get("exchangeRate"),
             "transactionCount": obj.get("transactionCount"),
-            "maxTransactions": obj.get("maxTransactions")
+            "maxTransactions": obj.get("maxTransactions"),
+            "replacedReceipts": obj.get("replacedReceipts"),
+            "receiptReplacementConflict": obj.get("receiptReplacementConflict")
         })
         return _obj
 

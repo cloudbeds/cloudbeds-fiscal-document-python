@@ -21,6 +21,7 @@ from datetime import date
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.line_grouping_selection_request import LineGroupingSelectionRequest
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
@@ -45,7 +46,8 @@ class ProFormaInvoiceRequest(BaseModel):
     emails: Optional[Annotated[List[StrictStr], Field(max_length=10)]] = Field(default=None, description="Optional list of email addresses to send the document to once it is ready")
     subject: Optional[Annotated[str, Field(min_length=1, strict=True, max_length=255)]] = Field(default=None, description="Optional per-send override for the email subject. When omitted or blank, the subject is resolved from the property's email template, falling back to the service default. Supports the same [Placeholder] tokens as template subjects.")
     package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
-    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds", "emails", "subject", "packageBreakdown"]
+    line_grouping_selection: Optional[LineGroupingSelectionRequest] = Field(default=None, alias="lineGroupingSelection")
+    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds", "emails", "subject", "packageBreakdown", "lineGroupingSelection"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -89,6 +91,9 @@ class ProFormaInvoiceRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of recipient
         if self.recipient:
             _dict['recipient'] = self.recipient.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of line_grouping_selection
+        if self.line_grouping_selection:
+            _dict['lineGroupingSelection'] = self.line_grouping_selection.to_dict()
         # set to None if transaction_id_to_amount (nullable) is None
         # and model_fields_set contains the field
         if self.transaction_id_to_amount is None and "transaction_id_to_amount" in self.model_fields_set:
@@ -145,7 +150,8 @@ class ProFormaInvoiceRequest(BaseModel):
             "includeTransactionIds": obj.get("includeTransactionIds"),
             "emails": obj.get("emails"),
             "subject": obj.get("subject"),
-            "packageBreakdown": obj.get("packageBreakdown")
+            "packageBreakdown": obj.get("packageBreakdown"),
+            "lineGroupingSelection": LineGroupingSelectionRequest.from_dict(obj["lineGroupingSelection"]) if obj.get("lineGroupingSelection") is not None else None
         })
         return _obj
 

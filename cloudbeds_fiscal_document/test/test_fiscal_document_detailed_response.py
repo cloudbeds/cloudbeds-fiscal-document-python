@@ -104,6 +104,7 @@ class TestFiscalDocumentDetailedResponse(unittest.TestCase):
                         ], 
                     folio_fiscal = '9B3E26F4-1234-4A5B-8C9D-ABCDEF012345', 
                     sat_qr_code = '', 
+                    ext = {"ar-arca-doc-type":"6","arca-cae-expiry":"2026-10-02"}, 
                     connection_id = 56, ),
                 latest_linked_document = cloudbeds_fiscal_document.models.latest_linked_document.LatestLinkedDocument(
                     id = '', 
@@ -186,6 +187,7 @@ class TestFiscalDocumentDetailedResponse(unittest.TestCase):
                 require_attention = True,
                 has_discrepancies = True,
                 package_breakdown = True,
+                vat_display = 'PER_LINE',
                 currency = '',
                 property_currency = '',
                 property_currency_amount = 1.337

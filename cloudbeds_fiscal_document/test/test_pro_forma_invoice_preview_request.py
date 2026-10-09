@@ -62,7 +62,12 @@ class TestProFormaInvoicePreviewRequest(unittest.TestCase):
                 include_transaction_ids = [
                     1
                     ],
-                package_breakdown = True
+                package_breakdown = True,
+                line_grouping_selection = cloudbeds_fiscal_document.models.line_grouping_selection_request.LineGroupingSelectionRequest(
+                    line_grouping = 'NONE', 
+                    pos_grouping = 'NOTHING', 
+                    group_by_room = True, 
+                    group_by_business_date = True, )
             )
         else:
             return ProFormaInvoicePreviewRequest(

@@ -47,8 +47,13 @@ class TestFiscalDocumentTransactionsSummary(unittest.TestCase):
                 currency = '',
                 property_currency = '',
                 property_currency_total = '',
+                exchange_rate = '',
                 transaction_count = 56,
-                max_transactions = 56
+                max_transactions = 56,
+                replaced_receipts = [
+                    ''
+                    ],
+                receipt_replacement_conflict = ''
             )
         else:
             return FiscalDocumentTransactionsSummary(

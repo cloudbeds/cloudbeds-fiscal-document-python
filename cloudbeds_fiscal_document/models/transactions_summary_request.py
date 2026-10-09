@@ -36,8 +36,9 @@ class TransactionsSummaryRequest(BaseModel):
     exclude_transaction_ids: Optional[Annotated[List[StrictInt], Field(min_length=1)]] = Field(default=None, description="Transaction IDs to exclude.", alias="excludeTransactionIds")
     include_transaction_ids: Optional[Annotated[List[StrictInt], Field(min_length=1)]] = Field(default=None, description="Transaction IDs to include.", alias="includeTransactionIds")
     transaction_id_to_amount: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(default=None, description="Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion.", alias="transactionIdToAmount")
+    transaction_id_to_display_amount: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(default=None, description="Map of transaction ID to amount in the invoice currency (major units, as in displayAmount) for partial transaction inclusion, recorded on the document exactly as given. Takes precedence over transactionIdToAmount for the same transaction. When the invoice currency is the property currency it behaves like transactionIdToAmount.", alias="transactionIdToDisplayAmount")
     currency: Optional[StrictStr] = Field(default=None, description="Invoice currency to express the totals in. When provided, totals are converted from the property currency using the property's configured exchange rates. Defaults to the property currency when omitted.")
-    __properties: ClassVar[List[str]] = ["documentKind", "sourceId", "sourceKind", "folioIds", "excludeTransactionIds", "includeTransactionIds", "transactionIdToAmount", "currency"]
+    __properties: ClassVar[List[str]] = ["documentKind", "sourceId", "sourceKind", "folioIds", "excludeTransactionIds", "includeTransactionIds", "transactionIdToAmount", "transactionIdToDisplayAmount", "currency"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -83,6 +84,11 @@ class TransactionsSummaryRequest(BaseModel):
         if self.transaction_id_to_amount is None and "transaction_id_to_amount" in self.model_fields_set:
             _dict['transactionIdToAmount'] = None
 
+        # set to None if transaction_id_to_display_amount (nullable) is None
+        # and model_fields_set contains the field
+        if self.transaction_id_to_display_amount is None and "transaction_id_to_display_amount" in self.model_fields_set:
+            _dict['transactionIdToDisplayAmount'] = None
+
         return _dict
 
     @classmethod
@@ -102,6 +108,7 @@ class TransactionsSummaryRequest(BaseModel):
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
             "includeTransactionIds": obj.get("includeTransactionIds"),
             "transactionIdToAmount": obj.get("transactionIdToAmount"),
+            "transactionIdToDisplayAmount": obj.get("transactionIdToDisplayAmount"),
             "currency": obj.get("currency")
         })
         return _obj
