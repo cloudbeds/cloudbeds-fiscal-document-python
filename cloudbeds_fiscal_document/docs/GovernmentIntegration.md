@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **signatures** | [**List[IntegrationSignature]**](IntegrationSignature.md) | Array of semantic signatures/response data from the government integration. | [optional] 
 **folio_fiscal** | **str** | MX SAT UUID (Folio Fiscal) — populated after CFDI acceptance by Fonoa. | [optional] 
 **sat_qr_code** | **str** | MX SAT validation URL used to verify a CFDI at verificacfdi.facturaelectronica.sat.gob.mx. | [optional] 
+**ext** | **Dict[str, str]** | Provider-returned extension values for the document, keyed by extension or stamp code (e.g. AR \&quot;ar-arca-doc-type\&quot;, and \&quot;arca-cae-expiry\&quot; for the CAE expiry date as YYYY-MM-DD; the CAE itself is in officialId). Read-only.  | [optional] [readonly] 
 **connection_id** | **int** | The fiscalization connection this document was dispatched through; its provider and channel are those of the connection. Read-only — a partner reporting an outcome cannot change where the document was routed, and uses this to confirm the document was addressed to it before acting on it.  | [optional] [readonly] 
 
 ## Example

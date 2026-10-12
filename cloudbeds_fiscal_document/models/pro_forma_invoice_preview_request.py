@@ -21,6 +21,7 @@ from datetime import date
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.line_grouping_selection_request import LineGroupingSelectionRequest
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
 from typing import Optional, Set
@@ -43,7 +44,8 @@ class ProFormaInvoicePreviewRequest(BaseModel):
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
     include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
     package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
-    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds", "packageBreakdown"]
+    line_grouping_selection: Optional[LineGroupingSelectionRequest] = Field(default=None, alias="lineGroupingSelection")
+    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "paymentIds", "sourceId", "sequenceId", "sourceKind", "userId", "recipient", "invoiceDate", "folioIds", "excludeTransactionIds", "includeTransactionIds", "packageBreakdown", "lineGroupingSelection"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -87,6 +89,9 @@ class ProFormaInvoicePreviewRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of recipient
         if self.recipient:
             _dict['recipient'] = self.recipient.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of line_grouping_selection
+        if self.line_grouping_selection:
+            _dict['lineGroupingSelection'] = self.line_grouping_selection.to_dict()
         # set to None if transaction_id_to_amount (nullable) is None
         # and model_fields_set contains the field
         if self.transaction_id_to_amount is None and "transaction_id_to_amount" in self.model_fields_set:
@@ -131,7 +136,8 @@ class ProFormaInvoicePreviewRequest(BaseModel):
             "folioIds": obj.get("folioIds"),
             "excludeTransactionIds": obj.get("excludeTransactionIds"),
             "includeTransactionIds": obj.get("includeTransactionIds"),
-            "packageBreakdown": obj.get("packageBreakdown")
+            "packageBreakdown": obj.get("packageBreakdown"),
+            "lineGroupingSelection": LineGroupingSelectionRequest.from_dict(obj["lineGroupingSelection"]) if obj.get("lineGroupingSelection") is not None else None
         })
         return _obj
 

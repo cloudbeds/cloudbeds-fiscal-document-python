@@ -62,6 +62,7 @@ class TestGovernmentIntegration(unittest.TestCase):
                     ],
                 folio_fiscal = '9B3E26F4-1234-4A5B-8C9D-ABCDEF012345',
                 sat_qr_code = '',
+                ext = {"ar-arca-doc-type":"6","arca-cae-expiry":"2026-10-02"},
                 connection_id = 56
             )
         else:

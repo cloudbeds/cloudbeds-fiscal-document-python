@@ -433,7 +433,6 @@ class FiscalDocumentsApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '204': None,
             '400': "ApiError",
-            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -510,7 +509,6 @@ class FiscalDocumentsApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '204': None,
             '400': "ApiError",
-            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -587,7 +585,6 @@ class FiscalDocumentsApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '204': None,
             '400': "ApiError",
-            '404': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -658,6 +655,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -3987,6 +3985,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -4363,6 +4362,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -4434,6 +4434,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -4505,6 +4506,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -4653,6 +4655,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -4724,6 +4727,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -4795,6 +4799,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -5806,6 +5811,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -6291,7 +6297,7 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
         nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.")] = None,
-        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, only a document issued in another currency is converted (see displayDocumentFiscalizedAmount).")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -6325,7 +6331,7 @@ class FiscalDocumentsApi:
         :type folio_ids: List[int]
         :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.
         :type nest_taxes: bool
-        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, only a document issued in another currency is converted (see displayDocumentFiscalizedAmount).
         :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -6390,7 +6396,7 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
         nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.")] = None,
-        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, only a document issued in another currency is converted (see displayDocumentFiscalizedAmount).")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -6424,7 +6430,7 @@ class FiscalDocumentsApi:
         :type folio_ids: List[int]
         :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.
         :type nest_taxes: bool
-        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, only a document issued in another currency is converted (see displayDocumentFiscalizedAmount).
         :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -6489,7 +6495,7 @@ class FiscalDocumentsApi:
         limit: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results to return per page.")] = None,
         folio_ids: Annotated[Optional[Annotated[List[StrictInt], Field(min_length=1)]], Field(description="Filter by folio IDs.")] = None,
         nest_taxes: Annotated[Optional[StrictBool], Field(description="When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.")] = None,
-        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.")] = None,
+        currency: Annotated[Optional[StrictStr], Field(description="Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, only a document issued in another currency is converted (see displayDocumentFiscalizedAmount).")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -6523,7 +6529,7 @@ class FiscalDocumentsApi:
         :type folio_ids: List[int]
         :param nest_taxes: When true, VAT tax transactions are nested inside their parent transaction's taxes field and removed from the top-level list. Only taxes whose configuration is classified as VAT are nested; everything else (city and municipal taxes, fees, custom item taxes not classified as VAT) stays in the top-level list with no link back to its parent, so the parent-child relationship for those has to be read from the same endpoint called without nestTaxes. A VAT tax is only ever returned together with its parent transaction: where the parent is not part of the document, the tax is omitted from the response entirely rather than returned at the top level.
         :type nest_taxes: bool
-        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, no conversion is applied.
+        :param currency: Invoice currency to convert every transaction into. Each transaction's amount is converted to this currency using the property's current exchange rate and returned in the display* fields; the original amount and currency are also returned. When omitted, only a document issued in another currency is converted (see displayDocumentFiscalizedAmount).
         :type currency: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -7073,6 +7079,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 
@@ -7783,6 +7790,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -7854,6 +7862,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -7925,6 +7934,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -8073,6 +8083,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -8144,6 +8155,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -8215,6 +8227,7 @@ class FiscalDocumentsApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "bytearray",
+            '400': None,
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -9273,6 +9286,7 @@ class FiscalDocumentsApi:
 
         # authentication setting
         _auth_settings: List[str] = [
+            'oauth2', 
             'bearerAuth'
         ]
 

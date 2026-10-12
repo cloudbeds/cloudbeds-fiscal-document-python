@@ -13,6 +13,8 @@ Method | HTTP request | Description
 Get enabled features for the current user and property
 
 Returns a map of feature flags enabled for the authenticated user in the context of the current property.
+`HAS_LEGACY_INVOICES` is true when the property holds invoices issued by MFD before it moved to fiscal
+documents, whose lines and PDF still live in legacy reporting.
 
 
 ### Example

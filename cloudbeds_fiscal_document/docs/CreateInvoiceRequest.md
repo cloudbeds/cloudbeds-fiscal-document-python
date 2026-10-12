@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **transaction_ids** | **List[int]** | Include transactions with the specified IDs (deprecated, use &#x60;includeTransactionIds&#x60; instead) | 
 **transaction_id_to_amount** | **Dict[str, float]** | Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion | [optional] 
+**transaction_id_to_display_amount** | **Dict[str, float]** | Map of transaction ID to amount in the invoice currency (major units, as in displayAmount) for partial transaction inclusion, recorded on the document exactly as given. Takes precedence over transactionIdToAmount for the same transaction. When the invoice currency is the property currency it behaves like transactionIdToAmount. | [optional] 
 **source_id** | **int** |  | 
 **sequence_id** | **int** |  | [optional] 
 **source_kind** | [**SourceKind**](SourceKind.md) |  | 
@@ -16,10 +17,11 @@ Name | Type | Description | Notes
 **manual_recipient** | [**ManualRecipientRequest**](ManualRecipientRequest.md) |  | [optional] 
 **folio_ids** | **List[int]** | Include all transactions from the specified folio IDs | [optional] 
 **exclude_transaction_ids** | **List[int]** | Exclude transactions with the specified IDs | [optional] 
-**include_transaction_ids** | **List[int]** | Include transactions with the specified IDs | [optional] 
+**include_transaction_ids** | **List[int]** | Include only the transactions with these IDs. With folioIds they are added on top of the folios&#39; transactions instead. Empty or omitted means every not-yet-invoiced transaction of the source (or of folioIds when given) minus excludeTransactionIds, payments included and pending transactions only when the property allows them. Transactions listed in transactionIdToAmount are added automatically. Ignored when the deprecated transactionIds is set. | [optional] 
 **simplified** | **bool** |  | [optional] [default to False]
 **invoice_type** | **str** | Argentina RI only — the ARCA invoice class to issue (Factura A/B/T). Determines the ar-arca-doc-type sent to ARCA and the Punto de Venta series used. Ignored for non-RI / non-AR properties (those always issue C).  | [optional] 
 **package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
+**line_grouping_selection** | [**LineGroupingSelectionRequest**](LineGroupingSelectionRequest.md) |  | [optional] 
 **due_date_property_timezone** | **date** |  | [optional] 
 **note** | **str** |  | [optional] 
 **emails** | **List[str]** | Optional list of email addresses to send the document to once it is ready | [optional] 

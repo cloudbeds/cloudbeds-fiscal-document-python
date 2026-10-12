@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 **display_currency** | **str** | Currency code used for the display amounts in this response. | [optional] 
 **display_amount** | **float** | Amount converted to the display currency. | [optional] 
 **display_available_amount** | **float** | Available amount converted to the display currency. | [optional] 
-**display_document_fiscalized_amount** | **float** | Document fiscalized amount converted to the display currency. | [optional] 
+**display_document_fiscalized_amount** | **float** | Document fiscalized amount converted to the display currency. Without a requested currency, set for a document issued in another currency, at the exchange rate locked when it was issued. | [optional] 
 **folio_id** | **str** |  | [optional] 
 **status** | **str** | Status of the transaction - PENDING for unpaid transactions, POSTED for paid transactions | [optional] 
 **paid_amount** | **float** |  | [optional] 

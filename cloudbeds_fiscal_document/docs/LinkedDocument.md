@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **kind** | [**FiscalDocumentKind**](FiscalDocumentKind.md) |  | [optional] 
 **status** | [**FiscalDocumentStatus**](FiscalDocumentStatus.md) |  | [optional] 
 **is_latest** | **bool** | Whether this is the latest document in the chain | [optional] 
-**relationship_type** | **str** | The relationship type - PARENT means this document is linked to the current document, CHILD means the current document is linked to this one | [optional] 
+**relationship_type** | **str** | PARENT means this document is linked to the current document, CHILD means the current document is linked to this one. REPLACED and REPLACED_BY are the two sides of a replacement: on an invoice, REPLACED names a receipt it withdrew — one that already declared the same charges and was voided when the invoice was issued; on that receipt, REPLACED_BY names the invoice that withdrew it. A client that presents the two differently should read this field; one that lists related documents plainly needs no change. | [optional] 
 
 ## Example
 

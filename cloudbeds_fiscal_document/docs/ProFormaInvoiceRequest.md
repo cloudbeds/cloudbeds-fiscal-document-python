@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **emails** | **List[str]** | Optional list of email addresses to send the document to once it is ready | [optional] 
 **subject** | **str** | Optional per-send override for the email subject. When omitted or blank, the subject is resolved from the property&#39;s email template, falling back to the service default. Supports the same [Placeholder] tokens as template subjects. | [optional] 
 **package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
+**line_grouping_selection** | [**LineGroupingSelectionRequest**](LineGroupingSelectionRequest.md) |  | [optional] 
 
 ## Example
 

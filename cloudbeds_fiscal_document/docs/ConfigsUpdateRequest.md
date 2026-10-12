@@ -38,6 +38,7 @@ Name | Type | Description | Notes
 **custom_text** | **Dict[str, str]** |  | [optional] 
 **logo_id** | **int** |  | [optional] 
 **date_display** | [**DateDisplay**](DateDisplay.md) |  | [optional] [default to DateDisplay.TRANSACTION_DATE]
+**line_grouping_settings** | [**LineGroupingSettings**](LineGroupingSettings.md) |  | [optional] 
 **simplified_enabled** | **bool** | Whether simplified invoices are enabled for this property (INVOICE kind). When true, simplifiedThreshold (unless the country enforces one) and simplifiedThresholdAction are required.  | [optional] 
 **simplified_threshold** | **float** | Simplified-invoice monetary threshold in the property currency (INVOICE kind). Optional; required when enabled and the threshold is editable. Silently ignored rather than rejected where the country fixes the threshold itself (simplifiedThresholdEditable false) or does not support simplified invoices at all, because in those cases there is nothing to store. Must not exceed simplifiedThresholdMax when one is returned; a higher value is rejected with 400.  | [optional] 
 **simplified_threshold_action** | **str** | Behaviour when a transaction total exceeds the simplified-invoice threshold (INVOICE kind). Optional; required when enabled.  | [optional] 

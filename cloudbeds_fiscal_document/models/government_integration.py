@@ -44,8 +44,9 @@ class GovernmentIntegration(BaseModel):
     signatures: Optional[List[IntegrationSignature]] = Field(default=None, description="Array of semantic signatures/response data from the government integration.")
     folio_fiscal: Optional[StrictStr] = Field(default=None, description="MX SAT UUID (Folio Fiscal) — populated after CFDI acceptance by Fonoa.", alias="folioFiscal")
     sat_qr_code: Optional[StrictStr] = Field(default=None, description="MX SAT validation URL used to verify a CFDI at verificacfdi.facturaelectronica.sat.gob.mx.", alias="satQrCode")
+    ext: Optional[Dict[str, StrictStr]] = Field(default=None, description="Provider-returned extension values for the document, keyed by extension or stamp code (e.g. AR \"ar-arca-doc-type\", and \"arca-cae-expiry\" for the CAE expiry date as YYYY-MM-DD; the CAE itself is in officialId). Read-only. ")
     connection_id: Optional[StrictInt] = Field(default=None, description="The fiscalization connection this document was dispatched through; its provider and channel are those of the connection. Read-only — a partner reporting an outcome cannot change where the document was routed, and uses this to confirm the document was addressed to it before acting on it. ", alias="connectionId")
-    __properties: ClassVar[List[str]] = ["number", "series", "invoiceType", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64", "handwritten", "signatures", "folioFiscal", "satQrCode", "connectionId"]
+    __properties: ClassVar[List[str]] = ["number", "series", "invoiceType", "status", "qr", "url", "officialId", "externalId", "rectifyingInvoiceType", "cancellationFailedFallbackStatus", "pdfFileBase64", "handwritten", "signatures", "folioFiscal", "satQrCode", "ext", "connectionId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -78,8 +79,10 @@ class GovernmentIntegration(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
         """
         excluded_fields: Set[str] = set([
+            "ext",
             "connection_id",
         ])
 
@@ -130,6 +133,7 @@ class GovernmentIntegration(BaseModel):
             "signatures": [IntegrationSignature.from_dict(_item) for _item in obj["signatures"]] if obj.get("signatures") is not None else None,
             "folioFiscal": obj.get("folioFiscal"),
             "satQrCode": obj.get("satQrCode"),
+            "ext": obj.get("ext"),
             "connectionId": obj.get("connectionId")
         })
         return _obj

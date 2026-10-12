@@ -133,6 +133,9 @@ cloudbeds_fiscal_document/docs/ItemCategoryRequirement.md
 cloudbeds_fiscal_document/docs/ItemExtensionField.md
 cloudbeds_fiscal_document/docs/ItemExtensionRulesResponse.md
 cloudbeds_fiscal_document/docs/LatestLinkedDocument.md
+cloudbeds_fiscal_document/docs/LineGrouping.md
+cloudbeds_fiscal_document/docs/LineGroupingSelectionRequest.md
+cloudbeds_fiscal_document/docs/LineGroupingSettings.md
 cloudbeds_fiscal_document/docs/LinkedDocument.md
 cloudbeds_fiscal_document/docs/ManualRecipientRequest.md
 cloudbeds_fiscal_document/docs/ManualRecipientRequestAddress.md
@@ -140,6 +143,7 @@ cloudbeds_fiscal_document/docs/ManualRecipientRequestDocument.md
 cloudbeds_fiscal_document/docs/Origin.md
 cloudbeds_fiscal_document/docs/PaymentMethodRule.md
 cloudbeds_fiscal_document/docs/PaymentMethodRulesResponse.md
+cloudbeds_fiscal_document/docs/PosGrouping.md
 cloudbeds_fiscal_document/docs/PreviewRequest.md
 cloudbeds_fiscal_document/docs/ProFormaInvoicePreviewRequest.md
 cloudbeds_fiscal_document/docs/ProFormaInvoiceRequest.md
@@ -180,6 +184,7 @@ cloudbeds_fiscal_document/docs/TransactionsSummaryRequest.md
 cloudbeds_fiscal_document/docs/UpdateRequireAttentionRequest.md
 cloudbeds_fiscal_document/docs/UploadConnectionCertificate422Response.md
 cloudbeds_fiscal_document/docs/ValidationError.md
+cloudbeds_fiscal_document/docs/VatDisplay.md
 cloudbeds_fiscal_document/docs/VoidReceiptRequest.md
 cloudbeds_fiscal_document/exceptions.py
 cloudbeds_fiscal_document/models/__init__.py
@@ -300,6 +305,9 @@ cloudbeds_fiscal_document/models/item_category_requirement.py
 cloudbeds_fiscal_document/models/item_extension_field.py
 cloudbeds_fiscal_document/models/item_extension_rules_response.py
 cloudbeds_fiscal_document/models/latest_linked_document.py
+cloudbeds_fiscal_document/models/line_grouping.py
+cloudbeds_fiscal_document/models/line_grouping_selection_request.py
+cloudbeds_fiscal_document/models/line_grouping_settings.py
 cloudbeds_fiscal_document/models/linked_document.py
 cloudbeds_fiscal_document/models/manual_recipient_request.py
 cloudbeds_fiscal_document/models/manual_recipient_request_address.py
@@ -307,6 +315,7 @@ cloudbeds_fiscal_document/models/manual_recipient_request_document.py
 cloudbeds_fiscal_document/models/origin.py
 cloudbeds_fiscal_document/models/payment_method_rule.py
 cloudbeds_fiscal_document/models/payment_method_rules_response.py
+cloudbeds_fiscal_document/models/pos_grouping.py
 cloudbeds_fiscal_document/models/preview_request.py
 cloudbeds_fiscal_document/models/pro_forma_invoice_preview_request.py
 cloudbeds_fiscal_document/models/pro_forma_invoice_request.py
@@ -347,6 +356,7 @@ cloudbeds_fiscal_document/models/transactions_summary_request.py
 cloudbeds_fiscal_document/models/update_require_attention_request.py
 cloudbeds_fiscal_document/models/upload_connection_certificate422_response.py
 cloudbeds_fiscal_document/models/validation_error.py
+cloudbeds_fiscal_document/models/vat_display.py
 cloudbeds_fiscal_document/models/void_receipt_request.py
 cloudbeds_fiscal_document/rest.py
 cloudbeds_fiscal_document/test/__init__.py
@@ -473,6 +483,9 @@ cloudbeds_fiscal_document/test/test_item_category_requirement.py
 cloudbeds_fiscal_document/test/test_item_extension_field.py
 cloudbeds_fiscal_document/test/test_item_extension_rules_response.py
 cloudbeds_fiscal_document/test/test_latest_linked_document.py
+cloudbeds_fiscal_document/test/test_line_grouping.py
+cloudbeds_fiscal_document/test/test_line_grouping_selection_request.py
+cloudbeds_fiscal_document/test/test_line_grouping_settings.py
 cloudbeds_fiscal_document/test/test_linked_document.py
 cloudbeds_fiscal_document/test/test_manual_recipient_request.py
 cloudbeds_fiscal_document/test/test_manual_recipient_request_address.py
@@ -480,6 +493,7 @@ cloudbeds_fiscal_document/test/test_manual_recipient_request_document.py
 cloudbeds_fiscal_document/test/test_origin.py
 cloudbeds_fiscal_document/test/test_payment_method_rule.py
 cloudbeds_fiscal_document/test/test_payment_method_rules_response.py
+cloudbeds_fiscal_document/test/test_pos_grouping.py
 cloudbeds_fiscal_document/test/test_preview_request.py
 cloudbeds_fiscal_document/test/test_pro_forma_invoice_preview_request.py
 cloudbeds_fiscal_document/test/test_pro_forma_invoice_request.py
@@ -520,4 +534,5 @@ cloudbeds_fiscal_document/test/test_transactions_summary_request.py
 cloudbeds_fiscal_document/test/test_update_require_attention_request.py
 cloudbeds_fiscal_document/test/test_upload_connection_certificate422_response.py
 cloudbeds_fiscal_document/test/test_validation_error.py
+cloudbeds_fiscal_document/test/test_vat_display.py
 cloudbeds_fiscal_document/test/test_void_receipt_request.py

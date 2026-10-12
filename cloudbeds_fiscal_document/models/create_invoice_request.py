@@ -21,6 +21,7 @@ from datetime import date
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from cloudbeds_fiscal_document.models.line_grouping_selection_request import LineGroupingSelectionRequest
 from cloudbeds_fiscal_document.models.manual_recipient_request import ManualRecipientRequest
 from cloudbeds_fiscal_document.models.recipient_request import RecipientRequest
 from cloudbeds_fiscal_document.models.source_kind import SourceKind
@@ -33,6 +34,7 @@ class CreateInvoiceRequest(BaseModel):
     """ # noqa: E501
     transaction_ids: List[Annotated[int, Field(strict=True, ge=1)]] = Field(description="Include transactions with the specified IDs (deprecated, use `includeTransactionIds` instead)", alias="transactionIds")
     transaction_id_to_amount: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(default=None, description="Map of transaction ID to amount (in major currency units, e.g., 10.50 for $10.50) for partial transaction inclusion", alias="transactionIdToAmount")
+    transaction_id_to_display_amount: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(default=None, description="Map of transaction ID to amount in the invoice currency (major units, as in displayAmount) for partial transaction inclusion, recorded on the document exactly as given. Takes precedence over transactionIdToAmount for the same transaction. When the invoice currency is the property currency it behaves like transactionIdToAmount.", alias="transactionIdToDisplayAmount")
     source_id: Annotated[int, Field(strict=True, ge=1)] = Field(alias="sourceId")
     sequence_id: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=None, alias="sequenceId")
     source_kind: SourceKind = Field(alias="sourceKind")
@@ -42,10 +44,11 @@ class CreateInvoiceRequest(BaseModel):
     manual_recipient: Optional[ManualRecipientRequest] = Field(default=None, alias="manualRecipient")
     folio_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include all transactions from the specified folio IDs", alias="folioIds")
     exclude_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Exclude transactions with the specified IDs", alias="excludeTransactionIds")
-    include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include transactions with the specified IDs", alias="includeTransactionIds")
+    include_transaction_ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(default=None, description="Include only the transactions with these IDs. With folioIds they are added on top of the folios' transactions instead. Empty or omitted means every not-yet-invoiced transaction of the source (or of folioIds when given) minus excludeTransactionIds, payments included and pending transactions only when the property allows them. Transactions listed in transactionIdToAmount are added automatically. Ignored when the deprecated transactionIds is set.", alias="includeTransactionIds")
     simplified: Optional[StrictBool] = False
     invoice_type: Optional[StrictStr] = Field(default=None, description="Argentina RI only — the ARCA invoice class to issue (Factura A/B/T). Determines the ar-arca-doc-type sent to ARCA and the Punto de Venta series used. Ignored for non-RI / non-AR properties (those always issue C). ", alias="invoiceType")
     package_breakdown: Optional[StrictBool] = Field(default=None, description="Per-document override for package breakdown. Null means use property default.", alias="packageBreakdown")
+    line_grouping_selection: Optional[LineGroupingSelectionRequest] = Field(default=None, alias="lineGroupingSelection")
     due_date_property_timezone: Optional[date] = Field(default=None, alias="dueDatePropertyTimezone")
     note: Optional[Annotated[str, Field(strict=True, max_length=500)]] = None
     emails: Optional[Annotated[List[StrictStr], Field(max_length=10)]] = Field(default=None, description="Optional list of email addresses to send the document to once it is ready")
@@ -53,7 +56,7 @@ class CreateInvoiceRequest(BaseModel):
     summary: Optional[StrictBool] = Field(default=False, description="When true, marks this as a CFDI global/summary invoice (MX only)")
     summary_frequency: Optional[StrictStr] = Field(default=None, description="Reporting frequency for summary invoices (MX only)", alias="summaryFrequency")
     mx_cfdi_use: Optional[StrictStr] = Field(default=None, description="MX only — SAT c_UsoCFDI code selected in the Create Invoice modal. Overrides the value stored in guest requirements (mx_cfdi_use). A generic RFC (XAXX/XEXX) always forces S01 at issuance time regardless of this value.", alias="mxCfdiUse")
-    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "sourceId", "sequenceId", "sourceKind", "userId", "currency", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "invoiceType", "packageBreakdown", "dueDatePropertyTimezone", "note", "emails", "subject", "summary", "summaryFrequency", "mxCfdiUse"]
+    __properties: ClassVar[List[str]] = ["transactionIds", "transactionIdToAmount", "transactionIdToDisplayAmount", "sourceId", "sequenceId", "sourceKind", "userId", "currency", "recipient", "manualRecipient", "folioIds", "excludeTransactionIds", "includeTransactionIds", "simplified", "invoiceType", "packageBreakdown", "lineGroupingSelection", "dueDatePropertyTimezone", "note", "emails", "subject", "summary", "summaryFrequency", "mxCfdiUse"]
 
     @field_validator('invoice_type')
     def invoice_type_validate_enum(cls, value):
@@ -122,10 +125,18 @@ class CreateInvoiceRequest(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of manual_recipient
         if self.manual_recipient:
             _dict['manualRecipient'] = self.manual_recipient.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of line_grouping_selection
+        if self.line_grouping_selection:
+            _dict['lineGroupingSelection'] = self.line_grouping_selection.to_dict()
         # set to None if transaction_id_to_amount (nullable) is None
         # and model_fields_set contains the field
         if self.transaction_id_to_amount is None and "transaction_id_to_amount" in self.model_fields_set:
             _dict['transactionIdToAmount'] = None
+
+        # set to None if transaction_id_to_display_amount (nullable) is None
+        # and model_fields_set contains the field
+        if self.transaction_id_to_display_amount is None and "transaction_id_to_display_amount" in self.model_fields_set:
+            _dict['transactionIdToDisplayAmount'] = None
 
         # set to None if sequence_id (nullable) is None
         # and model_fields_set contains the field
@@ -196,6 +207,7 @@ class CreateInvoiceRequest(BaseModel):
         _obj = cls.model_validate({
             "transactionIds": obj.get("transactionIds"),
             "transactionIdToAmount": obj.get("transactionIdToAmount"),
+            "transactionIdToDisplayAmount": obj.get("transactionIdToDisplayAmount"),
             "sourceId": obj.get("sourceId"),
             "sequenceId": obj.get("sequenceId"),
             "sourceKind": obj.get("sourceKind"),
@@ -209,6 +221,7 @@ class CreateInvoiceRequest(BaseModel):
             "simplified": obj.get("simplified") if obj.get("simplified") is not None else False,
             "invoiceType": obj.get("invoiceType"),
             "packageBreakdown": obj.get("packageBreakdown"),
+            "lineGroupingSelection": LineGroupingSelectionRequest.from_dict(obj["lineGroupingSelection"]) if obj.get("lineGroupingSelection") is not None else None,
             "dueDatePropertyTimezone": obj.get("dueDatePropertyTimezone"),
             "note": obj.get("note"),
             "emails": obj.get("emails"),

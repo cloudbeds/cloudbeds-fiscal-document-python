@@ -74,6 +74,18 @@ class TestConfigsResponse(unittest.TestCase):
                 use_invoice_document_settings = True,
                 use_invoice_title_and_numbering = True,
                 date_display = 'transaction_date',
+                line_grouping_settings = cloudbeds_fiscal_document.models.line_grouping_settings.LineGroupingSettings(
+                    default_line_grouping = 'NONE', 
+                    allowed_line_groupings = [
+                        'NONE'
+                        ], 
+                    default_pos_grouping = 'NONE', 
+                    allowed_pos_groupings = [
+                        'NONE'
+                        ], 
+                    default_group_by_room = True, 
+                    default_group_by_business_date = True, 
+                    vat_display = 'PER_LINE', ),
                 simplified_supported = True,
                 simplified_enabled = True,
                 simplified_threshold_editable = True,

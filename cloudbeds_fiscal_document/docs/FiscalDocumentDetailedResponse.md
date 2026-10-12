@@ -41,6 +41,7 @@ Name | Type | Description | Notes
 **require_attention** | **bool** | Indicates whether this document requires manual attention. | [optional] 
 **has_discrepancies** | **bool** | Indicates whether this document has pending transaction discrepancies. | [optional] 
 **package_breakdown** | **bool** | Per-document override for package breakdown. Null means use property default. | [optional] 
+**vat_display** | [**VatDisplay**](VatDisplay.md) |  | [optional] 
 **currency** | **str** | Currency the document amount is expressed in. Equals the invoice/document currency, which may differ from the property base currency when a foreign-currency invoice was issued. | [optional] 
 **property_currency** | **str** | The property&#39;s base currency code. | [optional] 
 **property_currency_amount** | **float** | The document amount converted to the property&#39;s base currency using the property&#39;s configured exchange rates. Null when the document currency already equals the property base currency (no conversion needed). | [optional] 

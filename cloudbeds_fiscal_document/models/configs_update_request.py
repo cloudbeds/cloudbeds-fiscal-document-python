@@ -22,6 +22,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
 from cloudbeds_fiscal_document.models.date_display import DateDisplay
 from cloudbeds_fiscal_document.models.document_trigger_event import DocumentTriggerEvent
+from cloudbeds_fiscal_document.models.line_grouping_settings import LineGroupingSettings
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -62,10 +63,11 @@ class ConfigsUpdateRequest(BaseModel):
     custom_text: Optional[Dict[str, StrictStr]] = Field(default=None, alias="customText")
     logo_id: Optional[StrictInt] = Field(default=None, alias="logoId")
     date_display: Optional[DateDisplay] = Field(default=DateDisplay.TRANSACTION_DATE, alias="dateDisplay")
+    line_grouping_settings: Optional[LineGroupingSettings] = Field(default=None, alias="lineGroupingSettings")
     simplified_enabled: Optional[StrictBool] = Field(default=None, description="Whether simplified invoices are enabled for this property (INVOICE kind). When true, simplifiedThreshold (unless the country enforces one) and simplifiedThresholdAction are required. ", alias="simplifiedEnabled")
     simplified_threshold: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Simplified-invoice monetary threshold in the property currency (INVOICE kind). Optional; required when enabled and the threshold is editable. Silently ignored rather than rejected where the country fixes the threshold itself (simplifiedThresholdEditable false) or does not support simplified invoices at all, because in those cases there is nothing to store. Must not exceed simplifiedThresholdMax when one is returned; a higher value is rejected with 400. ", alias="simplifiedThreshold")
     simplified_threshold_action: Optional[StrictStr] = Field(default=None, description="Behaviour when a transaction total exceeds the simplified-invoice threshold (INVOICE kind). Optional; required when enabled. ", alias="simplifiedThresholdAction")
-    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "allowPendingTransactions", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "separator", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "showPropertyDetails", "includeRoomNumber", "useDocumentNumber", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "companyCountry", "companyAddress", "companyState", "companyCity", "companyPostCode", "customText", "logoId", "dateDisplay", "simplifiedEnabled", "simplifiedThreshold", "simplifiedThresholdAction"]
+    __properties: ClassVar[List[str]] = ["triggerEvents", "showDetailedTaxFee", "chargeBreakdown", "allowPendingTransactions", "useGuestLang", "dueDays", "sequenceStartNumber", "lang", "prefix", "separator", "suffix", "legalCompanyName", "title", "showLegalCompanyName", "showPropertyDetails", "includeRoomNumber", "useDocumentNumber", "updateInvoiceOnLinkDocument", "isCompact", "useInvoiceTitleAndNumbering", "useInvoiceDocumentSettings", "showCreditNotesAndReceipts", "taxId1", "taxId2", "cpf", "companyCountry", "companyAddress", "companyState", "companyCity", "companyPostCode", "customText", "logoId", "dateDisplay", "lineGroupingSettings", "simplifiedEnabled", "simplifiedThreshold", "simplifiedThresholdAction"]
 
     @field_validator('simplified_threshold_action')
     def simplified_threshold_action_validate_enum(cls, value):
@@ -117,6 +119,9 @@ class ConfigsUpdateRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of line_grouping_settings
+        if self.line_grouping_settings:
+            _dict['lineGroupingSettings'] = self.line_grouping_settings.to_dict()
         # set to None if sequence_start_number (nullable) is None
         # and model_fields_set contains the field
         if self.sequence_start_number is None and "sequence_start_number" in self.model_fields_set:
@@ -257,6 +262,7 @@ class ConfigsUpdateRequest(BaseModel):
             "customText": obj.get("customText"),
             "logoId": obj.get("logoId"),
             "dateDisplay": obj.get("dateDisplay") if obj.get("dateDisplay") is not None else DateDisplay.TRANSACTION_DATE,
+            "lineGroupingSettings": LineGroupingSettings.from_dict(obj["lineGroupingSettings"]) if obj.get("lineGroupingSettings") is not None else None,
             "simplifiedEnabled": obj.get("simplifiedEnabled"),
             "simplifiedThreshold": obj.get("simplifiedThreshold"),
             "simplifiedThresholdAction": obj.get("simplifiedThresholdAction")
